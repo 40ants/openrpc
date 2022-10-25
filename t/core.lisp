@@ -10,7 +10,7 @@
 (in-package #:openrpc-tests/core)
 
 
-(deftest test-hello-world
-    (testing "Just example"
-             (ok (equal (length "Foo")
-                        3))))
+(deftest test-pet-shop-example
+  (testing "Just example"
+    (ok (equal (length "Foo")
+               3))))

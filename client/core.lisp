@@ -8,6 +8,8 @@
   (:import-from #:dexador)
   (:import-from #:alexandria
                 #:copy-hash-table)
+  (:import-from #:usocket
+                #:connection-refused-error)
   (:export #:@index
            #:@readme
            #:generate-client))
@@ -200,25 +202,29 @@
 
 (defgeneric rpc-call (client func-name arguments)
   (:method ((client t) func-name (arguments t))
-    (log:debug "Calling" client "with" arguments)
     (jsonrpc:call client func-name arguments)))
 
 
 (defmacro generate-client (class-name url)
-  (let* ((spec (yason:parse (dex:get url)))
-         (client-class (generate-client-class class-name spec))
-         (object-classes
-           ;; The map from package::symbol to a code which defines
-           ;; a class for some complex object used as argument or
-           ;; result in an API:
-           (make-hash-table :test 'equal))
-         (methods (loop for method-spec in (gethash "methods" spec)
-                        collect (generate-method class-name method-spec object-classes)))
-         (class-definitions
-           (loop for def being the hash-value of object-classes
-                 ;; Here each def contains a list of DEFCLASS + one or more methods.
-                 appending def)))
-    `(progn
-       ,@client-class
-       ,@class-definitions
-       ,@methods)))
+  (handler-bind ((connection-refused-error
+                   (lambda (condition)
+                     (declare (ignore condition))
+                     (error "Unable to generate client because URL ~S is unavailable."
+                            url))))
+    (let* ((spec (yason:parse (dex:get url)))
+           (client-class (generate-client-class class-name spec))
+           (object-classes
+             ;; The map from package::symbol to a code which defines
+             ;; a class for some complex object used as argument or
+             ;; result in an API:
+             (make-hash-table :test 'equal))
+           (methods (loop for method-spec in (gethash "methods" spec)
+                          collect (generate-method class-name method-spec object-classes)))
+           (class-definitions
+             (loop for def being the hash-value of object-classes
+                   ;; Here each def contains a list of DEFCLASS + one or more methods.
+                   appending def)))
+      `(progn
+         ,@client-class
+         ,@class-definitions
+         ,@methods))))

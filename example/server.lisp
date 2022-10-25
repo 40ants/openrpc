@@ -3,6 +3,8 @@
   (:import-from #:alexandria
                 #:hash-table-keys
                 #:hash-table-values)
+  (:import-from #:clack
+                #:clackup)
   (:import-from #:openrpc-server
                 #:return-error
                 #:transform-result
@@ -10,13 +12,16 @@
   (:import-from #:clack.handler.hunchentoot)
   (:import-from #:serapeum
                 #:dict)
+  (:import-from #:openrpc-server/clack
+                #:make-clack-app)
   (:export
    #:start
    #:stop))
 (in-package #:openrpc-example/server)
 
 (defvar *server* nil)
-(defvar *pets* (make-hash-table :test 'equal))
+;; (defvar *pets* (make-hash-table :test 'equal))
+(defvar *pets*)
 
 
 (defclass pet ()
@@ -59,7 +64,8 @@
   (:param page-key integer)
   (:result (paginated-list-of pet))
   (let* ((pets (hash-table-values *pets*))
-         (sorted-pets (sort pets #'< :key #'pet-id))
+         (sorted-pets (progn ;; (break)
+                             (sort pets #'< :key #'pet-id)))
          (page-key (or page-key
                        -1)))
     (loop with num-found = 0
@@ -78,12 +84,13 @@
                  ;; compared to SKIP/LIMIT approach.
           finally (return
                     (let* ((last-pet (car (last results)))
-                           (last-pet-id (pet-id last-pet))
-                           (more-pets-exists-p (loop for pet in sorted-pets
-                                                     thereis (> (pet-id pet)
-                                                                last-pet-id))))
-                      (if (and last-pet
-                               more-pets-exists-p)
+                           (last-pet-id (when last-pet
+                                          (pet-id last-pet)))
+                           (more-pets-exists-p (when last-pet-id
+                                                 (loop for pet in sorted-pets
+                                                       thereis (> (pet-id pet)
+                                                                  last-pet-id)))))
+                      (if more-pets-exists-p
                           (values results
                                   (pet-id last-pet))
                           results))))))
@@ -115,9 +122,9 @@
 (defun start (&key (port 8000) (interface "localhost"))
   (when *server*
     (error "Server is already running. Please, stop it first."))
-  (clack:clackup (openrpc-server/clack:make-clack-app)
-                 :address interface
-                 :port port)
+  (clackup (make-clack-app)
+           :address interface
+           :port port)
   (values))
 
 
