@@ -1,6 +1,20 @@
-(uiop:define-package #:openrpc-server/server
+(uiop:define-package #:openrpc-server
   (:use #:cl)
   (:import-from #:openrpc-server/discovery)
-  (:import-from #:openrpc-server/method)
-  (:import-from #:openrpc-server/interface))
-(in-package #:openrpc-server/server)
+  (:import-from #:openrpc-server/method
+                #:define-rpc-method)
+  (:import-from #:openrpc-server/interface
+                #:type-to-schema
+                #:transform-result
+                #:primitive-type-p
+                #:make-info)
+  (:import-from #:openrpc-server/errors
+                #:return-error)
+  (:export #:define-rpc-method
+           #:type-to-schema
+           #:transform-result
+           #:primitive-type-p
+           #:make-info
+           #:return-error))
+(in-package #:openrpc-server)
+

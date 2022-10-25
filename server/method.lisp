@@ -1,5 +1,7 @@
 (uiop:define-package #:openrpc-server/method
   (:use #:cl)
+  (:import-from #:serapeum
+                #:dict)
   (:import-from #:openrpc-server/vars
                 #:*server*)
   (:import-from #:alexandria
@@ -14,6 +16,7 @@
   (:import-from #:openrpc-server/content-descriptor
                 #:make-content-descriptor)
   (:import-from #:openrpc-server/interface
+                #:transform-result
                 #:type-to-schema))
 (in-package #:openrpc-server/method)
 
@@ -104,21 +107,24 @@
 
     (let* ((simplified-optional-args (mapcar #'simplify-arg optional-args))
            (simplified-keyword-args (mapcar #'simplify-arg keyword-args))
+           (positional-args (append required-args
+                                    optional-args))
            (sorted-params
-             (sort (copy-list params) #'<
-                   :key (lambda (param)
-                          (let ((name (parameter-name param)))
-                            (cond
-                              ((member name required-args)
-                               1)
-                              ((member name simplified-optional-args)
-                               2)
-                              ((member name simplified-keyword-args)
-                               3)
-                              (t
-                               (error "Parameter ~S not found among method arguments: ~S"
-                                      name
-                                      (make-lambda-list required-args optional-args keyword-args)))))))))
+             (stable-sort
+              (copy-list params) #'<
+              :key (lambda (param)
+                     (let* ((name (parameter-name param))
+                            (pos (position name positional-args)))
+                       (cond
+                         (pos pos)
+                         ((member name simplified-keyword-args)
+                          ;; There is no positional arg with this index,
+                          ;; so, we'll use it for keyword args
+                          (length positional-args))
+                         (t
+                          (error "Parameter ~S not found among method arguments: ~S"
+                                 name
+                                 (make-lambda-list required-args optional-args keyword-args)))))))))
       (let ((not-documented
               (set-difference (append required-args
                                       simplified-optional-args
@@ -260,10 +266,10 @@
                  #',wrapper-name)
            
            (setf (gethash ,name-as-string *method-info*)
-                 (collect-method-info ',info-forms
-                                      ',required-args
-                                      ',optional-args
-                                      ',keyword-args))
+                 (make-method-info ',info-forms
+                                   ',required-args
+                                   ',optional-args
+                                   ',keyword-args))
            
            (when *server*
              (jsonrpc:expose *server* ,name-as-string
