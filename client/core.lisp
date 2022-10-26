@@ -4,6 +4,7 @@
                 #:defsection
                 #:defsection-copy)
   (:import-from #:kebab)
+  (:import-from #:jsonrpc)
   (:import-from #:jsonrpc/class)
   (:import-from #:str)
   (:import-from #:dexador)
