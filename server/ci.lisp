@@ -37,7 +37,10 @@
                  )
           :asdf-version *asdf-version*
           :coverage t
-          :qlfile "{% ifequal quicklisp_dist \"ultralisp\" %}
-                   dist ultralisp http://dist.ultralisp.org
-                   {% endifequal %}")))
+          ;; TODO: We don't need this because we depend on a custom version
+          ;; of jsonrpc from the qlfile:
+          ;; :qlfile "{% ifequal quicklisp_dist \"ultralisp\" %}
+          ;;          dist ultralisp http://dist.ultralisp.org
+          ;;          {% endifequal %}"
+          )))
 
