@@ -28,11 +28,13 @@
           :asdf-version *asdf-version*)
          (run-tests
           :os ("ubuntu-latest"
-               "macos-latest")
-          :quicklisp ("quicklisp"
+               ;; "macos-latest"
+               )
+          :quicklisp (;; "quicklisp"
                       "ultralisp")
           :lisp ("sbcl-bin"
-                 "ccl-bin")
+                 ;; "ccl-bin"
+                 )
           :asdf-version *asdf-version*
           :coverage t
           :qlfile "{% ifequal quicklisp_dist \"ultralisp\" %}
