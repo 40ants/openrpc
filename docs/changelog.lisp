@@ -8,5 +8,7 @@
 (defchangelog (:ignore-words ("40ANTS-DOC"
                               "ASDF"
                               "OSX"))
+  (0.2.0 2022-10-25
+         "- Support client generation from a file on a filesystem.")
   (0.1.0 2022-10-13
          "- Initial version."))

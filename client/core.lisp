@@ -9,6 +9,7 @@
   (:import-from #:str)
   (:import-from #:dexador)
   (:import-from #:alexandria
+                #:read-file-into-string
                 #:copy-hash-table)
   (:import-from #:usocket
                 #:connection-refused-error)
@@ -23,7 +24,6 @@
 
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-
   (defun generate-method-description (spec)
     (let* ((original-name (gethash "name" spec))
            (name (intern (normalize-name original-name)))
@@ -199,7 +199,36 @@
            (labels ((retrieve-data (args)
                       (let ((raw-response (rpc-call client ,original-name args)))
                         ,result-transformation)))
-             (retrieve-data args)))))))
+             (retrieve-data args))))))
+
+
+
+  (defun retrieve-data-from-url (url)
+    (handler-bind ((connection-refused-error
+                     (lambda (condition)
+                       (declare (ignore condition))
+                       (error "Unable to generate client because URL ~S is unavailable."
+                              url))))
+      (dex:get url)))
+  
+  (defun retrieve-data-from-path (path)
+    (cond
+      ((probe-file path)
+       (read-file-into-string path))
+      (t
+       (error "Unable to generate client because PATH ~S does not exists."
+              path))))
+
+  (defun retrieve-spec (url-or-path)
+    (yason:parse 
+     (etypecase url-or-path
+       (pathname (retrieve-data-from-path url-or-path))
+       (string
+        (cond
+          ((str:starts-with-p "http" url-or-path)
+           (retrieve-data-from-url url-or-path))
+          (t
+           (retrieve-data-from-path url-or-path))))))))
 
 
 (defgeneric rpc-call (client func-name arguments)
@@ -207,26 +236,21 @@
     (jsonrpc:call client func-name arguments)))
 
 
-(defmacro generate-client (class-name url)
-  (handler-bind ((connection-refused-error
-                   (lambda (condition)
-                     (declare (ignore condition))
-                     (error "Unable to generate client because URL ~S is unavailable."
-                            url))))
-    (let* ((spec (yason:parse (dex:get url)))
-           (client-class (generate-client-class class-name spec))
-           (object-classes
-             ;; The map from package::symbol to a code which defines
-             ;; a class for some complex object used as argument or
-             ;; result in an API:
-             (make-hash-table :test 'equal))
-           (methods (loop for method-spec in (gethash "methods" spec)
-                          collect (generate-method class-name method-spec object-classes)))
-           (class-definitions
-             (loop for def being the hash-value of object-classes
-                   ;; Here each def contains a list of DEFCLASS + one or more methods.
-                   appending def)))
-      `(progn
-         ,@client-class
-         ,@class-definitions
-         ,@methods))))
+(defmacro generate-client (class-name url-or-path)
+  (let* ((spec (retrieve-spec url-or-path))
+         (client-class (generate-client-class class-name spec))
+         (object-classes
+           ;; The map from package::symbol to a code which defines
+           ;; a class for some complex object used as argument or
+           ;; result in an API:
+           (make-hash-table :test 'equal))
+         (methods (loop for method-spec in (gethash "methods" spec)
+                        collect (generate-method class-name method-spec object-classes)))
+         (class-definitions
+           (loop for def being the hash-value of object-classes
+                 ;; Here each def contains a list of DEFCLASS + one or more methods.
+                 appending def)))
+    `(progn
+       ,@client-class
+       ,@class-definitions
+       ,@methods)))

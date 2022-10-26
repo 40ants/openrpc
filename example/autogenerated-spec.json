@@ -1,0 +1,157 @@
+{
+  "methods": [
+    {
+      "name": "rpc.discover",
+      "params": [],
+      "result": {
+        "name": "OpenRPC Schema",
+        "schema": {
+          "$ref": "https://raw.githubusercontent.com/open-rpc/meta-schema/master/schema.json"
+        }
+      }
+    },
+    {
+      "name": "list-pets",
+      "params": [
+        {
+          "name": "page-key",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "limit",
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "result": {
+        "name": "list-pets-result",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "tag": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "name",
+                  "tag"
+                ],
+                "x-cl-class": "PET",
+                "x-cl-package": "OPENRPC-EXAMPLE/SERVER"
+              }
+            },
+            "next-page-key": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "items"
+          ],
+          "x-paginated-list": true
+        }
+      },
+      "paramStructure": "by-name"
+    },
+    {
+      "name": "create-pet",
+      "params": [
+        {
+          "name": "name",
+          "schema": {
+            "type": "string"
+          },
+          "required": true
+        },
+        {
+          "name": "tag",
+          "schema": {
+            "type": "string"
+          },
+          "required": true
+        }
+      ],
+      "result": {
+        "name": "create-pet-result",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "tag": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "tag"
+          ],
+          "x-cl-class": "PET",
+          "x-cl-package": "OPENRPC-EXAMPLE/SERVER"
+        }
+      },
+      "paramStructure": "by-name"
+    },
+    {
+      "name": "get-pet",
+      "params": [
+        {
+          "name": "id",
+          "schema": {
+            "type": "integer"
+          },
+          "required": true
+        }
+      ],
+      "result": {
+        "name": "get-pet-result",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "tag": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "tag"
+          ],
+          "x-cl-class": "PET",
+          "x-cl-package": "OPENRPC-EXAMPLE/SERVER"
+        }
+      },
+      "paramStructure": "by-name"
+    }
+  ],
+  "openrpc": "1.0.0",
+  "info": {
+    "title": "Experimental API",
+    "version": "0.1.0"
+  }
+}
