@@ -17,7 +17,9 @@
                 #:make-content-descriptor)
   (:import-from #:openrpc-server/interface
                 #:transform-result
-                #:type-to-schema))
+                #:type-to-schema)
+  (:export
+   #:define-rpc-method))
 (in-package #:openrpc-server/method)
 
 
@@ -224,6 +226,11 @@
 
 
 (defmacro define-rpc-method (name args &body body)
+  "Macro to define RPC method.
+
+   All arguments should have corresponding (:param arg type) form in the BODY.
+
+   Also, there should be one (:result type) form in the BODY."
   (with-destructured-lambda-list (:required required-args
                                   :optional optional-args
                                   :key keyword-args)

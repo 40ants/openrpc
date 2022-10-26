@@ -43,7 +43,7 @@
     (testing-app "Checking PetShop"
         (make-clack-app)
       (let* ((url (localhost "/openrpc.json"))
-             (test-package (make-package "test-package1")))
+             (test-package (make-package "test-package1" :use (list :cl))))
         (unwind-protect 
              (let* ((*package* test-package))
                (testing "Client classes creation"

@@ -4,7 +4,9 @@
   :license "BSD"
   :class :40ants-asdf-system
   :pathname "ci"
-  :depends-on ("openrpc-ci/ci")
+  :depends-on ("openrpc-server/ci"
+               "openrpc-client/ci"
+               "openrpc-doc/ci")
   :description "CI for Common Lisp OpenRPC library."
   :homepage "https://40ants.com/openrpc/"
   :source-control (:git "https://github.com/40ants/openrpc")

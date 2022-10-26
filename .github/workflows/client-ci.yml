@@ -1,5 +1,5 @@
 {
-  "name": "DOCS",
+  "name": "CLIENT-CI",
   "on": {
     "push": {
       "branches": [
@@ -14,7 +14,7 @@
     ]
   },
   "jobs": {
-    "build-docs": {
+    "linter": {
       "runs-on": "ubuntu-latest",
       "env": {
         "OS": "ubuntu-latest",
@@ -56,18 +56,30 @@
           "name": "Setup Common Lisp Environment",
           "uses": "40ants/setup-lisp@v2",
           "with": {
-            "asdf-system": "openrpc-docs",
+            "asdf-system": "openrpc-client",
             "asdf-version": "3.3.5.1"
           },
           "if": "steps.cache.outputs.cache-hit != 'true'"
         },
         {
-          "name": "Build Docs",
-          "uses": "40ants/build-docs@v1",
-          "with": {
-            "asdf-system": "openrpc-docs",
-            "error-on-warnings": true
-          }
+          "name": "Change dist to Ultralisp",
+          "run": "echo 'dist ultralisp http://dist.ultralisp.org' > qlfile",
+          "shell": "bash"
+        },
+        {
+          "name": "Update Qlot",
+          "run": "qlot update || qlot update",
+          "shell": "bash"
+        },
+        {
+          "name": "Install SBLint wrapper",
+          "run": "qlot exec ros install 40ants-linter",
+          "shell": "bash"
+        },
+        {
+          "name": "Run Linter",
+          "run": "qlot exec 40ants-linter --system \"openrpc-client\"",
+          "shell": "bash"
         }
       ]
     }

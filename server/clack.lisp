@@ -13,7 +13,8 @@
                 #:*methods*)
   (:import-from #:openrpc-server/vars
                 #:*server*)
-  (:export #:make-clack-app))
+  (:export
+   #:make-clack-app))
 (in-package #:openrpc-server/clack)
 
 
@@ -58,6 +59,8 @@
 
 (defun make-clack-app (&key (http t)
                             (websocket t))
+  "Returns an Clack application to serve JSON-RPC API."
+  
   (unless (or http websocket)
     (error "Argument :http, :websocket or both should be set to T."))
   

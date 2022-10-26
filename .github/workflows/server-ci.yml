@@ -1,5 +1,5 @@
 {
-  "name": "CI",
+  "name": "SERVER-CI",
   "on": {
     "push": {
       "branches": [
@@ -56,7 +56,7 @@
           "name": "Setup Common Lisp Environment",
           "uses": "40ants/setup-lisp@v2",
           "with": {
-            "asdf-system": "40ants-ci",
+            "asdf-system": "openrpc-server",
             "asdf-version": "3.3.5.1"
           },
           "if": "steps.cache.outputs.cache-hit != 'true'"
@@ -78,7 +78,7 @@
         },
         {
           "name": "Run Linter",
-          "run": "qlot exec 40ants-linter --system \"40ants-ci\"",
+          "run": "qlot exec 40ants-linter --system \"openrpc-server\"",
           "shell": "bash"
         }
       ]
@@ -142,7 +142,7 @@
           "name": "Setup Common Lisp Environment",
           "uses": "40ants/setup-lisp@v2",
           "with": {
-            "asdf-system": "40ants-ci",
+            "asdf-system": "openrpc-server",
             "asdf-version": "3.3.5.1",
             "qlfile-template": "{% ifequal quicklisp_dist \"ultralisp\" %}\ndist ultralisp http://dist.ultralisp.org\n{% endifequal %}"
           },
@@ -152,7 +152,7 @@
           "name": "Run Tests",
           "uses": "40ants/run-tests@v2",
           "with": {
-            "asdf-system": "40ants-ci",
+            "asdf-system": "openrpc-server",
             "coveralls-token": "\n${{ matrix.lisp == 'sbcl-bin' &&\n    matrix.os == 'ubuntu-latest' &&\n    matrix.quicklisp == 'ultralisp' &&\n    secrets.github_token }}"
           }
         }

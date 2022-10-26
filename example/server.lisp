@@ -20,8 +20,8 @@
 (in-package #:openrpc-example/server)
 
 (defvar *server* nil)
-;; (defvar *pets* (make-hash-table :test 'equal))
-(defvar *pets*)
+
+(defvar *pets* (make-hash-table :test 'equal))
 
 
 (defclass pet ()

@@ -1,4 +1,4 @@
-(defpackage #:openrpc/ci
+(defpackage #:openrpc-server/ci
   (:use #:cl)
   (:import-from #:40ants-ci/jobs/linter)
   (:import-from #:40ants-ci/jobs/critic)
@@ -11,7 +11,7 @@
   (:import-from #:40ants-ci/steps/sh
                 #:sections
                 #:sh))
-(in-package #:openrpc/ci)
+(in-package #:openrpc-server/ci)
 
 
 (defparameter *asdf-version* "3.3.5.1"
@@ -19,16 +19,7 @@
    https://github.com/roswell/roswell/issues/497")
 
 
-(defworkflow docs
-  :on-push-to "master"
-  :on-pull-request t
-  :by-cron "0 10 * * 1"
-  :cache t
-  :jobs ((40ants-ci/jobs/docs:build-docs
-          :asdf-version *asdf-version*)))
-
-
-(defworkflow ci
+(defworkflow server-ci
   :on-push-to "master"
   :by-cron "0 10 * * 1"
   :on-pull-request t

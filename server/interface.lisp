@@ -3,7 +3,12 @@
   (:import-from #:serapeum
                 #:dict)
   (:import-from #:alexandria
-                #:length=))
+                #:length=)
+  (:export
+   #:type-to-schema
+   #:transform-result
+   #:primitive-type-p
+   #:make-info))
 (in-package #:openrpc-server/interface)
 
 
@@ -16,6 +21,9 @@ Result should be list, hash-map or a value of primitive type.")
 
 
 (defgeneric primitive-type-p (type)
+  (:documentation "Should return t for type if it's name matched to simple types supported by [JSON-SCHEMA](https://json-schema.org/).
+
+Argument TYPE is a symbol.")
   (:method ((type t))
     nil)
   (:method ((type (eql 'integer)))
@@ -25,6 +33,11 @@ Result should be list, hash-map or a value of primitive type.")
 
 
 (defgeneric type-to-schema (type)
+  (:documentation "This method is called for all types for which PRIMITIVE-TYPE-P generic-function
+returns NIL.
+
+It should return as hash-table with JSON-SCHEMA corresponding to type. Keys of the dictionary should
+be strings. It is convenient to use [`SERAPEUM:DICT`][SERAPEUM:DICT] for building the result.")
   (:method ((type t))
     (cond
       ((primitive-type-p type)
@@ -65,6 +78,7 @@ Result should be list, hash-map or a value of primitive type.")
 
 
 (defgeneric make-info (server)
+  (:documentation "Returns a basic information about API for [info section](https://spec.open-rpc.org/#info-object) of OpenRPC spec.")
   (:method ((server jsonrpc:server))
     (let ((info (make-hash-table :test 'equal)))
       (setf (gethash "title" info)
