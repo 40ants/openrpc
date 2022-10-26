@@ -237,7 +237,7 @@
 
 
 (defmacro generate-client (class-name url-or-path)
-  (let* ((spec (retrieve-spec url-or-path))
+  (let* ((spec (retrieve-spec (eval url-or-path)))
          (client-class (generate-client-class class-name spec))
          (object-classes
            ;; The map from package::symbol to a code which defines
