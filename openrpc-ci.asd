@@ -3,6 +3,7 @@
   :author "Alexander Artemenko"
   :license "BSD"
   :class :40ants-asdf-system
+  :defsystem-depends-on ("40ants-asdf-system")
   :pathname "ci"
   :depends-on ("openrpc-server/ci"
                "openrpc-client/ci"
