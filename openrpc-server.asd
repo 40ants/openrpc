@@ -10,3 +10,6 @@
   :homepage "https://40ants.com/openrpc/"
   :source-control (:git "https://github.com/40ants/openrpc")
   :in-order-to ((test-op (test-op openrpc-tests))))
+
+(register-system-packages "log4cl" '(#:log))
+(register-system-packages "lack-request" '(#:lack.request))

@@ -3,6 +3,5 @@
 (in-package #:openrpc-server/vars)
 
 
-(defvar *server* nil)
-
+(defvar *current-request*)
 
