@@ -36,7 +36,7 @@
         },
         {
           "name": "Build Docs",
-          "uses": "40ants/build-docs@v1",
+          "uses": "40ants/build-docs@v1.3.2-pre1",
           "with": {
             "asdf-system": "openrpc-docs",
             "error-on-warnings": true
