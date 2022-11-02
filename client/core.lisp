@@ -3,7 +3,8 @@
   (:import-from #:40ants-doc
                 #:defsection
                 #:defsection-copy)
-  (:import-from #:kebab)
+  (:import-from #:kebab
+                #:to-lisp-case)
   (:import-from #:jsonrpc)
   (:import-from #:jsonrpc/class)
   (:import-from #:str)
@@ -55,7 +56,7 @@
 
   (defun normalize-name (string)
     (string-upcase
-     (kebab:to-lisp-case
+     (to-lisp-case
       (str:replace-all "." "-" string))))
 
   (defun schema-to-type (schema)
@@ -120,7 +121,8 @@
       (unless existing-code
         (loop with properties = (gethash "properties" schema)
               for name being the hash-key of properties
-              for name-symbol = (alexandria:symbolicate (string-upcase name))
+              for name-symbol = (alexandria:symbolicate (string-upcase
+                                                         (to-lisp-case name)))
               for name-keyword = (alexandria:make-keyword name-symbol)
               for reader-func = (alexandria:symbolicate class-name
                                                         "-"
@@ -149,7 +151,9 @@
   (defun make-plist-from (raw-response)
     (loop for name being the hash-key of raw-response
           using (hash-value value)
-          for name-as-keyword = (alexandria:make-keyword (string-upcase name))
+          for name-as-keyword = (alexandria:make-keyword
+                                 (string-upcase
+                                  (to-lisp-case name)))
           appending (list name-as-keyword value)))
 
   (defun generate-result-transformation (api-class-name result-symbol spec-or-schema classes-cache
