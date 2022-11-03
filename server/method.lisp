@@ -134,7 +134,7 @@
               (list* '&key
                      keyword-args))))
 
-  (defun sort-params (params required-args optional-args keyword-args)
+  (defun sort-params (method-name params required-args optional-args keyword-args)
     "Accepts PARAMS list and reorders it such that first go required args, then optional and finally keyword."
 
     (let* ((simplified-optional-args (mapcar #'simplify-arg optional-args))
@@ -163,12 +163,13 @@
                                       simplified-keyword-args)
                               (mapcar #'parameter-name sorted-params))))
         (when not-documented
-          (error "Some parameters of function are not documented: ~{~S~^, ~}"
+          (error "Some parameters of function ~S are not documented: ~{~S~^, ~}"
+                 method-name
                  not-documented)))
       sorted-params))
   
 
-  (defun make-method-info (thunk info-forms required-args optional-args keyword-args)
+  (defun make-method-info (method-name thunk info-forms required-args optional-args keyword-args)
     (loop with params = nil
           with result = nil
           with summary = nil
@@ -200,7 +201,8 @@
                                              :type (second form)))))
           finally (return
                     (let ((sorted-params
-                            (sort-params params
+                            (sort-params method-name
+                                         params
                                          required-args
                                          optional-args
                                          keyword-args)))
@@ -339,7 +341,8 @@
 
              (add-api-method ,api
                              ,name-as-string
-                             (make-method-info #',wrapper-name
+                             (make-method-info ',name
+                                               #',wrapper-name
                                                ',info-forms
                                                ',required-args
                                                ',optional-args
