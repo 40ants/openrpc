@@ -171,7 +171,8 @@
                                                  (gethash "items"
                                                           (gethash "items"
                                                                    (gethash "properties" schema)))
-                                                 classes-cache)))
+                                                 classes-cache
+                                                 :export-symbols export-symbols)))
            `(let ((next-page-key (gethash "next-page-key" ,result-symbol)))
               (values-list
                (append
@@ -200,7 +201,11 @@
                    (make-plist-from ,result-symbol))))
         ((string-equal type "array")
          (let ((element-transformation
-                 (generate-result-transformation api-class-name 'item (gethash "items" schema) classes-cache)))
+                 (generate-result-transformation api-class-name
+                                                 'item
+                                                 (gethash "items" schema)
+                                                 classes-cache
+                                                 :export-symbols export-symbols)))
            `(loop for item in ,result-symbol
                   collect ,element-transformation)))
         (t
