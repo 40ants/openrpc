@@ -81,8 +81,11 @@ be strings. It is convenient to use [`SERAPEUM:DICT`][SERAPEUM:DICT] for buildin
       ;; Non paginated results:
       ((and (listp type)
             (symbolp (car type))
-            (string-equal (car type)
-                          "list-of"))
+            (or (string-equal (car type)
+                              "list-of")
+                ;; Support for SERAPEUM:SOFT-LIST-OF
+                (string-equal (car type)
+                              "soft-list-of")))
        (unless (length= 2 type)
          (error "Type definition ~S should have this form (LIST-OF ~A)."
                 type
