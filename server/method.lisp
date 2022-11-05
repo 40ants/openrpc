@@ -28,6 +28,8 @@
                 #:with-log-unhandled)
   (:import-from #:jsonrpc/errors
                 #:jsonrpc-callback-error)
+  (:import-from #:openrpc-server/errors
+                #:return-error)
   (:export
    #:define-rpc-method))
 (in-package #:openrpc-server/method)
@@ -325,7 +327,7 @@
                                             collect `(multiple-value-bind (value present-p)
                                                          (gethash ,name args)
                                                        (unless present-p
-                                                         (openrpc-server:return-error
+                                                         (return-error
                                                           (fmt "Argument ~A is required but not supplied by a client."
                                                                ',arg)
                                                           :error-class 'jsonrpc/errors:jsonrpc-invalid-request))
