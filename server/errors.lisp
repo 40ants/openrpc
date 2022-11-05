@@ -6,8 +6,9 @@
 (in-package #:openrpc-server/errors)
 
 
-(defun return-error (message &key (code -1))
+(defun return-error (message &key (code -1)
+                               (error-class 'jsonrpc/errors:jsonrpc-callback-error))
   "Raises an error to interrupt processing and return status to the caller."
-  (error 'jsonrpc/errors:jsonrpc-callback-error
+  (error error-class
          :message message
          :code code))

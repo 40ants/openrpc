@@ -2,6 +2,7 @@
   (:use #:cl)
   (:import-from #:log)
   (:import-from #:serapeum
+                #:fmt
                 #:dict)
   (:import-from #:alexandria
                 #:length=
@@ -324,8 +325,10 @@
                                             collect `(multiple-value-bind (value present-p)
                                                          (gethash ,name args)
                                                        (unless present-p
-                                                         (error "Argument ~A is required but not supplied by a client."
-                                                                ',arg))
+                                                         (openrpc-server:return-error
+                                                          (fmt "Argument ~A is required but not supplied by a client."
+                                                               ',arg)
+                                                          :error-class 'jsonrpc/errors:jsonrpc-invalid-request))
                                                        value)))
                (optional-arg-names (mapcar #'sym-to-api-string optional-args))
                (keyword-arg-names (mapcar #'sym-to-api-string keyword-args))
