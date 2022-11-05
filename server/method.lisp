@@ -256,7 +256,7 @@
                     ,call-form
                   (let ((response (dict "items" (transform-result result))))
                     (when next-page-key
-                      (setf (gethash "next-page-key" response)
+                      (setf (gethash "next_page_key" response)
                             next-page-key))
                     response)))
               (t

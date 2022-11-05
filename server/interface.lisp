@@ -106,7 +106,9 @@ be strings. It is convenient to use [`SERAPEUM:DICT`][SERAPEUM:DICT] for buildin
        (dict "type" "object"
              "properties" (dict "items" (dict "type" "array"
                                               "items" (type-to-schema (second type)))
-                                "next-page-key" (dict "type" "string"))
+                                "next_page_key" (dict "oneOf"
+                                                      (list (dict "type" "string")
+                                                            (dict "type" "int"))))
              "required" (list "items")
              "x-paginated-list" t))
       ((find-class type)

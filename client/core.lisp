@@ -173,7 +173,7 @@
                                                                    (gethash "properties" schema)))
                                                  classes-cache
                                                  :export-symbols export-symbols)))
-           `(let ((next-page-key (gethash "next-page-key" ,result-symbol)))
+           `(let ((next-page-key (gethash "next_page_key" ,result-symbol)))
               (values-list
                (append
                 (list
@@ -183,7 +183,7 @@
                   (list
                    (flet ((retrieve-next-page ()
                             (let ((new-args (copy-hash-table args)))
-                              (setf (gethash "page-key" new-args)
+                              (setf (gethash "page_key" new-args)
                                     next-page-key)
                               (retrieve-data new-args))))
                      #'retrieve-next-page))))))))
