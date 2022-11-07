@@ -43,11 +43,12 @@
     (testing-app "Checking PetShop"
         (make-clack-app)
       (let* ((url (localhost "/openrpc.json"))
-             (test-package (make-package "test-package1" :use (list :cl))))
+             (test-package (make-package "test-package1" :use (list :cl)))
+             (api-symbol (intern "PETSHOP" test-package)))
         (unwind-protect 
              (let* ((*package* test-package))
                (testing "Client classes creation"
-                 (eval `(generate-client petshop ,url))
+                 (eval `(generate-client ,api-symbol ,url))
                 
                  (let ((client (uiop:symbol-call test-package "MAKE-PETSHOP")))
                    (jsonrpc:client-connect client :url (localhost "/") :mode :http)
