@@ -284,7 +284,7 @@
                                 :message message
                                 :func-name func-name
                                 :func-arguments arguments)))))
-      (jsonrpc:call client func-name arguments))))
+      (jsonrpc/class:call client func-name arguments))))
 
 
 (defmacro generate-client (class-name url-or-path &key (export-symbols t))
