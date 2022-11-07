@@ -2,6 +2,7 @@
   (:use #:cl)
   (:import-from #:log)
   (:import-from #:serapeum
+                #:soft-list-of
                 #:fmt
                 #:dict)
   (:import-from #:alexandria
@@ -40,10 +41,11 @@
 
   (defclass parameter ()
     ((name :initarg :name
-           :type string
+           :type symbol
            :reader parameter-name)
      (type :initarg :type
-           :type string
+           :type (or symbol
+                     (soft-list-of symbol))
            :reader parameter-type)
      (required :initarg :required
                :initform nil
