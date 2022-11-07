@@ -26,6 +26,7 @@
                 #:api-server)
   (:import-from #:log4cl-extras/error
                 #:with-log-unhandled)
+  (:import-from #:jsonrpc)
   (:import-from #:jsonrpc/errors
                 #:jsonrpc-callback-error)
   (:import-from #:openrpc-server/errors

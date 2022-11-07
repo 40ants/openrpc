@@ -1,7 +1,8 @@
 (uiop:define-package #:openrpc-server/clack
   (:use #:cl)
   (:import-from #:jsonrpc)
-  (:import-from #:log)
+  (:import-from #:yason)
+  (:import-from #:lack.request)
   (:import-from #:jsonrpc/class
                 #:bind-server-to-transport)
   (:import-from #:jsonrpc/transport/websocket
@@ -19,6 +20,8 @@
                 #:default-api)
   (:import-from #:openrpc-server/method
                 #:method-thunk)
+  (:import-from #:websocket-driver
+                #:websocket-p)
   (:export
    #:make-clack-app))
 (in-package #:openrpc-server/clack)
@@ -34,7 +37,7 @@
 (defun process-request (env server websocket websocket-app http http-app indent-json)
   (cond
     ((and websocket
-          (wsd:websocket-p env))
+          (websocket-p env))
      (funcall websocket-app env))
     ((and (string-equal (getf env :path-info)
                         "/openrpc.json")
