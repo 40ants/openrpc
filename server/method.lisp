@@ -302,7 +302,7 @@
    Also, there should be one (:result type) form in the BODY."
   (destructuring-bind (api name)
       (etypecase name
-        (symbol (list default-api name))
+        (symbol (list 'default-api name))
         (list name))
     (with-destructured-lambda-list (:required required-args
                                     :optional optional-args
