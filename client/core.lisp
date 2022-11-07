@@ -5,7 +5,8 @@
                 #:defsection-copy)
   (:import-from #:kebab
                 #:to-lisp-case)
-  (:import-from #:jsonrpc)
+  (:import-from #:log)
+  (:import-from #:yason)
   (:import-from #:jsonrpc/class)
   (:import-from #:str)
   (:import-from #:dexador)
