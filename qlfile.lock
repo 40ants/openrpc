@@ -6,11 +6,3 @@
  (:class qlot/source/dist:source-dist
   :initargs (:distribution "http://dist.ultralisp.org" :%version :latest)
   :version "20221112220500"))
-("bordeaux-threads" .
- (:class qlot/source/github:source-github
-  :initargs (:repos "svetlyak40wt/bordeaux-threads" :ref nil :branch "fix-apiv2-for-no-threads" :tag nil)
-  :version "github-29a839d1db25d86b18c0caad50036da9481b064b"))
-("jsonrpc" .
- (:class qlot/source/github:source-github
-  :initargs (:repos "svetlyak40wt/jsonrpc" :ref nil :branch "separate-clack-builder" :tag nil)
-  :version "github-12bc0abfa33497fff0b9974f7c23b7df25b6a979"))

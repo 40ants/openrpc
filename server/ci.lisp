@@ -18,22 +18,17 @@
   :on-push-to "master"
   :by-cron "0 10 * * 1"
   :on-pull-request t
-  ;; :cache t
+  :cache t
   :jobs ((40ants-ci/jobs/linter:linter :check-imports t)
          (run-tests
           :os ("ubuntu-latest"
-               ;; "macos-latest"
-               )
-          :quicklisp (;; "quicklisp"
+               "macos-latest")
+          :quicklisp ("quicklisp"
                       "ultralisp")
           :lisp ("sbcl-bin"
-                 ;; "ccl-bin"
-                 )
+                 "ccl-bin")
           :coverage t
-          ;; TODO: We don't need this because we depend on a custom version
-          ;; of jsonrpc from the qlfile:
-          ;; :qlfile "{% ifequal quicklisp_dist \"ultralisp\" %}
-          ;;          dist ultralisp http://dist.ultralisp.org
-          ;;          {% endifequal %}"
-          )))
+          :qlfile "{% ifequal quicklisp_dist \"ultralisp\" %}
+                   dist ultralisp http://dist.ultralisp.org
+                   {% endifequal %}")))
 
