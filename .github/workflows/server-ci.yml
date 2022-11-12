@@ -24,14 +24,13 @@
       "steps": [
         {
           "name": "Checkout Code",
-          "uses": "actions/checkout@v2"
+          "uses": "actions/checkout@v3"
         },
         {
           "name": "Setup Common Lisp Environment",
           "uses": "40ants/setup-lisp@v2",
           "with": {
-            "asdf-system": "openrpc-server",
-            "asdf-version": "3.3.5.1"
+            "asdf-system": "openrpc-server"
           }
         },
         {
@@ -41,7 +40,7 @@
         },
         {
           "name": "Update Qlot",
-          "run": "qlot update || qlot update",
+          "run": "qlot update --no-deps",
           "shell": "bash"
         },
         {
@@ -51,7 +50,7 @@
         },
         {
           "name": "Run Linter",
-          "run": "qlot exec 40ants-linter --system \"openrpc-server\"",
+          "run": "qlot exec 40ants-linter --system \"openrpc-server\" --imports",
           "shell": "bash"
         }
       ]
@@ -66,14 +65,13 @@
       "steps": [
         {
           "name": "Checkout Code",
-          "uses": "actions/checkout@v2"
+          "uses": "actions/checkout@v3"
         },
         {
           "name": "Setup Common Lisp Environment",
           "uses": "40ants/setup-lisp@v2",
           "with": {
-            "asdf-system": "openrpc-server",
-            "asdf-version": "3.3.5.1"
+            "asdf-system": "openrpc-server"
           }
         },
         {

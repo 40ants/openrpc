@@ -14,15 +14,10 @@
 (in-package #:openrpc-docs/ci)
 
 
-(defparameter *asdf-version* "3.3.5.1"
-  "At some point installation of the latest roswell version was broken:
-   https://github.com/roswell/roswell/issues/497")
-
-
 (defworkflow docs
   :on-push-to "master"
   :on-pull-request t
   :by-cron "0 10 * * 1"
   ;; :cache t
-  :jobs ((40ants-ci/jobs/docs:build-docs
-          :asdf-version *asdf-version*)))
+  :jobs ((40ants-ci/jobs/linter:linter :check-imports t)
+         (40ants-ci/jobs/docs:build-docs)))

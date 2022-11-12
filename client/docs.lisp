@@ -8,6 +8,7 @@
 
 
 (defsection @client (:title "Client")
+  (openrpc-client system)
   "OPENRPC-CLIENT ASDF system provides a way to build CL classes and methods for working with JSON-RPC API.
 All you need is to give it an URL and all code will be created in compile-time as a result of macro-expansion.
 

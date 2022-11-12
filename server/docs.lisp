@@ -13,7 +13,9 @@
 (in-package #:openrpc-server/docs)
 
 
-(defsection @server (:title "Server")
+(defsection @server (:title "Server"
+                     :ignore-words ("PET"))
+  (openrpc-server system)
   (@defining-methods section)
   (@starting-server section)
   (@spec section)
@@ -70,7 +72,7 @@ Now we can define an RPC method to create a new pet:
 
 Here we should explicitly specify type for each parameter and result's type.
 
-Pay attention, the result type is PET class. OPENRPC-SERVER takes care on serializing
+Pay attention, the result type is PET. OPENRPC-SERVER system takes care on serializing
 objects and you can retrieve an OpenRPC spec for any type, using TYPE-TO-SCHEMA generic-function:
 
 ```
