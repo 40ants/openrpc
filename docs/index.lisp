@@ -44,6 +44,8 @@
                                    "URL"
                                    "CL"
                                    "REPL"
+                                   "MAKE"
+                                   "HTTP"
                                    "OPENRPC-CLIENT"
                                    "ASDF"))
   "

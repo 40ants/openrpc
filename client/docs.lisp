@@ -1,7 +1,9 @@
 (uiop:define-package #:openrpc-client/docs
   (:use #:cl)
   (:import-from #:40ants-doc
-                #:defsection))
+                #:defsection)
+  (:import-from #:openrpc-client
+                #:generate-client))
 (in-package #:openrpc-client/docs)
 
 
@@ -127,4 +129,5 @@ OPENRPC-EXAMPLE/CLIENT> (funcall #v167:1)
 
 Now this is the last page and there is now a closure to retrieve the next page. Learn more how
 to implement pagination on server-side in the OPENRPC-SERVER/DOCS::@PAGINATION section.
-")
+"
+  (generate-client macro))

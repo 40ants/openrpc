@@ -52,8 +52,11 @@ Now we can define an RPC method to create a new pet:
 
 ```
 (openrpc-server:define-rpc-method create-pet (name tag)
-  (:param name string)
-  (:param tag string)
+  (:summary \"Short method docstring.\")
+  (:description \"Lengthy description of the method.\")
+  (:param name string \"Pet's name\"
+          :description \"This is a long description of the parameter.\")
+  (:param tag string \"Old param, don't use it anymore.\" :deprecated t)
   (:result pet)
   (let* ((new-id (get-new-id))
          (pet (make-instance 'pet
@@ -67,33 +70,52 @@ Now we can define an RPC method to create a new pet:
 
 Here we should explicitly specify type for each parameter and result's type.
 
-But to make this work with our pet class, we have to define a two more methods.
-First one will tell framework to which JSON-SCHEMA should be mapped objects of this type:
+Pay attention, the result type is PET class. OPENRPC-SERVER takes care on serializing
+objects and you can retrieve an OpenRPC spec for any type, using TYPE-TO-SCHEMA generic-function:
 
 ```
-(defmethod type-to-schema ((type (eql 'pet)))
-  (dict \"type\" \"object\"
-        \"properties\" (dict \"id\" (type-to-schema 'integer)
-                           \"name\" (type-to-schema 'string)
-                           \"tag\" (type-to-schema 'string))
-        \"required\" (list \"id\" \"name\" \"tag\")
-        \"x-cl-class\" (symbol-name type)
-        \"x-cl-package\" (package-name (symbol-package type))))
+CL-USER> (serapeum:toggle-pretty-print-hash-table)
+T
+CL-USER> (openrpc-server:type-to-schema 'pet)
+(SERAPEUM:DICT
+  \"type\" \"object\"
+  \"properties\" (SERAPEUM:DICT
+                 \"id\" (SERAPEUM:DICT
+                        \"type\" \"integer\"
+                       )
+                 \"name\" (SERAPEUM:DICT
+                          \"type\" \"string\"
+                         )
+                 \"tag\" (SERAPEUM:DICT
+                         \"type\" \"string\"
+                        )
+                )
+  \"required\" '(\"tag\" \"name\" \"id\")
+  \"x-cl-class\" \"PET\"
+  \"x-cl-package\" \"COMMON-LISP-USER\"
+ )
 ```
 
-And second method should transform pet instance into simple datastructures
-according to scheme. Later result of this transformation will be serialized
-to JSON:
+This method is used to render response requests to `/openrpc.json` handle of your API.
+
+There is also a second generic-function which transform class instance into simple datastructures
+according to a scheme. For example, here is how we can serialize our pet:
 
 ```
-(defmethod transform-result ((obj pet))
-  (dict \"id\" (pet-id obj)
-        \"name\" (pet-name obj)
-        \"tag\" (pet-tag obj)))
+CL-USER> (openrpc-server:transform-result
+          (make-instance 'pet :name \"Bobik\"))
+(SERAPEUM:DICT
+  \"name\" \"Bobik\"
+ ) 
+CL-USER> (openrpc-server:transform-result
+          (make-instance 'pet
+                         :name \"Bobik\"
+                         :tag \"the dog\"))
+(SERAPEUM:DICT
+  \"name\" \"Bobik\"
+  \"tag\" \"the dog\"
+ )
 ```
-
-Probably, someday framework will generate these methods automatically, using
-types from DEFCLASS form.
 ")
 
 
