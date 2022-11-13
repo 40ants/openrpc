@@ -29,6 +29,10 @@
                       "ultralisp")
           :lisp ("sbcl-bin"
                  "ccl-bin/1.12.1")
+          :exclude ((:os "ubuntu-latest"
+                         ;; On Ubuntu tests fail with this error:
+                         ;; The condition Address family for hostname not supported (error #-9) during nameserver operation in getaddrinfo occurred with errno: 0.
+                     :lisp "ccl-bin/1.12.1"))
           :coverage t
           :qlfile "{% ifequal quicklisp_dist \"ultralisp\" %}
                    dist ultralisp http://dist.ultralisp.org
