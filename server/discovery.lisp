@@ -1,5 +1,6 @@
 (uiop:define-package #:openrpc-server/discovery
   (:use #:cl)
+  (:import-from #:jsonrpc)
   (:import-from #:jsonrpc/mapper)
   (:import-from #:lack.request)
   (:import-from #:openrpc-server/vars
