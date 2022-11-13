@@ -23,7 +23,9 @@
          (run-tests
           :os ("ubuntu-latest"
                "macos-latest")
-          :quicklisp ("quicklisp"
+          :quicklisp (;; Quicklisp is not working yet, because
+                      ;; there is old JSONRPC where no "jsonrpc/transport/http" system. 
+                      ;; "quicklisp"
                       "ultralisp")
           :lisp ("sbcl-bin"
                  "ccl-bin/1.12.1")
