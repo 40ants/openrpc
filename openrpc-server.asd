@@ -5,6 +5,7 @@
   :class :40ants-asdf-system
   :defsystem-depends-on ("40ants-asdf-system")
   :pathname "server"
+  :serial t
   :depends-on ("log4cl-extras"
                "openrpc-server/server"
                "openrpc-server/class"
