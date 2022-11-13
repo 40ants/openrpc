@@ -1,13 +1,12 @@
 (uiop:define-package #:openrpc-tests/petshop
   (:use #:cl)
-  (:import-from #:hamcrest/rove
-                #:contains
-                #:assert-that)
+  (:import-from #:jsonrpc)
   (:import-from #:clack.test)
   (:import-from #:rove
                 #:testing
                 #:ok
                 #:deftest)
+  (:import-from #:openrpc-server)
   (:import-from #:openrpc-server/clack
                 #:make-clack-app)
   (:import-from #:clack.test
@@ -20,6 +19,7 @@
                 #:length=)
   (:import-from #:bordeaux-threads
                 #:*default-special-bindings*)
+  (:import-from #:openrpc-example)
   (:import-from #:openrpc-example/server
                 #:*pets*))
 (in-package #:openrpc-tests/petshop)

@@ -6,8 +6,7 @@
   :defsystem-depends-on ("40ants-asdf-system")
   :pathname "example"
   :depends-on ("clack-handler-hunchentoot"
-               "openrpc-example/server"
-               "openrpc-example/client")
+               "openrpc-example/core")
   :description "Example JSON-RPC server and client."
   :homepage "https://40ants.com/openrpc/"
   :source-control (:git "https://github.com/40ants/openrpc")
