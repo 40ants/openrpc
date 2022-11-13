@@ -1,5 +1,6 @@
 (uiop:define-package #:openrpc-docs/changelog
   (:use #:cl)
+  (:import-from #:40ants-doc)
   (:import-from #:40ants-doc/changelog
                 #:defchangelog))
 (in-package #:openrpc-docs/changelog)
