@@ -9,7 +9,6 @@
                 #:return-error
                 #:transform-result
                 #:type-to-schema)
-  (:import-from #:clack.handler.hunchentoot)
   (:import-from #:serapeum
                 #:dict)
   (:import-from #:openrpc-server/clack

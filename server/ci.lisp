@@ -14,33 +14,27 @@
 (in-package #:openrpc-server/ci)
 
 
-(defparameter *asdf-version* "3.3.5.1"
-  "At some point installation of the latest roswell version was broken:
-   https://github.com/roswell/roswell/issues/497")
-
-
 (defworkflow server-ci
   :on-push-to "master"
   :by-cron "0 10 * * 1"
   :on-pull-request t
-  ;; :cache t
-  :jobs ((40ants-ci/jobs/linter:linter
-          :asdf-version *asdf-version*)
+  :cache t
+  :jobs ((40ants-ci/jobs/linter:linter :check-imports t)
          (run-tests
           :os ("ubuntu-latest"
-               ;; "macos-latest"
-               )
-          :quicklisp (;; "quicklisp"
+               "macos-latest")
+          :quicklisp (;; Quicklisp is not working yet, because
+                      ;; there is old JSONRPC where no "jsonrpc/transport/http" system. 
+                      ;; "quicklisp"
                       "ultralisp")
           :lisp ("sbcl-bin"
-                 ;; "ccl-bin"
-                 )
-          :asdf-version *asdf-version*
+                 "ccl-bin/1.12.1")
+          :exclude ((:os "ubuntu-latest"
+                         ;; On Ubuntu tests fail with this error:
+                         ;; The condition Address family for hostname not supported (error #-9) during nameserver operation in getaddrinfo occurred with errno: 0.
+                     :lisp "ccl-bin/1.12.1"))
           :coverage t
-          ;; TODO: We don't need this because we depend on a custom version
-          ;; of jsonrpc from the qlfile:
-          ;; :qlfile "{% ifequal quicklisp_dist \"ultralisp\" %}
-          ;;          dist ultralisp http://dist.ultralisp.org
-          ;;          {% endifequal %}"
-          )))
+          :qlfile "{% ifequal quicklisp_dist \"ultralisp\" %}
+                   dist ultralisp http://dist.ultralisp.org
+                   {% endifequal %}")))
 

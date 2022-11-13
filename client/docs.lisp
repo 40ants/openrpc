@@ -1,11 +1,14 @@
 (uiop:define-package #:openrpc-client/docs
   (:use #:cl)
   (:import-from #:40ants-doc
-                #:defsection))
+                #:defsection)
+  (:import-from #:openrpc-client
+                #:generate-client))
 (in-package #:openrpc-client/docs)
 
 
 (defsection @client (:title "Client")
+  (openrpc-client system)
   "OPENRPC-CLIENT ASDF system provides a way to build CL classes and methods for working with JSON-RPC API.
 All you need is to give it an URL and all code will be created in compile-time as a result of macro-expansion.
 
@@ -127,4 +130,5 @@ OPENRPC-EXAMPLE/CLIENT> (funcall #v167:1)
 
 Now this is the last page and there is now a closure to retrieve the next page. Learn more how
 to implement pagination on server-side in the OPENRPC-SERVER/DOCS::@PAGINATION section.
-")
+"
+  (generate-client macro))

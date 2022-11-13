@@ -1,7 +1,5 @@
 (uiop:define-package #:openrpc-server
   (:use #:cl)
-  (:import-from #:openrpc-server/discovery)
-  (:import-from #:openrpc-server/class)
   (:import-from #:openrpc-server/method
                 #:define-rpc-method)
   (:import-from #:openrpc-server/interface
@@ -35,4 +33,6 @@
            #:api-title
            #:api-methods))
 (in-package #:openrpc-server)
+
+
 

@@ -1,10 +1,9 @@
 (uiop:define-package #:openrpc-client/core
   (:use #:cl)
-  (:import-from #:40ants-doc
-                #:defsection
-                #:defsection-copy)
   (:import-from #:kebab
                 #:to-lisp-case)
+  (:import-from #:log)
+  (:import-from #:yason)
   (:import-from #:jsonrpc)
   (:import-from #:jsonrpc/class)
   (:import-from #:str)
@@ -17,14 +16,9 @@
                 #:connection-refused-error)
   (:import-from #:openrpc-client/error
                 #:rpc-error)
-  (:export #:@index
-           #:@readme
-           #:generate-client))
+  (:export #:generate-client))
 (in-package #:openrpc-client/core)
 
-
-(defsection @example (:title "Example chapter")
-  "Please, fill this documentation with real docs.")
 
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
@@ -283,10 +277,17 @@
                                 :message message
                                 :func-name func-name
                                 :func-arguments arguments)))))
-      (jsonrpc:call client func-name arguments))))
+      (jsonrpc/class:call client func-name arguments))))
 
 
 (defmacro generate-client (class-name url-or-path &key (export-symbols t))
+  "Generates Common Lisp client by OpenRPC spec.
+
+   CLASS-NAME is the name of a API class. Also, a corresponding MAKE-<CLASS-NAME> function
+   is created.
+
+   URL-OR-PATH argument could be a string with HTTP URL of a spec, or a pathname
+   if a spec should be read from the disc."
   (let* ((spec (retrieve-spec (eval url-or-path)))
          (client-class (generate-client-class class-name spec :export-symbols export-symbols))
          (object-classes
