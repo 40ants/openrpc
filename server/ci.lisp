@@ -26,7 +26,7 @@
           :quicklisp ("quicklisp"
                       "ultralisp")
           :lisp ("sbcl-bin"
-                 "ccl-bin")
+                 "ccl-bin/1.12.1")
           :coverage t
           :qlfile "{% ifequal quicklisp_dist \"ultralisp\" %}
                    dist ultralisp http://dist.ultralisp.org

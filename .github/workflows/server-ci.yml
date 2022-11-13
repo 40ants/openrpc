@@ -96,7 +96,7 @@
           ],
           "lisp": [
             "sbcl-bin",
-            "ccl-bin"
+            "ccl-bin/1.12.1"
           ]
         }
       },

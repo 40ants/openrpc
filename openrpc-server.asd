@@ -5,7 +5,8 @@
   :class :40ants-asdf-system
   :defsystem-depends-on ("40ants-asdf-system")
   :pathname "server"
-  :depends-on ("openrpc-server/server"
+  :depends-on ("log4cl-extras"
+               "openrpc-server/server"
                "openrpc-server/class"
                "openrpc-server/discovery")
   :description "OpenRPC server implementation for Common Lisp."
