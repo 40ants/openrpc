@@ -5,7 +5,11 @@
 (in-package #:openrpc-server/content-descriptor)
 
 
-(defun make-content-descriptor (name &key type reference required (schema nil schema-given-p))
+(defun make-content-descriptor (name &key type reference required
+                                       (schema nil schema-given-p)
+                                       summary
+                                       description
+                                       deprecated)
   (let ((result (make-hash-table :test 'equal))
         (schema (if schema
                     (copy-hash-table schema)
@@ -28,6 +32,18 @@
 
     (when required
       (setf (gethash "required" result)
+            t))
+    
+    (when summary
+      (setf (gethash "summary" result)
+            summary))
+    
+    (when description
+      (setf (gethash "description" result)
+            description))
+
+    (when deprecated
+      (setf (gethash "deprecated" result)
             t))
 
     result))

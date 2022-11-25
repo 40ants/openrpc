@@ -1,13 +1,12 @@
 (uiop:define-package #:openrpc-tests/petshop
   (:use #:cl)
-  (:import-from #:hamcrest/rove
-                #:contains
-                #:assert-that)
+  (:import-from #:jsonrpc)
   (:import-from #:clack.test)
   (:import-from #:rove
                 #:testing
                 #:ok
                 #:deftest)
+  (:import-from #:openrpc-server)
   (:import-from #:openrpc-server/clack
                 #:make-clack-app)
   (:import-from #:clack.test
@@ -20,6 +19,7 @@
                 #:length=)
   (:import-from #:bordeaux-threads
                 #:*default-special-bindings*)
+  (:import-from #:openrpc-example)
   (:import-from #:openrpc-example/server
                 #:*pets*))
 (in-package #:openrpc-tests/petshop)
@@ -43,11 +43,12 @@
     (testing-app "Checking PetShop"
         (make-clack-app)
       (let* ((url (localhost "/openrpc.json"))
-             (test-package (make-package "test-package1" :use (list :cl))))
+             (test-package (make-package "test-package1" :use (list :cl)))
+             (api-symbol (intern "PETSHOP" test-package)))
         (unwind-protect 
              (let* ((*package* test-package))
                (testing "Client classes creation"
-                 (eval `(generate-client petshop ,url))
+                 (eval `(generate-client ,api-symbol ,url))
                 
                  (let ((client (uiop:symbol-call test-package "MAKE-PETSHOP")))
                    (jsonrpc:client-connect client :url (localhost "/") :mode :http)

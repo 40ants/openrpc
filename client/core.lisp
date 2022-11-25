@@ -1,26 +1,24 @@
 (uiop:define-package #:openrpc-client/core
   (:use #:cl)
-  (:import-from #:40ants-doc
-                #:defsection
-                #:defsection-copy)
-  (:import-from #:kebab)
+  (:import-from #:kebab
+                #:to-lisp-case)
+  (:import-from #:log)
+  (:import-from #:yason)
   (:import-from #:jsonrpc)
   (:import-from #:jsonrpc/class)
   (:import-from #:str)
   (:import-from #:dexador)
   (:import-from #:alexandria
+                #:appendf
                 #:read-file-into-string
                 #:copy-hash-table)
   (:import-from #:usocket
                 #:connection-refused-error)
-  (:export #:@index
-           #:@readme
-           #:generate-client))
+  (:import-from #:openrpc-client/error
+                #:rpc-error)
+  (:export #:generate-client))
 (in-package #:openrpc-client/core)
 
-
-(defsection @example (:title "Example chapter")
-  "Please, fill this documentation with real docs.")
 
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
@@ -34,22 +32,25 @@
                        lambda-list))))
 
   
-  (defun generate-client-class (class-name spec)
-    (let ((make-func-name (alexandria:symbolicate "MAKE-" class-name))
-          (method-descriptions (mapcar #'generate-method-description
-                                       (gethash "methods" spec))))
-      `((defclass ,class-name (jsonrpc/class:client)
-          ())
-        (defun ,make-func-name ()
-          (make-instance ',class-name))
-
-        (defmethod describe-object ((client ,class-name) stream)
-          (format stream "Supported RPC methods:~2%")
-          ,@method-descriptions))))
+  (defun generate-client-class (class-name spec &key export-symbols)
+    (let* ((make-func-name (alexandria:symbolicate "MAKE-" class-name))
+           (method-descriptions (mapcar #'generate-method-description
+                                        (gethash "methods" spec)))
+           (result `((defclass ,class-name (jsonrpc/class:client)
+                       ())
+                     (defun ,make-func-name ()
+                       (make-instance ',class-name))
+                     (defmethod describe-object ((client ,class-name) stream)
+                       (format stream "Supported RPC methods:~2%")
+                       ,@method-descriptions))))
+      (when export-symbols
+        (appendf result
+                 `((export ',class-name)
+                   (export ',make-func-name))))))
 
   (defun normalize-name (string)
     (string-upcase
-     (kebab:to-lisp-case
+     (to-lisp-case
       (str:replace-all "." "-" string))))
 
   (defun schema-to-type (schema)
@@ -57,6 +58,7 @@
       (cond
         ((string-equal type "integer") 'integer)
         ((string-equal type "string") 'string)
+        ((string-equal type "array") 'list)
         (t
          (error "Type ~S is not supported yet."
                 type)))))
@@ -107,17 +109,19 @@
                              ;; Returning the dictionary with all given arguments
                              args))))
   
-  (defun get-or-create-class (x-cl-class schema classes-cache)
+  (defun get-or-create-class (x-cl-class schema classes-cache &key export-symbols)
     (let* ((class-name (alexandria:symbolicate (string-upcase x-cl-class)))
            (existing-code (gethash class-name classes-cache)))
       (unless existing-code
         (loop with properties = (gethash "properties" schema)
               for name being the hash-key of properties
-              for name-symbol = (alexandria:symbolicate (string-upcase name))
+              for name-symbol = (alexandria:symbolicate (string-upcase
+                                                         (to-lisp-case name)))
               for name-keyword = (alexandria:make-keyword name-symbol)
               for reader-func = (alexandria:symbolicate class-name
                                                         "-"
                                                         name-symbol)
+              collect `(export ',reader-func) into slot-reader-exports
               collect `(,name-symbol :initform nil
                                      :initarg ,name-keyword
                                      :reader ,reader-func) into slots
@@ -131,16 +135,23 @@
                                   (print-unreadable-object (obj stream :type t)
                                     ,@slot-printers)))))
                         (setf (gethash class-name classes-cache)
-                              class-definition))))
+                              (append class-definition
+                                      (when export-symbols
+                                        (list `(export ',class-name)))
+                                      (when export-symbols
+                                        slot-reader-exports))))))
       class-name))
 
   (defun make-plist-from (raw-response)
     (loop for name being the hash-key of raw-response
           using (hash-value value)
-          for name-as-keyword = (alexandria:make-keyword (string-upcase name))
+          for name-as-keyword = (alexandria:make-keyword
+                                 (string-upcase
+                                  (to-lisp-case name)))
           appending (list name-as-keyword value)))
 
-  (defun generate-result-transformation (result-symbol spec-or-schema classes-cache)
+  (defun generate-result-transformation (api-class-name result-symbol spec-or-schema classes-cache
+                                         &key export-symbols)
     (let* ((schema (or (gethash "schema" spec-or-schema)
                        spec-or-schema))
            (x-cl-class (gethash "x-cl-class" schema))
@@ -149,12 +160,14 @@
       (cond
         (paginated-list
          (let ((element-transformation
-                 (generate-result-transformation 'item
+                 (generate-result-transformation api-class-name
+                                                 'item
                                                  (gethash "items"
                                                           (gethash "items"
                                                                    (gethash "properties" schema)))
-                                                 classes-cache)))
-           `(let ((next-page-key (gethash "next-page-key" ,result-symbol)))
+                                                 classes-cache
+                                                 :export-symbols export-symbols)))
+           `(let ((next-page-key (gethash "next_page_key" ,result-symbol)))
               (values-list
                (append
                 (list
@@ -164,21 +177,29 @@
                   (list
                    (flet ((retrieve-next-page ()
                             (let ((new-args (copy-hash-table args)))
-                              (setf (gethash "page-key" new-args)
+                              (setf (gethash "page_key" new-args)
                                     next-page-key)
                               (retrieve-data new-args))))
                      #'retrieve-next-page))))))))
         (x-cl-class
          (let ((class-name (get-or-create-class x-cl-class
                                                 schema
-                                                classes-cache)))
+                                                classes-cache
+                                                :export-symbols export-symbols)))
+           (when (eql class-name api-class-name)
+             (error "API defines class ~S which clashesh with a name of symbol you choose for API class. Please, choose another name." class-name))
+
            `(apply #'make-instance
                    ',class-name
                    ;; Now we need to extract parameters from raw-response
                    (make-plist-from ,result-symbol))))
         ((string-equal type "array")
          (let ((element-transformation
-                 (generate-result-transformation 'item (gethash "items" schema) classes-cache)))
+                 (generate-result-transformation api-class-name
+                                                 'item
+                                                 (gethash "items" schema)
+                                                 classes-cache
+                                                 :export-symbols export-symbols)))
            `(loop for item in ,result-symbol
                   collect ,element-transformation)))
         (t
@@ -186,23 +207,31 @@
          result-symbol))))
   
   
-  (defun generate-method (class-name spec classes-cache)
+  (defun generate-method (class-name spec classes-cache &key export-symbols)
     (let* ((original-name (gethash "name" spec))
            (name (intern (normalize-name original-name)))
            (params-spec (gethash "params" spec))
            (result-spec (gethash "result" spec))
-           (result-transformation (generate-result-transformation 'raw-response result-spec classes-cache))
+           (result-transformation (generate-result-transformation class-name
+                                                                  'raw-response
+                                                                  result-spec
+                                                                  classes-cache
+                                                                  :export-symbols export-symbols))
            (lambda-list (generate-lambda-list params-spec))
-           (arguments-collector (generate-arguments-collector params-spec)))
-      `(defmethod ,name ((client ,class-name) ,@lambda-list)
-         (let* ((args ,arguments-collector))
-           (labels ((retrieve-data (args)
-                      (let ((raw-response (rpc-call client ,original-name args)))
-                        ,result-transformation)))
-             (retrieve-data args))))))
+           (arguments-collector (generate-arguments-collector params-spec))
+           (result (list
+                    `(defmethod ,name ((client ,class-name) ,@lambda-list)
+                       (let* ((args ,arguments-collector))
+                         (labels ((retrieve-data (args)
+                                    (let ((raw-response (rpc-call client ,original-name args)))
+                                      ,result-transformation)))
+                           (retrieve-data args)))))))
+      (when export-symbols
+        (push `(export ',name)
+              result))
+      (values result)))
 
-
-
+  
   (defun retrieve-data-from-url (url)
     (handler-bind ((connection-refused-error
                      (lambda (condition)
@@ -233,19 +262,42 @@
 
 (defgeneric rpc-call (client func-name arguments)
   (:method ((client t) func-name (arguments t))
-    (jsonrpc:call client func-name arguments)))
+    (handler-bind ((dexador.error:http-request-internal-server-error
+                     (lambda (condition)
+                       (let* ((body (dex:response-body condition))
+                              (response (yason:parse body))
+                              (error (gethash "error" response))
+                              (code (gethash "code" error))
+                              (message (gethash "message" error)))
+                         (log:error "Received error response"
+                                    code
+                                    message)
+                         (error 'rpc-error
+                                :code code
+                                :message message
+                                :func-name func-name
+                                :func-arguments arguments)))))
+      (jsonrpc/class:call client func-name arguments))))
 
 
-(defmacro generate-client (class-name url-or-path)
+(defmacro generate-client (class-name url-or-path &key (export-symbols t))
+  "Generates Common Lisp client by OpenRPC spec.
+
+   CLASS-NAME is the name of a API class. Also, a corresponding MAKE-<CLASS-NAME> function
+   is created.
+
+   URL-OR-PATH argument could be a string with HTTP URL of a spec, or a pathname
+   if a spec should be read from the disc."
   (let* ((spec (retrieve-spec (eval url-or-path)))
-         (client-class (generate-client-class class-name spec))
+         (client-class (generate-client-class class-name spec :export-symbols export-symbols))
          (object-classes
            ;; The map from package::symbol to a code which defines
            ;; a class for some complex object used as argument or
            ;; result in an API:
            (make-hash-table :test 'equal))
          (methods (loop for method-spec in (gethash "methods" spec)
-                        collect (generate-method class-name method-spec object-classes)))
+                        appending (generate-method class-name method-spec object-classes
+                                                   :export-symbols export-symbols)))
          (class-definitions
            (loop for def being the hash-value of object-classes
                  ;; Here each def contains a list of DEFCLASS + one or more methods.

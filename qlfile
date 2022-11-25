@@ -1,9 +1,1 @@
 dist ultralisp http://dist.ultralisp.org
-
-# Unless this pull will be merged:
-# https://github.com/sionescu/bordeaux-threads/pull/86
-github bordeaux-threads svetlyak40wt/bordeaux-threads :branch fix-apiv2-for-no-threads
-
-# Waiting for this pull:
-# https://github.com/cxxxr/jsonrpc/pull/33
-github jsonrpc svetlyak40wt/jsonrpc :branch separate-clack-builder

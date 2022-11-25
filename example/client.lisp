@@ -1,5 +1,6 @@
 (uiop:define-package #:openrpc-example/client
   (:use #:cl)
+  (:import-from #:jsonrpc)
   (:import-from #:openrpc-client
                 #:generate-client))
 (in-package #:openrpc-example/client)
