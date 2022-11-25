@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<rss version="2.0">
+    <channel>
+        <title>openrpc-docs ChangeLog</title>
+        <link>https://40ants.com/openrpc/</link>
+        <generator>xml-emitter</generator>
+        <language>en-us</language>
+        <item>
+            <title>0.4.0  (2022-11-07)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Fixed usage of default &lt;code&gt;API&lt;/code&gt; when api is not specified to define-rpc-method macro.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Fixed most imports.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Mon, 07 Nov 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.3.0  (2022-10-30)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Method and its params now support such metadata as :summary :description and :deprecated.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Schemas for &lt;code&gt;CL&lt;/code&gt; classes can have :description if documentation id defined for class or its slots.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Macro &lt;a href=&quot;https://40ants.com/openrpc/#x-28OPENRPC-CLIENT-2FCORE-3AGENERATE-CLIENT-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29&quot; data-document=&quot;https://40ants.com/openrpc/&quot; data-node=&quot;x-28OPENRPC-CLIENT-2FCORE-3AGENERATE-CLIENT-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29&quot;&gt;&lt;code&gt;openrpc-client:generate-client&lt;/code&gt;&lt;/a&gt; now exports methods, classes and their slot readers by default.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;All methods, their arguments and object keys now use underscore instead of dash to make them more
+  convenient to use from other languages.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sun, 30 Oct 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.2.0  (2022-10-25)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Support client generation from a file on a filesystem.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Tue, 25 Oct 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.1.0  (2022-10-13)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Initial version.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Thu, 13 Oct 2022 00:00:00 +0000</pubDate>
+        </item>
+    </channel>
+</rss>
