@@ -5,7 +5,7 @@
 ("ultralisp" .
  (:class qlot/source/dist:source-dist
   :initargs (:distribution "http://dist.ultralisp.org" :%version :latest)
-  :version "20221026155000"))
+  :version "20221027092000"))
 ("bordeaux-threads" .
  (:class qlot/source/github:source-github
   :initargs (:repos "svetlyak40wt/bordeaux-threads" :ref nil :branch "fix-apiv2-for-no-threads" :tag nil)
@@ -14,3 +14,15 @@
  (:class qlot/source/github:source-github
   :initargs (:repos "svetlyak40wt/jsonrpc" :ref nil :branch "separate-clack-builder" :tag nil)
   :version "github-62be10e477bb9ad2047e1c06afeb70aed2dcbd99"))
+("log4cl-extras" .
+ (:class qlot/source/github:source-github
+  :initargs (:repos "40ants/log4cl-extras" :ref nil :branch nil :tag nil)
+  :version "github-39d94eb333ed9ea43567b6ee2ef40fb5e66b5bee"))
+("docs-builder" .
+ (:class qlot/source/github:source-github
+  :initargs (:repos "40ants/docs-builder" :ref nil :branch nil :tag nil)
+  :version "github-2fbabace7fb4e338cd4ff85d95921c4c0d692541"))
+("ngrok" .
+ (:class qlot/source/github:source-github
+  :initargs (:repos "40ants/ngrok" :ref nil :branch nil :tag nil)
+  :version "github-0a3a3ca1dd1557d813be97891f6a663c9acd7ab3"))
