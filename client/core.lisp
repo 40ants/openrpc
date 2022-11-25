@@ -57,6 +57,7 @@
     (let ((type (gethash "type" schema)))
       (cond
         ((string-equal type "integer") 'integer)
+        ((string-equal type "number") 'double-float)
         ((string-equal type "string") 'string)
         ((string-equal type "array") 'list)
         (t
