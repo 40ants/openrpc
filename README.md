@@ -252,7 +252,7 @@ For our example project it will looks like:
 
 <a id="x-28OPENRPC-SERVER-2FMETHOD-3ADEFINE-RPC-METHOD-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29"></a>
 
-#### [macro](77d7) `openrpc-server/method:define-rpc-method` name args &body body
+#### [macro](5a53) `openrpc-server/method:define-rpc-method` name args &body body
 
 Macro to define `RPC` method.
 
@@ -262,7 +262,7 @@ Also, there should be one (:result type) form in the `BODY`.
 
 <a id="x-28OPENRPC-SERVER-2FINTERFACE-3ATYPE-TO-SCHEMA-20GENERIC-FUNCTION-29"></a>
 
-#### [generic-function](0faf) `openrpc-server/interface:type-to-schema` type
+#### [generic-function](7b73) `openrpc-server/interface:type-to-schema` type
 
 This method is called for all types for which [`primitive-type-p`][edf5] generic-function
 returns `NIL`.
@@ -272,7 +272,7 @@ be strings. It is convenient to use `SERAPEUM:DICT` for building the result.
 
 <a id="x-28OPENRPC-SERVER-2FINTERFACE-3ATRANSFORM-RESULT-20GENERIC-FUNCTION-29"></a>
 
-#### [generic-function](1449) `openrpc-server/interface:transform-result` object
+#### [generic-function](4501) `openrpc-server/interface:transform-result` object
 
 Prepares object for serialization before responding to `RPC` call.
 
@@ -280,7 +280,7 @@ Result should be list, hash-map or a value of primitive type.
 
 <a id="x-28OPENRPC-SERVER-2FINTERFACE-3APRIMITIVE-TYPE-P-20GENERIC-FUNCTION-29"></a>
 
-#### [generic-function](ecc4) `openrpc-server/interface:primitive-type-p` type
+#### [generic-function](2c80) `openrpc-server/interface:primitive-type-p` type
 
 Should return t for type if it's name matched to simple types supported by [JSON-SCHEMA][686b].
 
@@ -288,19 +288,19 @@ Argument `TYPE` is a symbol.
 
 <a id="x-28OPENRPC-SERVER-2FINTERFACE-3AMAKE-INFO-20GENERIC-FUNCTION-29"></a>
 
-#### [generic-function](6624) `openrpc-server/interface:make-info` api server
+#### [generic-function](d4f0) `openrpc-server/interface:make-info` api server
 
 Returns a basic information about `API` for [info section][5f59] of Open`RPC` spec.
 
 <a id="x-28OPENRPC-SERVER-2FERRORS-3ARETURN-ERROR-20FUNCTION-29"></a>
 
-#### [function](7fc1) `openrpc-server/errors:return-error` message &key (code -1) (error-class 'jsonrpc/errors:jsonrpc-callback-error)
+#### [function](5451) `openrpc-server/errors:return-error` message &key (code -1) (error-class 'jsonrpc/errors:jsonrpc-callback-error)
 
 Raises an error to interrupt processing and return status to the caller.
 
 <a id="x-28OPENRPC-SERVER-2FCLACK-3AMAKE-CLACK-APP-20FUNCTION-29"></a>
 
-#### [function](a5b3) `openrpc-server/clack:make-clack-app` &key (api default-api) (http t) (websocket t) (indent-json nil)
+#### [function](43a6) `openrpc-server/clack:make-clack-app` &key (api default-api) (http t) (websocket t) (indent-json nil)
 
 Returns an Clack application to serve `JSON-RPC` `API`.
 
@@ -442,7 +442,7 @@ to implement pagination on server-side in the [`Paginated Results`][5c31] sectio
 
 <a id="x-28OPENRPC-CLIENT-2FCORE-3AGENERATE-CLIENT-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29"></a>
 
-### [macro](9814) `openrpc-client/core:generate-client` class-name url-or-path &key (export-symbols t)
+### [macro](8ab0) `openrpc-client/core:generate-client` class-name url-or-path &key (export-symbols t)
 
 Generates Common Lisp client by Open`RPC` spec.
 
@@ -462,14 +462,14 @@ if a spec should be read from the disc.
 [4de0]: https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FINTERFACE-3ATYPE-TO-SCHEMA-20GENERIC-FUNCTION-29
 [76b5]: https://github.com/40ants/openrpc
 [4bbd]: https://github.com/40ants/openrpc/actions
-[9814]: https://github.com/40ants/openrpc/blob/8bb78c7bcf22eed95b3a8e6e634697d76b15d753/client/core.lisp#L283
-[a5b3]: https://github.com/40ants/openrpc/blob/8bb78c7bcf22eed95b3a8e6e634697d76b15d753/server/clack.lisp#L51
-[7fc1]: https://github.com/40ants/openrpc/blob/8bb78c7bcf22eed95b3a8e6e634697d76b15d753/server/errors.lisp#L10
-[6624]: https://github.com/40ants/openrpc/blob/8bb78c7bcf22eed95b3a8e6e634697d76b15d753/server/interface.lisp#L123
-[1449]: https://github.com/40ants/openrpc/blob/8bb78c7bcf22eed95b3a8e6e634697d76b15d753/server/interface.lisp#L20
-[ecc4]: https://github.com/40ants/openrpc/blob/8bb78c7bcf22eed95b3a8e6e634697d76b15d753/server/interface.lisp#L44
-[0faf]: https://github.com/40ants/openrpc/blob/8bb78c7bcf22eed95b3a8e6e634697d76b15d753/server/interface.lisp#L60
-[77d7]: https://github.com/40ants/openrpc/blob/8bb78c7bcf22eed95b3a8e6e634697d76b15d753/server/method.lisp#L298
+[8ab0]: https://github.com/40ants/openrpc/blob/f611c933479365a5d9aefe576fa2134d09f90349/client/core.lisp#L284
+[43a6]: https://github.com/40ants/openrpc/blob/f611c933479365a5d9aefe576fa2134d09f90349/server/clack.lisp#L51
+[5451]: https://github.com/40ants/openrpc/blob/f611c933479365a5d9aefe576fa2134d09f90349/server/errors.lisp#L10
+[d4f0]: https://github.com/40ants/openrpc/blob/f611c933479365a5d9aefe576fa2134d09f90349/server/interface.lisp#L123
+[4501]: https://github.com/40ants/openrpc/blob/f611c933479365a5d9aefe576fa2134d09f90349/server/interface.lisp#L20
+[2c80]: https://github.com/40ants/openrpc/blob/f611c933479365a5d9aefe576fa2134d09f90349/server/interface.lisp#L44
+[7b73]: https://github.com/40ants/openrpc/blob/f611c933479365a5d9aefe576fa2134d09f90349/server/interface.lisp#L60
+[5a53]: https://github.com/40ants/openrpc/blob/f611c933479365a5d9aefe576fa2134d09f90349/server/method.lisp#L298
 [c597]: https://github.com/cxxxr/jsonrpc
 [75f7]: https://github.com/fukamachi/clack
 [686b]: https://json-schema.org/
