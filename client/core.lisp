@@ -303,7 +303,7 @@
            (loop for def being the hash-value of object-classes
                  ;; Here each def contains a list of DEFCLASS + one or more methods.
                  appending def)))
-    `(progn
+    `(eval-when (:compile-toplevel :load-toplevel :execute)
        ,@client-class
        ,@class-definitions
        ,@methods)))
