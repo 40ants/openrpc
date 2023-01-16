@@ -1,6 +1,5 @@
 (uiop:define-package #:openrpc-server/errors
   (:use #:cl)
-  (:import-from #:jsonrpc)
   (:import-from #:jsonrpc/errors)
   (:export
    #:return-error))
