@@ -4,7 +4,6 @@
                 #:to-lisp-case)
   (:import-from #:log)
   (:import-from #:yason)
-  (:import-from #:jsonrpc)
   (:import-from #:jsonrpc/class)
   (:import-from #:str)
   (:import-from #:dexador)

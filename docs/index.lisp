@@ -5,10 +5,8 @@
                 #:defsection-copy)
   (:import-from #:docs-config
                 #:docs-config)
-  (:import-from #:openrpc-server)
   (:import-from #:openrpc-server/docs
                 #:@server)
-  (:import-from #:openrpc-client)
   (:import-from #:openrpc-client/docs
                 #:@client)
   (:export #:@index
