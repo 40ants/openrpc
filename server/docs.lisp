@@ -126,8 +126,6 @@ CL-USER> (openrpc-server:transform-result
 
 ```
 (openrpc-server:define-rpc-method list-pets ()
-  (:param limit integer)
-  (:param page-key integer)
   (:result (list-of pet))
   (retrieve-all-pets))
 ```
