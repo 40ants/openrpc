@@ -16,15 +16,26 @@
   (:import-from #:openrpc-server/api
                 #:api-server
                 #:*current-api*
-                #:api-methods
-                #:default-api)
+                #:api-methods)
   (:import-from #:openrpc-server/method
                 #:method-thunk)
   (:import-from #:websocket-driver
                 #:websocket-p)
+  (:import-from #:clack-prometheus
+                #:with-prometheus-stats)
+  (:import-from #:clack-cors
+                #:make-cors-middleware)
   (:export
-   #:make-clack-app))
+   #:make-clack-app
+   #:app-middlewares
+   #:debug-on
+   #:debug-off))
 (in-package #:openrpc-server/clack)
+
+
+(defvar *allow-debug-header* nil
+  "If set to true, then JSON-RPC request will be processed with interactive debugger enabled
+   in case if X-Debug-On header is present in the request.")
 
 
 (defun return-spec (server &key indent-json)
@@ -48,11 +59,32 @@
      (funcall http-app env))))
 
 
-(defun make-clack-app (&key
-                         (api default-api)
-                         (http t)
-                         (websocket t)
-                         (indent-json nil))
+(defgeneric make-clack-app (api &key)
+  (:documentation "Should return an app suitable for passing to clackup.
+
+                   You can define a method to redefine application.
+                   But to add middlewares it is more convenient to define a method for
+                   APP-MIDDLEWARES generic-function."))
+
+(defgeneric app-middlewares (api)
+  (:documentation "Should return an plist of middlewared to be applied to the Clack application.
+
+                   Keys should be a keyword with middleware name. And value is a function accepting
+                   a Clack application as a single argument and returning a new application.
+
+                   Middlewares are applied to the app from left to right. This makes it possible to
+                   define an :around method which will inject or replace a middleware or original app.
+
+                   Default method defines two middlewares with keys :CORS and :PROMETHEUS.
+                   To wrap these middlewares, add your middlewares to the end of the list.
+                   To add your middleware inside the stack - push it to the front."))
+
+
+(defmethod make-clack-app ((api t)
+                           &key
+                           (http t)
+                           (websocket t)
+                           (indent-json nil))
   "Returns an Clack application to serve JSON-RPC API."
   
   (unless (or http websocket)
@@ -82,7 +114,7 @@
           server)
 
     (loop for name being the hash-key of (api-methods api)
-            using (hash-value method-info)
+          using (hash-value method-info)
           do (jsonrpc:expose server name
                              (method-thunk method-info)))
 
@@ -94,3 +126,54 @@
         (let ((*current-api* api)
               (*current-request* (lack.request:make-request env)))
           (process-request env server websocket websocket-app http http-app indent-json))))))
+
+
+(defun process-debug-header (app)
+  (flet ((debug-header-processor (env)
+           (cond ((and *allow-debug-header*
+                       (gethash "x-debug-on"
+                                (getf env :headers)))
+                  (let ((jsonrpc:*debug-on-error* t))
+                    (funcall app env)))
+                 (t
+                  (funcall app env)))))
+    #'debug-header-processor))
+
+
+(defun return-allowed-headers (env response-headers)
+  (declare (ignore env response-headers))
+  (let ((result (or (uiop:getenv "CORS_ALLOWED_HEADERS")
+                    clack-cors:*default-allowed-headers*
+                    "Content-Type,Authorization")))
+    (if *allow-debug-header*
+        (if result
+            (concatenate 'string result ",X-Debug-On")
+            result)
+        result)))
+
+
+(defmethod app-middlewares ((api t))
+  (flet ((cors-middleware (app)
+           (make-cors-middleware
+            app
+            :allowed-origin (or (uiop:getenv "CORS_ALLOWED_ORIGIN")
+                                clack-cors:*default-allowed-origin*
+                                "*")
+            :allowed-headers #'return-allowed-headers
+            :allowed-methods (or (uiop:getenv "CORS_ALLOWED_METHODS")
+                                 clack-cors:*default-allowed-methods*
+                                 "POST"))))
+    (list
+     :debug #'process-debug-header
+     :cors #'cors-middleware
+     :prometheus #'with-prometheus-stats)))
+
+
+(defun debug-on ()
+  (setf *allow-debug-header* t)
+  (values))
+
+
+(defun debug-off ()
+  (setf *allow-debug-header* nil)
+  (values))
