@@ -16,7 +16,8 @@
          "
 ## Changes
 
-- OPENRPC-SERVER/CLACK:MAKE-CLACK-APP now is a generic-function.
+- OPENRPC-SERVER/CLACK:MAKE-CLACK-APP now is a generic-function and it requires API instance as a first argument.
+  Previously API instance was optional.
 
 ## Additions
 

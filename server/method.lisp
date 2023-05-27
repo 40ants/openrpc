@@ -2,6 +2,7 @@
   (:use #:cl)
   (:import-from #:log)
   (:import-from #:serapeum
+                #:merge-tables
                 #:soft-list-of
                 #:fmt
                 #:dict)

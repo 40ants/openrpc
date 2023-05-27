@@ -6,7 +6,8 @@
                 #:testing
                 #:ok
                 #:deftest)
-  (:import-from #:openrpc-server)
+  (:import-from #:openrpc-server
+                #:define-api)
   (:import-from #:openrpc-server/clack
                 #:make-clack-app)
   (:import-from #:clack.test
@@ -21,6 +22,7 @@
                 #:*default-special-bindings*)
   (:import-from #:openrpc-example)
   (:import-from #:openrpc-example/server
+                #:pets-api
                 #:*pets*))
 (in-package #:openrpc-tests/petshop)
 
@@ -41,7 +43,7 @@
 (deftest test-pet-shop-example
   (with-empty-pet-store ()
     (testing-app "Checking PetShop"
-        (make-clack-app)
+        (make-clack-app pets-api)
       (let* ((url (localhost "/openrpc.json"))
              (test-package (make-package "test-package1" :use (list :cl)))
              (api-symbol (intern "PETSHOP" test-package)))
