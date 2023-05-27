@@ -21,6 +21,10 @@
                 #:method-thunk)
   (:import-from #:websocket-driver
                 #:websocket-p)
+  ;; On CCL prometheus.cl does not load propertly
+  ;; See this issue:
+  ;; https://github.com/deadtrickster/prometheus.cl/issues/2
+  #-ccl
   (:import-from #:clack-prometheus
                 #:with-prometheus-stats)
   (:import-from #:clack-cors
@@ -76,6 +80,7 @@
                    define an :around method which will inject or replace a middleware or original app.
 
                    Default method defines two middlewares with keys :CORS and :PROMETHEUS.
+                   (Prometheus middleware works on SBCL but not on CCL).
                    To wrap these middlewares, add your middlewares to the end of the list.
                    To add your middleware inside the stack - push it to the front."))
 
@@ -166,7 +171,10 @@
     (list
      :debug #'process-debug-header
      :cors #'cors-middleware
-     :prometheus #'with-prometheus-stats)))
+     #-ccl
+     :prometheus
+     #-ccl
+     #'with-prometheus-stats)))
 
 
 (defun debug-on ()
