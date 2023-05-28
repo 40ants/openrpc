@@ -15,7 +15,8 @@
                 #:make-clack-app)
   (:export
    #:start
-   #:stop))
+   #:stop
+   #:pets-api))
 (in-package #:openrpc-example/server)
 
 (defvar *server* nil)
@@ -58,13 +59,16 @@
        (apply #'max (hash-table-keys *pets*)))))
 
 
-(openrpc-server:define-rpc-method list-pets (&key (limit 10) page-key)
+(openrpc-server:define-api (pets-api :title "Pets API"))
+
+
+(openrpc-server:define-rpc-method (pets-api list-pets) (&key (limit 10) page-key)
   (:param limit integer)
   (:param page-key integer)
   (:result (paginated-list-of pet))
   (let* ((pets (hash-table-values *pets*))
          (sorted-pets (progn ;; (break)
-                             (sort pets #'< :key #'pet-id)))
+                        (sort pets #'< :key #'pet-id)))
          (page-key (or page-key
                        -1)))
     (loop with num-found = 0
@@ -95,7 +99,7 @@
                           results))))))
 
 
-(openrpc-server:define-rpc-method create-pet (name tag)
+(openrpc-server:define-rpc-method (pets-api create-pet) (name tag)
   (:param name string)
   (:param tag string)
   (:result pet)
@@ -109,7 +113,7 @@
     pet))
 
 
-(openrpc-server:define-rpc-method get-pet (id)
+(openrpc-server:define-rpc-method (pets-api get-pet) (id)
   (:param id integer)
   (:result pet)
   (let ((pet (gethash id *pets*)))

@@ -4,7 +4,8 @@
   :class :package-inferred-system
   :pathname "t"
   :depends-on ("hamcrest"
-               "openrpc-tests/petshop")
+               "openrpc-tests/petshop"
+               "openrpc-tests/server/interface")
   :description "Test system for OPENRPC."
 
   :perform (test-op (op c)

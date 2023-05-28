@@ -36,6 +36,8 @@
                                    "SQL"
                                    "WHERE"
                                    "LIMIT"
+                                   "SBCL"
+                                   "CCL"
                                    "JSON"
                                    "JSON-SCHEMA"
                                    "API"

@@ -2,6 +2,7 @@
   (:use #:cl)
   (:import-from #:log)
   (:import-from #:serapeum
+                #:merge-tables
                 #:soft-list-of
                 #:fmt
                 #:dict)
@@ -255,12 +256,26 @@
   (let ((wrapper-body
           (cond
             (paginated-result
-             `(multiple-value-bind (result next-page-key)
+             `(multiple-value-bind (result next-page-key additional-keys)
                   ,call-form
                 (let ((response (dict "items" (transform-result result))))
                   (when next-page-key
                     (setf (gethash "next_page_key" response)
                           next-page-key))
+                  ;; Third value is used to extend results dict by adding it's
+                  ;; keys to it:
+                  (when additional-keys
+                    (check-type additional-keys hash-table)
+                    (loop for key being the hash-key of additional-keys
+                          using (hash-value value)
+                          when (nth-value 1 (gethash key response))
+                          ;; TODO: разобраться почему не выравнивается
+                          do (error "Result already has key with name \"~A\"."
+                                    key)
+                          do (setf (gethash key response)
+                                   value))
+                    (setf response
+                          (merge-tables response additional-keys)))
                   response)))
             (t
              `(transform-result ,call-form)))))

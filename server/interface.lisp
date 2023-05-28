@@ -13,7 +13,8 @@
    #:type-to-schema
    #:transform-result
    #:primitive-type-p
-   #:make-info))
+   #:make-info
+   #:slots-to-exclude))
 (in-package #:openrpc-server/interface)
 
 
@@ -21,6 +22,9 @@
   (:documentation "Prepares object for serialization before responding to RPC call.
 
 Result should be list, hash-map or a value of primitive type.")
+  (:method ((object hash-table))
+    object)
+
   (:method ((object list))
     (mapcar #'transform-result object))
   
@@ -34,11 +38,7 @@ Result should be list, hash-map or a value of primitive type.")
     object)
   
   (:method ((object (eql t)))
-    object)
-  
-  ;; (:method ((object integer))
-  ;;   object)
-  )
+    object))
 
 
 (defgeneric primitive-type-p (type)
@@ -57,6 +57,12 @@ Argument TYPE is a symbol.")
     t))
 
 
+(defgeneric slots-to-exclude (type)
+  (:documentation "You can define a method for this generic function to exclude some slots from being shown in the JSON schema.")
+  (:method ((type t))
+    nil))
+
+
 (defgeneric type-to-schema (type)
   (:documentation "This method is called for all types for which PRIMITIVE-TYPE-P generic-function
 returns NIL.
@@ -68,6 +74,10 @@ be strings. It is convenient to use [`SERAPEUM:DICT`][SERAPEUM:DICT] for buildin
       ((primitive-type-p type)
        (dict "type"
              (string-downcase (symbol-name type))))
+      ;; To return or accept as arguments any dictionaries
+      ((and (symbolp type)
+            (eql type 'hash-table))
+       (dict "type" "object"))
       ;; Scheme for these multiple types should be generated:
       ;; Here TYPE might be (OR NULL STRING)
       ((and (listp type)
@@ -79,6 +89,15 @@ be strings. It is convenient to use [`SERAPEUM:DICT`][SERAPEUM:DICT] for buildin
              collect subtype-schema into subtype-schemas
              finally (return (dict "oneOf"
                                    subtype-schemas))))
+      ;; (MEMBER :FOO :BAR)
+      ((and (listp type)
+            (symbolp (car type))
+            (string-equal (car type)
+                          "member")
+            (every #'keywordp (cdr type)))
+       (dict "type" "string"
+             "enum" (mapcar #'symbol-name (cdr type))))
+      
       ;; Non paginated results:
       ((and (listp type)
             (symbolp (car type))
@@ -109,7 +128,7 @@ be strings. It is convenient to use [`SERAPEUM:DICT`][SERAPEUM:DICT] for buildin
                                               "items" (type-to-schema (second type)))
                                 "next_page_key" (dict "oneOf"
                                                       (list (dict "type" "string")
-                                                            (dict "type" "int"))))
+                                                            (dict "type" "integer"))))
              "required" (list "items")
              "x-paginated-list" t))
       ((find-class type)

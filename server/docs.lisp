@@ -9,7 +9,11 @@
                 #:type-to-schema
                 #:transform-result
                 #:primitive-type-p
-                #:make-clack-app))
+                #:make-clack-app
+                #:debug-off
+                #:debug-on
+                #:slots-to-exclude
+                #:app-middlewares))
 (in-package #:openrpc-server/docs)
 
 
@@ -255,4 +259,8 @@ For our example project it will looks like:
   (primitive-type-p generic-function)
   (make-info generic-function)
   (return-error function)
-  (make-clack-app function))
+  (make-clack-app generic-function)
+  (app-middlewares generic-function)
+  (debug-on function)
+  (debug-off function)
+  (slots-to-exclude generic-function))

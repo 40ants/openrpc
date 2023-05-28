@@ -1,6 +1,7 @@
 (uiop:define-package #:openrpc-server/class
   (:use #:cl)
   (:import-from #:openrpc-server/interface
+                #:slots-to-exclude
                 #:transform-result
                 #:type-to-schema)
   (:import-from #:serapeum
@@ -24,6 +25,7 @@
   (let* ((class (ensure-finalized class))
          (class-name (class-name class))
          (slots (class-slots class))
+         (to-exclude (slots-to-exclude class))
          (required-properties nil)
          (properties (loop with result = (make-hash-table :test 'equal
                                                           :size (length slots))
@@ -31,9 +33,13 @@
                            for name = (sym-to-api-string
                                        (slot-definition-name slot))
                            for has-default = (slot-definition-initfunction slot)
+                           for should-be-exluded = (member name to-exclude
+                                                           :test #'string-equal)
                            for required = (not has-default)
-                           when required
-                             do (push name required-properties)
+                           when (and (not should-be-exluded)
+                                     required)
+                           do (push name required-properties)
+                           unless should-be-exluded
                            do (setf (gethash name result)
                                     (type-to-schema slot))
                            finally (return result)))
@@ -63,17 +69,21 @@
 (defmethod transform-result ((object standard-object))
   (let* ((class (class-of object))
          (class (ensure-finalized class))
-         (slots (class-slots class)))
+         (slots (class-slots class))
+         (to-exclude (slots-to-exclude class)))
     (loop with result = (make-hash-table :test 'equal
                                          :size (length slots))
           for slot in slots
           for slot-name = (slot-definition-name slot)
           for field-name = (sym-to-api-string slot-name)
-          when (slot-boundp object slot-name)
-            do (let ((slot-value (slot-value object
-                                             slot-name)))
-                 (setf (gethash field-name result)
-                       (transform-result slot-value)))
+          for should-be-excluded = (member field-name to-exclude
+                                           :test #'string-equal)
+          when (and (not should-be-excluded)
+                    (slot-boundp object slot-name))
+          do (let ((slot-value (slot-value object
+                                           slot-name)))
+               (setf (gethash field-name result)
+                     (transform-result slot-value)))
           finally (return result))))
 
 
