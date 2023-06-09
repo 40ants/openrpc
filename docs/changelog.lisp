@@ -12,6 +12,12 @@
                               "HTTP"
                               "JSON"
                               "OSX"))
+  (0.6.0 2023-06-09
+         "
+## Additions
+
+- Float, Double float and Ratio types are supported. They are represented as a \"number\" type in JSON schema.
+")
   (0.5.0 2023-05-27
          "
 ## Changes
