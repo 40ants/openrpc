@@ -2,6 +2,16 @@
 
 # ChangeLog
 
+<a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E6-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.6.0 (2023-06-09)
+
+<a id="additions"></a>
+
+### Additions
+
+* Float, Double float and Ratio types are supported. They are represented as a "number" type in `JSON` schema.
+
 <a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E5-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.5.0 (2023-05-27)
