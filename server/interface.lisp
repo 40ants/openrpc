@@ -36,6 +36,15 @@ Result should be list, hash-map or a value of primitive type.")
   
   (:method ((object integer))
     object)
+
+  (:method ((object ratio))
+    (coerce object 'double-float))
+  
+  (:method ((object float))
+    object)
+  
+  (:method ((object double-float))
+    object)
   
   (:method ((object (eql t)))
     object))
@@ -74,6 +83,12 @@ be strings. It is convenient to use [`SERAPEUM:DICT`][SERAPEUM:DICT] for buildin
       ((primitive-type-p type)
        (dict "type"
              (string-downcase (symbol-name type))))
+      ;; floats
+      ((and (symbolp type)
+            (or (eql type 'float)
+                (eql type 'double-float)
+                (eql type 'ratio)))
+       (dict "type" "number"))
       ;; To return or accept as arguments any dictionaries
       ((and (symbolp type)
             (eql type 'hash-table))
