@@ -67,7 +67,14 @@ Argument TYPE is a symbol.")
 
 
 (defgeneric slots-to-exclude (type)
-  (:documentation "You can define a method for this generic function to exclude some slots from being shown in the JSON schema.")
+  (:documentation "You can define a method for this generic function to exclude some slots from being shown in the JSON schema.
+
+                   Pay attention that this generic-function is called with class not with objects to be serialized.
+                   We need this because at the moment of generation API methods and OpenRPC spec we know nothing about
+                   objects except their classes.
+
+                   Methods of this function should return a list of strings. Given slots will be excluded from the spec
+                   and will not be serialized. Strings are compared in case-insensitive mode.")
   (:method ((type t))
     nil))
 

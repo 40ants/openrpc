@@ -45,7 +45,8 @@
       (when export-symbols
         (appendf result
                  `((export ',class-name)
-                   (export ',make-func-name))))))
+                   (export ',make-func-name))))
+      (values result)))
 
   (defun normalize-name (string)
     (string-upcase
