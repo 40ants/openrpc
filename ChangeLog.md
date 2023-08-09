@@ -2,6 +2,24 @@
 
 # ChangeLog
 
+<a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E7-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.7.0 (2023-08-09)
+
+<a id="backward-incompatible-changes"></a>
+
+### Backward Incompatible Changes
+
+* Generic-function [`openrpc-server/interface:slots-to-exclude`][6155] now matches slot names before transforming
+  them to camel_case. Now you can return slot names as they are given in lisp classes.
+
+<a id="fixes"></a>
+
+### Fixes
+
+* Now client `API` is generated correctly when you call [`openrpc-client:generate-client`][3710] macro
+  with `:export-symbols nil` argument.
+
 <a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E6-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.6.0 (2023-06-09)
