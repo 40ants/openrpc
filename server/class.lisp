@@ -30,17 +30,17 @@
          (properties (loop with result = (make-hash-table :test 'equal
                                                           :size (length slots))
                            for slot in slots
-                           for name = (sym-to-api-string
-                                       (slot-definition-name slot))
+                           for slot-name = (slot-definition-name slot)
+                           for api-attr-name = (sym-to-api-string slot-name)
                            for has-default = (slot-definition-initfunction slot)
-                           for should-be-exluded = (member name to-exclude
+                           for should-be-exluded = (member slot-name to-exclude
                                                            :test #'string-equal)
                            for required = (not has-default)
                            when (and (not should-be-exluded)
                                      required)
-                           do (push name required-properties)
+                           do (push api-attr-name required-properties)
                            unless should-be-exluded
-                           do (setf (gethash name result)
+                           do (setf (gethash api-attr-name result)
                                     (type-to-schema slot))
                            finally (return result)))
          (description (documentation class t))
@@ -76,7 +76,7 @@
           for slot in slots
           for slot-name = (slot-definition-name slot)
           for field-name = (sym-to-api-string slot-name)
-          for should-be-excluded = (member field-name to-exclude
+          for should-be-excluded = (member slot-name to-exclude
                                            :test #'string-equal)
           when (and (not should-be-excluded)
                     (slot-boundp object slot-name))

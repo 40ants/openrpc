@@ -12,6 +12,18 @@
                               "HTTP"
                               "JSON"
                               "OSX"))
+  (0.7.0 2023-08-09
+         "
+## Backward Incompatible Changes
+
+- Generic-function OPENRPC-SERVER/INTERFACE:SLOTS-TO-EXCLUDE now matches slot names before transforming
+  them to camel_case. Now you can return slot names as they are given in lisp classes.
+
+## Fixes
+
+- Now client API is generated correctly when you call OPENRPC-CLIENT:GENERATE-CLIENT macro
+  with `:export-symbols nil` argument.
+")
   (0.6.0 2023-06-09
          "
 ## Additions
