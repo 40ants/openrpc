@@ -15,6 +15,8 @@
                 #:connection-refused-error)
   (:import-from #:openrpc-client/error
                 #:rpc-error)
+  (:import-from #:serapeum
+                #:fmt)
   (:export #:generate-client))
 (in-package #:openrpc-client/core)
 
@@ -64,6 +66,24 @@
          (error "Type ~S is not supported yet."
                 type)))))
 
+  (defun generate-generic-lambda-list (params)
+    (loop for param in params
+          for required = (gethash "required" param)
+          if required
+          collect param into required-params
+          else
+          collect param into keyword-params
+          finally (return (append (loop for param in required-params
+                                        for name = (intern (normalize-name
+                                                            (gethash "name" param)))
+                                        collect name)
+                                  (when keyword-params
+                                    (list '&key))
+                                  (loop for param in keyword-params
+                                        for name = (intern (normalize-name
+                                                            (gethash "name" param)))
+                                        collect name)))))
+  
   (defun generate-lambda-list (params)
     (loop for param in params
           for required = (gethash "required" param)
@@ -212,6 +232,8 @@
     (let* ((original-name (gethash "name" spec))
            (name (intern (normalize-name original-name)))
            (params-spec (gethash "params" spec))
+           (summary (gethash "summary" spec))
+           (description (gethash "description" spec))
            (result-spec (gethash "result" spec))
            (result-transformation (generate-result-transformation class-name
                                                                   'raw-response
@@ -219,8 +241,17 @@
                                                                   classes-cache
                                                                   :export-symbols export-symbols))
            (lambda-list (generate-lambda-list params-spec))
+           (generic-lambda-list (generate-generic-lambda-list params-spec))
+           (generic-body (when summary
+                           (list (list :documentation
+                                       (fmt "~A~@[~2%~A~]"
+                                            summary
+                                            description)))))
            (arguments-collector (generate-arguments-collector params-spec))
            (result (list
+                    `(defgeneric ,name (client ,@generic-lambda-list)
+                       ,@generic-body)
+                    
                     `(defmethod ,name ((client ,class-name) ,@lambda-list)
                        (let* ((args ,arguments-collector))
                          (labels ((retrieve-data (args)
