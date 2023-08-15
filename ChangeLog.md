@@ -2,6 +2,16 @@
 
 # ChangeLog
 
+<a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E8-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.8.0 (2023-08-16)
+
+<a id="backward-incompatible-fixes"></a>
+
+### Backward Incompatible Fixes
+
+Nested dataclasses now handled propertly in the client. Previously, nested objects were parsed as hash-maps.
+
 <a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E7-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.7.1 (2023-08-11)
