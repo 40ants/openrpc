@@ -8,6 +8,7 @@
   (:import-from #:str)
   (:import-from #:dexador)
   (:import-from #:alexandria
+                #:make-keyword
                 #:appendf
                 #:read-file-into-string
                 #:copy-hash-table)
@@ -175,7 +176,9 @@
                                          &key export-symbols)
     (let* ((schema (or (gethash "schema" spec-or-schema)
                        spec-or-schema))
+           (props (gethash "properties" schema))
            (x-cl-class (gethash "x-cl-class" schema))
+           (x-cl-package (gethash "x-cl-package" schema))
            (paginated-list (gethash "x-paginated-list" schema))
            (type (gethash "type" schema)))
       (cond
@@ -202,7 +205,10 @@
                                     next-page-key)
                               (retrieve-data new-args))))
                      #'retrieve-next-page))))))))
-        (x-cl-class
+        ((and x-cl-class
+              ;; If object class is unknown, we'll use it's value as is:
+              (not (and (string= x-cl-class "T")
+                        (string= x-cl-package "COMMON-LISP"))))
          (let ((class-name (get-or-create-class x-cl-class
                                                 schema
                                                 classes-cache
@@ -213,6 +219,20 @@
            `(apply #'make-instance
                    ',class-name
                    ;; Now we need to extract parameters from raw-response
+                   ;; For each parameter we need to apply
+                   ;; GENERATE-RESULT-TRANSFORMATION again.
+                   ,@(loop for prop-name being the hash-key of props
+                           using (hash-value prop-schema)
+                           for prop-name-as-key = (make-keyword
+                                                   (string-upcase
+                                                    (to-lisp-case prop-name)))
+                           collect prop-name-as-key
+                           collect (generate-result-transformation
+                                    api-class-name
+                                    `(gethash ,prop-name ,result-symbol)
+                                    prop-schema
+                                    classes-cache
+                                    :export-symbols export-symbols))
                    (make-plist-from ,result-symbol))))
         ((string-equal type "array")
          (let ((element-transformation
