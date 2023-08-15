@@ -13,6 +13,12 @@
                               "JSON"
                               "RPC"
                               "OSX"))
+  (0.8.0 2023-08-16
+         "
+## Backward Incompatible Fixes
+
+Nested dataclasses now handled propertly in the client. Previously, nested objects were parsed as hash-maps.
+")
   (0.7.1 2023-08-11
          "
 ## Fixes
