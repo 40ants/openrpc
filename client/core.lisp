@@ -8,6 +8,7 @@
   (:import-from #:str)
   (:import-from #:dexador)
   (:import-from #:alexandria
+                #:length=
                 #:make-keyword
                 #:appendf
                 #:read-file-into-string
@@ -164,24 +165,45 @@
                                         slot-reader-exports))))))
       class-name))
 
-  (defun make-plist-from (raw-response)
-    (loop for name being the hash-key of raw-response
-          using (hash-value value)
-          for name-as-keyword = (alexandria:make-keyword
-                                 (string-upcase
-                                  (to-lisp-case name)))
-          appending (list name-as-keyword value)))
+  (defun null-type-p (spec)
+    (equal (gethash "type" spec)
+           "null"))
 
   (defun generate-result-transformation (api-class-name result-symbol spec-or-schema classes-cache
                                          &key export-symbols)
     (let* ((schema (or (gethash "schema" spec-or-schema)
                        spec-or-schema))
+           (one-of (gethash "oneOf" schema))
            (props (gethash "properties" schema))
            (x-cl-class (gethash "x-cl-class" schema))
            (x-cl-package (gethash "x-cl-package" schema))
            (paginated-list (gethash "x-paginated-list" schema))
            (type (gethash "type" schema)))
       (cond
+        ((and (length= 2 one-of)
+              ;; This is a special case were we supporting for
+              ;; optional arguments or fields where one of
+              ;; possible values is null.
+              ;;
+              ;; TODO: to support really automatic choose of one from many
+              ;; possible types, we need either to analyze required properties
+              ;; of their schemas and to build a matcher which will analyze
+              ;; properties of received data object and choose correct class.
+              ;; 
+              ;; The other way is to support "discriminator" like users of OpenAPI
+              ;; do: https://redocly.com/docs/resources/discriminator/
+              ;; However I didn't find any materials pointing that sombody use
+              ;; this technique with OpenRPC.
+              (find-if #'null-type-p one-of))
+         (let* ((other-type (find-if-not #'null-type-p one-of))
+                (element-transformation
+                  (generate-result-transformation api-class-name
+                                                  result-symbol
+                                                  other-type
+                                                  classes-cache
+                                                  :export-symbols export-symbols)))
+           `(when ,result-symbol
+              ,element-transformation)))
         (paginated-list
          (let ((element-transformation
                  (generate-result-transformation api-class-name
@@ -216,24 +238,23 @@
            (when (eql class-name api-class-name)
              (error "API defines class ~S which clashesh with a name of symbol you choose for API class. Please, choose another name." class-name))
 
-           `(apply #'make-instance
-                   ',class-name
-                   ;; Now we need to extract parameters from raw-response
-                   ;; For each parameter we need to apply
-                   ;; GENERATE-RESULT-TRANSFORMATION again.
-                   ,@(loop for prop-name being the hash-key of props
-                           using (hash-value prop-schema)
-                           for prop-name-as-key = (make-keyword
-                                                   (string-upcase
-                                                    (to-lisp-case prop-name)))
-                           collect prop-name-as-key
-                           collect (generate-result-transformation
-                                    api-class-name
-                                    `(gethash ,prop-name ,result-symbol)
-                                    prop-schema
-                                    classes-cache
-                                    :export-symbols export-symbols))
-                   (make-plist-from ,result-symbol))))
+           `(funcall #'make-instance
+                     ',class-name
+                     ;; Now we need to extract parameters from raw-response
+                     ;; For each parameter we need to apply
+                     ;; GENERATE-RESULT-TRANSFORMATION again.
+                     ,@(loop for prop-name being the hash-key of props
+                             using (hash-value prop-schema)
+                             for prop-name-as-key = (make-keyword
+                                                     (string-upcase
+                                                      (to-lisp-case prop-name)))
+                             collect prop-name-as-key
+                             collect (generate-result-transformation
+                                      api-class-name
+                                      `(gethash ,prop-name ,result-symbol)
+                                      prop-schema
+                                      classes-cache
+                                      :export-symbols export-symbols)))))
         ((string-equal type "array")
          (let ((element-transformation
                  (generate-result-transformation api-class-name
