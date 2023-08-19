@@ -13,6 +13,33 @@
                               "JSON"
                               "RPC"
                               "OSX"))
+  (0.9.0 2023-08-19
+         "
+## Backward Incompatible Fixes
+
+Fixed how `oneOf` type is processed when there are only two subtypes like that:
+
+```json
+\"oneOf\": [
+  {
+    \"type\": \"null\"
+  },
+  {
+    \"type\": \"object\",
+    \"properties\": {
+      \"project_name\": {
+        \"type\": \"object\",
+        \"properties\": {},
+        \"required\": [],
+        \"x-cl-class\": \"T\",
+        \"x-cl-package\": \"COMMON-LISP\"
+      },
+```
+
+Previously in this case openrpc-client generated code which returned a hash-table.
+Now it will return a common-lisp object or NIL.
+
+")
   (0.8.0 2023-08-16
          "
 ## Backward Incompatible Fixes

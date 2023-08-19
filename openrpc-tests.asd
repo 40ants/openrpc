@@ -5,7 +5,8 @@
   :pathname "t"
   :depends-on ("hamcrest"
                "openrpc-tests/petshop"
-               "openrpc-tests/server/interface")
+               "openrpc-tests/server/interface"
+               "openrpc-tests/client/deserialization")
   :description "Test system for OPENRPC."
 
   :perform (test-op (op c)

@@ -2,6 +2,35 @@
 
 # ChangeLog
 
+<a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E9-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.9.0 (2023-08-19)
+
+<a id="backward-incompatible-fixes"></a>
+
+### Backward Incompatible Fixes
+
+Fixed how `oneOf` type is processed when there are only two subtypes like that:
+
+```json
+"oneOf": [
+  {
+    "type": "null"
+  },
+  {
+    "type": "object",
+    "properties": {
+      "project_name": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "x-cl-class": "T",
+        "x-cl-package": "COMMON-LISP"
+      },
+```
+Previously in this case openrpc-client generated code which returned a hash-table.
+Now it will return a common-lisp object or `NIL`.
+
 <a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E8-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.8.0 (2023-08-16)
