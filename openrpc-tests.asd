@@ -6,7 +6,8 @@
   :depends-on ("hamcrest"
                "openrpc-tests/petshop"
                "openrpc-tests/server/interface"
-               "openrpc-tests/client/deserialization")
+               "openrpc-tests/client/deserialization"
+               "openrpc-tests/client/generation")
   :description "Test system for OPENRPC."
 
   :perform (test-op (op c)

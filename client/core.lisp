@@ -75,7 +75,7 @@
         (if (stringp type)
             (%schema-to-type type)
             (mapc #'%schema-to-type type)))
-      type-list))
+      (nreverse type-list)))
 
   (defun generate-generic-lambda-list (params)
     (loop for param in params
@@ -319,21 +319,22 @@
 
   (declaim (ftype (function (symbol symbol list cons string (or symbol cons))
                             cons)
-                  generate-defmethod))
-  (defun generate-defmethod (name class-name lambda-list arguments-collector
+                  generate-defmethods))
+  (defun generate-defmethods (name class-name lambda-list arguments-collector
                              original-name result-transformation)
     "Generate either a defmethod with only client as argument or for each given
 lambda-list a separate defmethod."
-    (flet ((%generate-defmethod (&optional lambda-list-element)
-             `(defmethod ,name ,(cons `(client ,class-name) lambda-list-element)
-                          (let* ((args ,arguments-collector))
-                            (labels ((retrieve-data (args)
-                                       (let ((raw-response (rpc-call client ,original-name args)))
-                                         ,result-transformation)))
-                              (retrieve-data args))))))
+    (flet ((generate-defmethod (&optional lambda-list-element)
+             (let ((args-collect (gensym)))
+               `(defmethod ,name ,(cons `(client ,class-name) lambda-list-element)
+                  (let* ((,args-collect ,arguments-collector))
+                    (labels ((retrieve-data (args)
+                               (let ((raw-response (rpc-call client ,original-name args)))
+                                 ,result-transformation)))
+                      (retrieve-data ,args-collect)))))))
       (if lambda-list
-          (mapcar #'%generate-defmethod lambda-list)
-          (list (%generate-defmethod)))))
+          (mapcar #'generate-defmethod lambda-list)
+          (list (generate-defmethod)))))
 
   (declaim (ftype (function (symbol hash-table hash-table &key (:export-symbols t))
                             cons)
@@ -362,8 +363,8 @@ lambda-list a separate defmethod."
            (result (cons
                     `(defgeneric ,name (client ,@generic-lambda-list)
                        ,@generic-body)
-                    (generate-defmethod name class-name lambda-list arguments-collector
-                                        original-name result-transformation))))
+                    (generate-defmethods name class-name lambda-list arguments-collector
+                                         original-name result-transformation))))
       (when export-symbols
         (push `(export ',name)
               result))
