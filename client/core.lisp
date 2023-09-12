@@ -69,6 +69,7 @@
                      ((string-equal type "number") (push 'double-float type-list))
                      ((string-equal type "string") (push 'string type-list))
                      ((string-equal type "array") (push 'list type-list))
+                     ((string-equal type "null") (push 'null type-list))
                      (t
                       (error "Type ~S is not supported yet."
                              type)))))
@@ -418,6 +419,26 @@ lambda-list a separate defmethod."
       (jsonrpc/class:call client func-name arguments))))
 
 
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defun %generate-client (class-name spec &key (export-symbols t))
+    (let* ((client-class (generate-client-class class-name spec :export-symbols export-symbols))
+           (object-classes
+             ;; The map from package::symbol to a code which defines
+             ;; a class for some complex object used as argument or
+             ;; result in an API:
+             (make-hash-table :test 'equal))
+           (methods (loop for method-spec in (gethash "methods" spec)
+                          appending (generate-method class-name method-spec object-classes
+                                                     :export-symbols export-symbols)))
+           (class-definitions
+             (loop for def being the hash-value of object-classes
+                   ;; Here each def contains a list of DEFCLASS + one or more methods.
+                   appending def)))
+      (values client-class
+              class-definitions
+              methods))))
+
+
 (defmacro generate-client (class-name url-or-path &key (export-symbols t))
   "Generates Common Lisp client by OpenRPC spec.
 
@@ -426,21 +447,10 @@ lambda-list a separate defmethod."
 
    URL-OR-PATH argument could be a string with HTTP URL of a spec, or a pathname
    if a spec should be read from the disc."
-  (let* ((spec (retrieve-spec (eval url-or-path)))
-         (client-class (generate-client-class class-name spec :export-symbols export-symbols))
-         (object-classes
-           ;; The map from package::symbol to a code which defines
-           ;; a class for some complex object used as argument or
-           ;; result in an API:
-           (make-hash-table :test 'equal))
-         (methods (loop for method-spec in (gethash "methods" spec)
-                        appending (generate-method class-name method-spec object-classes
-                                                   :export-symbols export-symbols)))
-         (class-definitions
-           (loop for def being the hash-value of object-classes
-                 ;; Here each def contains a list of DEFCLASS + one or more methods.
-                 appending def)))
-    `(eval-when (:compile-toplevel :load-toplevel :execute)
-       ,@client-class
-       ,@class-definitions
-       ,@methods)))
+  (let* ((spec (retrieve-spec (eval url-or-path))))
+    (multiple-value-bind (client-class class-definitions methods)
+        (%generate-client class-name spec :export-symbols export-symbols)
+      `(eval-when (:compile-toplevel :load-toplevel :execute)
+         ,@client-class
+         ,@class-definitions
+         ,@methods))))
