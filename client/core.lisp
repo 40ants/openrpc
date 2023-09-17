@@ -109,12 +109,15 @@
                            lists)
                    (list (list element)))))
         (mapc (lambda (elements)
-                (if (symbolp (car elements))
-                    (setf lambda-lists (add-to-lists elements lambda-lists))
-                    (setf lambda-lists
-                          (mapcan (lambda (element)
-                                    (add-to-lists element lambda-lists))
-                                  elements))))
+                (let ((name (car elements))
+                      (types (cdr elements)))
+                  (declare (symbol name) (list types))
+                  (if (= 1 (length types))
+                      (setf lambda-lists (add-to-lists elements lambda-lists))
+                      (setf lambda-lists
+                            (mapcan (lambda (type)
+                                      (add-to-lists (list name type) lambda-lists))
+                                    types)))))
               lambda-list))
       lambda-lists))
 
@@ -135,9 +138,7 @@
                                 if (atom type)
                                   collect (list name type)
                                 else
-                                  collect (progn (mapcar (lambda (type)
-                                                           (list name type))
-                                                         type))))
+                                  collect (cons name type)))
                         (keyword-parameter
                           (when keyword-params
                             (cons '&key
