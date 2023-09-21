@@ -52,14 +52,23 @@
          (etalon (read-file-into-string path))
          (diff (diff:generate-seq-diff 'diff:unified-diff
                                        (str:split #\Newline etalon)
-                                       (str:split #\Newline lisp-code-as-string))))
+                                       (str:split #\Newline lisp-code-as-string)))
+         (diff-is-empty (null (diff:diff-windows diff))))
     (restart-case
-        (rove:ok (null (diff:diff-windows diff))
+        (rove:ok diff-is-empty
                  (cond
                    ((diff:diff-windows diff)
-                    (with-output-to-string (s)
-                      (format s "File ~S has this difference:~2%" path)
-                      (diff:render-diff diff s)))
+                    (cond
+                      (rove:*debug-on-error*
+                       (error
+                        (with-output-to-string (s)
+                          (format s "File ~S has this difference:~2%" path)
+                          (diff:render-diff diff s))))
+                      (t
+                       (with-output-to-string (s)
+                         (format s "File ~S has this difference:~2%" path)
+                         (diff:render-diff diff s)
+                         (format s "~2&Set rove:*debug-on-error* to T and select UPDATE-REGRESSION-FILE-CONTENT restart to update the file.")))))
                    (t
                     (format nil "Content of ~S is the same as ~S"
                             file-name
@@ -69,7 +78,8 @@
                   (format stream "Update file ~S with new lisp code."
                           path))
         (write-string-into-file lisp-code-as-string
-                                path)))))
+                                path
+                                :if-exists :supersede)))))
 
 
 (deftest client-regression ()
