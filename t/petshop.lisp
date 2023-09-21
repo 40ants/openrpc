@@ -41,6 +41,11 @@
 
 
 (deftest test-pet-shop-example
+  (format t "TRACE: clack is here: ~S~%"
+          (ql:where-is-system :clack))
+  (format t "TRACE: hunchentoot is here: ~S~%"
+          (ql:where-is-system :hunchentoot))
+  
   (with-empty-pet-store ()
     (testing-app "Checking PetShop"
         (make-clack-app pets-api)
