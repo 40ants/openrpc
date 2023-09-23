@@ -25,7 +25,7 @@
                "macos-latest")
           :quicklisp (;; Quicklisp is not working yet, because
                       ;; there is old JSONRPC where no "jsonrpc/transport/http" system. 
-                      "quicklisp"
+                      ;; "quicklisp"
                       "ultralisp")
           :lisp ("sbcl-bin"
                  ;; On CCL there are some strange network errors both on ubuntu and OSX
