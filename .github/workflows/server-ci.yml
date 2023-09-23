@@ -138,7 +138,7 @@
           "uses": "40ants/setup-lisp@v2",
           "with": {
             "asdf-system": "openrpc-server",
-            "qlfile-template": "{% ifequal quicklisp_dist \"ultralisp\" %}\ndist ultralisp http://dist.ultralisp.org\nql clack\n{% endifequal %}"
+            "qlfile-template": "{% ifequal quicklisp_dist \"ultralisp\" %}\ndist ultralisp http://dist.ultralisp.org\n{% endifequal %}"
           },
           "if": "steps.cache.outputs.cache-hit != 'true'"
         },

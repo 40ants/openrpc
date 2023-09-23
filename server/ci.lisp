@@ -38,6 +38,5 @@
           :coverage t
           :qlfile "{% ifequal quicklisp_dist \"ultralisp\" %}
                    dist ultralisp http://dist.ultralisp.org
-                   ql clack
                    {% endifequal %}")))
 
