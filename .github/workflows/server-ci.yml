@@ -83,6 +83,7 @@
       ]
     },
     "run-tests": {
+      "continue-on-error": "${{ matrix.experimental }}"
       "strategy": {
         "fail-fast": false,
         "matrix": {
@@ -95,6 +96,12 @@
             "ccl-bin/1.12.1",
             "clisp",
             "ecl"
+          ],
+          "experimental": false,
+          "include": [
+             {"lisp": "ccl-bin/1.12.1", "experimental": true},
+             {"lisp": "clisp", "os": "macos-latest", "experimental": true},
+             {"lisp": "ecl", "os": "macos-latest", "experimental": true},
           ]
         }
       },
