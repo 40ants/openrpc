@@ -13,6 +13,26 @@
                               "JSON"
                               "RPC"
                               "OSX"))
+  (0.9.1 2023-09-24
+         "
+## Fixes
+
+Fix support for multiple parameter types, (particularly for required parameters):
+
+```json
+\"params\": [
+  {
+    \"name\": \"name\",
+    \"schema\":
+    {
+      \"type\": [\"string\", \"null\"],
+      \"maxLength\": 255
+    },
+    \"required\": true,
+    \"summary\": \"User name.\"
+  }
+]
+```")
   (0.9.0 2023-08-19
          "
 ## Backward Incompatible Fixes
