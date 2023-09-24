@@ -102,6 +102,11 @@
              {"lisp": "ccl-bin/1.12.1", "os": "macos-latest", "experimental": true},
              {"lisp": "clisp", "os": "macos-latest", "experimental": true},
              {"lisp": "ecl", "os": "macos-latest", "experimental": true}
+          ],
+          "exclude": [
+             {"lisp": "ccl-bin/1.12.1", "os": "macos-latest", "experimental": false},
+             {"lisp": "clisp", "os": "macos-latest", "experimental": false},
+             {"lisp": "ecl", "os": "macos-latest", "experimental": false}
           ]
         }
       },
