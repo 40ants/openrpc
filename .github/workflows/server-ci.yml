@@ -97,11 +97,11 @@
             "clisp",
             "ecl"
           ],
-          "experimental": false,
+          "experimental": "false",
           "include": [
-             {"lisp": "ccl-bin/1.12.1", "experimental": true},
-             {"lisp": "clisp", "os": "macos-latest", "experimental": true},
-             {"lisp": "ecl", "os": "macos-latest", "experimental": true}
+             {"lisp": "ccl-bin/1.12.1", "experimental": "true"},
+             {"lisp": "clisp", "os": "macos-latest", "experimental": "true"},
+             {"lisp": "ecl", "os": "macos-latest", "experimental": "true"}
           ]
         }
       },
