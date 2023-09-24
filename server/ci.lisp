@@ -29,8 +29,9 @@
                       "ultralisp")
           :lisp ("sbcl-bin"
                  ;; On CCL there are some strange network errors both on ubuntu and OSX
-                 ;; "ccl-bin/1.12.1"
-                 )
+                 "ccl-bin/1.12.1"
+                 "clisp"
+                 "ecl")
           ;; :exclude ((:os "ubuntu-latest"
           ;;                ;; On Ubuntu tests fail with this error:
           ;;                ;; The condition Address family for hostname not supported (error #-9) during nameserver operation in getaddrinfo occurred with errno: 0.
