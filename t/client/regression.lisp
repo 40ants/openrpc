@@ -46,10 +46,14 @@
                 file-name)
   "Compares LISP-CODE with content of the etalon saved in the t/client/regress-data/<test-name>"
   (let* ((lisp-code-as-string
-           (let ((*print-case* :downcase))
+           (let ((*print-case* :downcase)
+                 (*print-pretty* t))
              (format nil "~S~%" lisp-code)))
          (path (relative-path test-name file-name))
-         (etalon (read-file-into-string path))
+         (etalon (let ((*print-case* :downcase)
+                       (*print-pretty* t))
+                   (format nil "~S~%"
+                           (car (uiop:read-file-forms path)))))
          (diff (diff:generate-seq-diff 'diff:unified-diff
                                        (str:split #\Newline etalon)
                                        (str:split #\Newline lisp-code-as-string)))
