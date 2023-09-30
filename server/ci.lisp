@@ -32,10 +32,11 @@
                  "ccl-bin/1.12.1"
                  "clisp"
                  "ecl")
-          ;; :exclude ((:os "ubuntu-latest"
-          ;;                ;; On Ubuntu tests fail with this error:
-          ;;                ;; The condition Address family for hostname not supported (error #-9) during nameserver operation in getaddrinfo occurred with errno: 0.
-          ;;            :lisp "ccl-bin/1.12.1"))
+          :exclude (
+                    ;; For some reason CLISP of OSX does not support threading
+                    ;; and bordeaux-threads fails to compile
+                    (:os "macos-latest" 
+                     :lisp "clisp"))
           :coverage t
           :qlfile "{% ifequal quicklisp_dist \"ultralisp\" %}
                    dist ultralisp http://dist.ultralisp.org

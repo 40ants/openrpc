@@ -83,7 +83,6 @@
       ]
     },
     "run-tests": {
-      "continue-on-error": "${{ matrix.experimental }}",
       "strategy": {
         "fail-fast": false,
         "matrix": {
@@ -97,17 +96,11 @@
             "clisp",
             "ecl"
           ],
-          "experimental": [false],
-          "include": [
-             {"lisp": "ccl-bin/1.12.1", "os": "macos-latest", "experimental": true},
-             {"lisp": "ccl-bin/1.12.1", "os": "ubuntu-latest", "experimental": true},
-             {"lisp": "clisp", "os": "macos-latest", "experimental": true}
-          ],
           "exclude": [
-             {"lisp": "ccl-bin/1.12.1", "os": "macos-latest", "experimental": false},
-             {"lisp": "ccl-bin/1.12.1", "os": "ubuntu-latest", "experimental": false},
-             {"lisp": "clisp", "os": "macos-latest", "experimental": false},
-             {"lisp": "ecl", "os": "macos-latest", "experimental": false}
+            {
+              "os": "macos-latest",
+              "lisp": "clisp"
+            }
           ]
         }
       },
