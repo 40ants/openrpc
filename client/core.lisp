@@ -57,16 +57,26 @@
      (to-lisp-case
       (str:replace-all "." "-" string))))
 
+  (declaim (ftype (function (hash-table) cons) schema-to-type))
   (defun schema-to-type (schema)
-    (let ((type (gethash "type" schema)))
-      (cond
-        ((string-equal type "integer") 'integer)
-        ((string-equal type "number") 'double-float)
-        ((string-equal type "string") 'string)
-        ((string-equal type "array") 'list)
-        (t
-         (error "Type ~S is not supported yet."
-                type)))))
+    "Convert JSON types to CL types. Supports one or multiple types."
+    (let ((type (gethash "type" schema))
+          (type-list nil))
+      (declare (type (or string cons) type)
+               (list type-list))
+      (flet ((%schema-to-type (type)
+               (cond ((string-equal type "integer") (push 'integer type-list))
+                     ((string-equal type "number") (push 'double-float type-list))
+                     ((string-equal type "string") (push 'string type-list))
+                     ((string-equal type "array") (push 'list type-list))
+                     ((string-equal type "null") (push 'null type-list))
+                     (t
+                      (error "Type ~S is not supported yet."
+                             type)))))
+        (if (stringp type)
+            (%schema-to-type type)
+            (mapc #'%schema-to-type type)))
+      (nreverse type-list)))
 
   (defun generate-generic-lambda-list (params)
     (loop for param in params
@@ -85,28 +95,69 @@
                                         for name = (intern (normalize-name
                                                             (gethash "name" param)))
                                         collect name)))))
-  
+
+  (declaim (ftype (function (cons) cons) expand-list))
+  (defun expand-list (lambda-list)
+    "Expand required parameters to all possible combinations of types.
+     If required parameters have one type, the result is same as input."
+    (let ((lambda-lists nil))
+      (declare (list lambda-lists))
+      (flet ((add-to-lists (element lists)
+               (if lists
+                   (mapcar (lambda (list)
+                             (reverse (cons element (reverse list))))
+                           lists)
+                   (list (list element)))))
+        (mapc (lambda (elements)
+                (let ((name (car elements))
+                      (types (cdr elements)))
+                  (declare (symbol name) (list types))
+                  (if (= 1 (length types))
+                      (setf lambda-lists (add-to-lists elements lambda-lists))
+                      (setf lambda-lists
+                            (mapcan (lambda (type)
+                                      (add-to-lists (list name type) lambda-lists))
+                                    types)))))
+              lambda-list))
+      lambda-lists))
+
+  (declaim (ftype (function (list) (values list &optional)) generate-lambda-list))
   (defun generate-lambda-list (params)
+    "Generate lambda list from parameter list."
     (loop for param in params
           for required = (gethash "required" param)
           if required
           collect param into required-params
           else
           collect param into keyword-params
-          finally (return (append (loop for param in required-params
-                                        for name = (intern (normalize-name
-                                                            (gethash "name" param)))
-                                        for type = (schema-to-type (gethash "schema" param))
-                                        collect (list name type))
-                                  (when keyword-params
-                                    (list '&key))
+          finally (let ((required-parameter
+                          (loop for param in required-params
+                                for name = (intern (normalize-name
+                                                    (gethash "name" param)))
+                                for type = (schema-to-type (gethash "schema" param))
+                                if (atom type)
+                                  collect (list name type)
+                                else
+                                  collect (cons name type)))
+                        (keyword-parameter
+                          (when keyword-params
+                            (cons '&key
                                   (loop for param in keyword-params
                                         for name = (intern (normalize-name
                                                             (gethash "name" param)))
                                         for default = nil
                                         for given-name = (alexandria:symbolicate name "-GIVEN-P")
                                         collect (list name default given-name))))))
-  
+                    (declare (list required-parameter keyword-parameter))
+                    (return (if required-parameter
+                                (if keyword-parameter
+                                    (mapcar (lambda (required-combination)
+                                              (append required-combination keyword-parameter))
+                                            (expand-list required-parameter))
+                                    (expand-list required-parameter))
+                                (when keyword-parameter
+                                  (list keyword-parameter)))))))
+
   (defun generate-arguments-collector (params)
     (loop for param in params
           for required = (gethash "required" param)
@@ -255,7 +306,8 @@
                                       prop-schema
                                       classes-cache
                                       :export-symbols export-symbols)))))
-        ((string-equal type "array")
+        ((and (stringp type)
+              (string-equal type "array"))
          (let ((element-transformation
                  (generate-result-transformation api-class-name
                                                  'item
@@ -267,9 +319,31 @@
         (t
          ;; In simple cases we don't need to apply any transformations
          result-symbol))))
-  
-  
+
+  (declaim (ftype (function (symbol symbol list cons string (or symbol cons))
+                            cons)
+                  generate-defmethods))
+  (defun generate-defmethods (name class-name lambda-list arguments-collector
+                             original-name result-transformation)
+    "Generate either a defmethod with only client as argument or for each given
+lambda-list a separate defmethod."
+    (flet ((generate-defmethod (&optional lambda-list-element)
+             (let ((args-collect (gensym)))
+               `(defmethod ,name ,(cons `(client ,class-name) lambda-list-element)
+                  (let* ((,args-collect ,arguments-collector))
+                    (labels ((retrieve-data (args)
+                               (let ((raw-response (rpc-call client ,original-name args)))
+                                 ,result-transformation)))
+                      (retrieve-data ,args-collect)))))))
+      (if lambda-list
+          (mapcar #'generate-defmethod lambda-list)
+          (list (generate-defmethod)))))
+
+  (declaim (ftype (function (symbol hash-table hash-table &key (:export-symbols t))
+                            cons)
+                  generate-method))
   (defun generate-method (class-name spec classes-cache &key export-symbols)
+    "Generate generic and specialized methods for certain class."
     (let* ((original-name (gethash "name" spec))
            (name (intern (normalize-name original-name)))
            (params-spec (gethash "params" spec))
@@ -289,22 +363,16 @@
                                             summary
                                             description)))))
            (arguments-collector (generate-arguments-collector params-spec))
-           (result (list
+           (result (cons
                     `(defgeneric ,name (client ,@generic-lambda-list)
                        ,@generic-body)
-                    
-                    `(defmethod ,name ((client ,class-name) ,@lambda-list)
-                       (let* ((args ,arguments-collector))
-                         (labels ((retrieve-data (args)
-                                    (let ((raw-response (rpc-call client ,original-name args)))
-                                      ,result-transformation)))
-                           (retrieve-data args)))))))
+                    (generate-defmethods name class-name lambda-list arguments-collector
+                                         original-name result-transformation))))
       (when export-symbols
         (push `(export ',name)
               result))
       (values result)))
 
-  
   (defun retrieve-data-from-url (url)
     (handler-bind ((connection-refused-error
                      (lambda (condition)
@@ -353,6 +421,26 @@
       (jsonrpc/class:call client func-name arguments))))
 
 
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defun %generate-client (class-name spec &key (export-symbols t))
+    (let* ((client-class (generate-client-class class-name spec :export-symbols export-symbols))
+           (object-classes
+             ;; The map from package::symbol to a code which defines
+             ;; a class for some complex object used as argument or
+             ;; result in an API:
+             (make-hash-table :test 'equal))
+           (methods (loop for method-spec in (gethash "methods" spec)
+                          appending (generate-method class-name method-spec object-classes
+                                                     :export-symbols export-symbols)))
+           (class-definitions
+             (loop for def being the hash-value of object-classes
+                   ;; Here each def contains a list of DEFCLASS + one or more methods.
+                   appending def)))
+      (values client-class
+              class-definitions
+              methods))))
+
+
 (defmacro generate-client (class-name url-or-path &key (export-symbols t))
   "Generates Common Lisp client by OpenRPC spec.
 
@@ -361,21 +449,10 @@
 
    URL-OR-PATH argument could be a string with HTTP URL of a spec, or a pathname
    if a spec should be read from the disc."
-  (let* ((spec (retrieve-spec (eval url-or-path)))
-         (client-class (generate-client-class class-name spec :export-symbols export-symbols))
-         (object-classes
-           ;; The map from package::symbol to a code which defines
-           ;; a class for some complex object used as argument or
-           ;; result in an API:
-           (make-hash-table :test 'equal))
-         (methods (loop for method-spec in (gethash "methods" spec)
-                        appending (generate-method class-name method-spec object-classes
-                                                   :export-symbols export-symbols)))
-         (class-definitions
-           (loop for def being the hash-value of object-classes
-                 ;; Here each def contains a list of DEFCLASS + one or more methods.
-                 appending def)))
-    `(eval-when (:compile-toplevel :load-toplevel :execute)
-       ,@client-class
-       ,@class-definitions
-       ,@methods)))
+  (let* ((spec (retrieve-spec (eval url-or-path))))
+    (multiple-value-bind (client-class class-definitions methods)
+        (%generate-client class-name spec :export-symbols export-symbols)
+      `(eval-when (:compile-toplevel :load-toplevel :execute)
+         ,@client-class
+         ,@class-definitions
+         ,@methods))))

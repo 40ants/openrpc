@@ -1,0 +1,39 @@
+{
+  "methods": [
+    {
+      "name": "example",
+      "params": [
+        {
+          "name": "name",
+          "schema":
+          {
+            "type": ["string", "null"],
+            "maxLength": 255
+          },
+          "required": true,
+          "summary": "User name."
+        }
+      ],
+      "result": {
+        "name": "example_result",
+        "schema": {
+          "type": ["string", "null"],
+          "maxLength": 255
+        }
+      }, 
+      "summary": "Example method.",
+      "paramStructure": "by-name"
+    }
+  ],
+  "openrpc": "1.0.0",
+  "info": {
+    "title": "Example API",
+    "version": "0.1.0"
+  },
+  "servers": [
+    {
+      "name": "default",
+      "url": "https://example.org/"
+    }
+  ]
+}

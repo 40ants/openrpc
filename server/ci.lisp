@@ -29,12 +29,17 @@
                       "ultralisp")
           :lisp ("sbcl-bin"
                  ;; On CCL there are some strange network errors both on ubuntu and OSX
-                 ;; "ccl-bin/1.12.1"
-                 )
-          ;; :exclude ((:os "ubuntu-latest"
-          ;;                ;; On Ubuntu tests fail with this error:
-          ;;                ;; The condition Address family for hostname not supported (error #-9) during nameserver operation in getaddrinfo occurred with errno: 0.
-          ;;            :lisp "ccl-bin/1.12.1"))
+                 "ccl-bin/1.12.1"
+                 "clisp"
+                 "ecl")
+          :exclude (
+                    ;; For some reason CLISP of OSX does not support threading
+                    ;; and bordeaux-threads fails to compile
+                    (:os "macos-latest" 
+                     :lisp "clisp")
+                    ;; ECL on OSX fails to compile prometheus-gc/sbcl
+                    (:os "macos-latest" 
+                     :lisp "ecl"))
           :coverage t
           :qlfile "{% ifequal quicklisp_dist \"ultralisp\" %}
                    dist ultralisp http://dist.ultralisp.org
