@@ -100,6 +100,10 @@
             {
               "os": "macos-latest",
               "lisp": "clisp"
+            },
+            {
+              "os": "macos-latest",
+              "lisp": "ecl"
             }
           ]
         }

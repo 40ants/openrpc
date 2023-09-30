@@ -36,7 +36,10 @@
                     ;; For some reason CLISP of OSX does not support threading
                     ;; and bordeaux-threads fails to compile
                     (:os "macos-latest" 
-                     :lisp "clisp"))
+                     :lisp "clisp")
+                    ;; ECL on OSX fails to compile prometheus-gc/sbcl
+                    (:os "macos-latest" 
+                     :lisp "ecl"))
           :coverage t
           :qlfile "{% ifequal quicklisp_dist \"ultralisp\" %}
                    dist ultralisp http://dist.ultralisp.org
