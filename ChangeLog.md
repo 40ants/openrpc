@@ -2,6 +2,30 @@
 
 # ChangeLog
 
+<a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E9-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.9.1 (2023-09-24)
+
+<a id="fixes"></a>
+
+### Fixes
+
+Fix support for multiple parameter types, (particularly for required parameters):
+
+```json
+"params": [
+  {
+    "name": "name",
+    "schema":
+    {
+      "type": ["string", "null"],
+      "maxLength": 255
+    },
+    "required": true,
+    "summary": "User name."
+  }
+]
+```
 <a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E9-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.9.0 (2023-08-19)
