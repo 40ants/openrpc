@@ -13,6 +13,16 @@
                               "JSON"
                               "RPC"
                               "OSX"))
+  (0.9.2 2023-10-15
+	   "
+## Fixes
+
+- Generate additional method with integer class specializer (till now it was
+  only double-float) for required parameter of type number.
+
+- Allow required parameter of type array without an items slot.
+  The result will not be transformed.
+")
   (0.9.1 2023-09-24
          "
 ## Fixes
