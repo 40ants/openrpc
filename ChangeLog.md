@@ -2,6 +2,20 @@
 
 # ChangeLog
 
+<a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E9-2E2-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.9.2 (2023-10-15)
+
+<a id="fixes"></a>
+
+### Fixes
+
+* Generate additional method with integer class specializer (till now it was
+  only double-float) for required parameter of type number.
+
+* Allow required parameter of type array without an items slot.
+  The result will not be transformed.
+
 <a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E9-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.9.1 (2023-09-24)
