@@ -308,7 +308,8 @@
                                       prop-schema
                                       classes-cache
                                       :export-symbols export-symbols)))))
-        ((and (stringp type)
+        ((and (gethash "items" schema)
+	      (stringp type)
               (string-equal type "array"))
          (let ((element-transformation
                  (generate-result-transformation api-class-name
