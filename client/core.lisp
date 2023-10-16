@@ -26,6 +26,8 @@
 (declaim (ftype (function (closer-mop:specializer stream) null)
 		generate-method-descriptions))
 (defun generate-method-descriptions (class stream)
+  "Prints method lambda lists wherein a class is used as parameter specializer.
+The list is ordered alphabetically and excludes the describe-object method."
   (flet ((proper-lambda-list (method)
 	   (let* ((lambda-list (closer-mop:method-lambda-list method))
 		  (specializers (closer-mop:method-specializers method))
@@ -39,7 +41,10 @@
 				      (nth (incf list-element) specializers)))
 				(if type
 				    (list (intern (symbol-name element))
-					  (intern (symbol-name (class-name type))))
+					  (if (string-equal 'eql-specializer
+							    (class-name (class-of type)))
+					      (list 'eql (closer-mop:eql-specializer-object type))
+					      (intern (symbol-name (class-name type)))))
 				    (typecase element
 				      (symbol
 				       (intern (symbol-name element)))
@@ -99,8 +104,12 @@
 		      (push 'double-float type-list)
 		      (push 'integer type-list))
                      ((string-equal type "string") (push 'string type-list))
+		     ((string-equal type "boolean")
+		      (pushnew 'null type-list)
+		      (push '(eql t) type-list))
+		     ((string-equal type "object") (push 'hash-table type-list))
                      ((string-equal type "array") (push 'list type-list))
-                     ((string-equal type "null") (push 'null type-list))
+                     ((string-equal type "null") (pushnew 'null type-list))
                      (t
                       (error "Type ~S is not supported yet."
                              type)))))
