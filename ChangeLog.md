@@ -2,6 +2,20 @@
 
 # ChangeLog
 
+<a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E9-2E3-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.9.3 (2023-10-16)
+
+<a id="fixes"></a>
+
+### Fixes
+
+A function `generate-method-descriptions` has been added. This function uses the mop
+for generating the method descriptions at run-time. Previously this happend at compile-time.
+The `generate-method-descriptions` is called from the generated specialized `describe-object`
+method. Now the output of `describe-object` should be correct again and show all generated,
+excluding the describe-object method itself.
+
 <a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E9-2E2-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.9.2 (2023-10-15)
