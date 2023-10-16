@@ -23,48 +23,47 @@
 (in-package #:openrpc-client/core)
 
 
+(declaim (ftype (function (closer-mop:specializer stream) null)
+		generate-method-descriptions))
+(defun generate-method-descriptions (class stream)
+  (flet ((proper-lambda-list (method)
+	   (let* ((lambda-list (closer-mop:method-lambda-list method))
+		  (specializers (closer-mop:method-specializers method))
+		  (list-element 0)
+		  (method-name (intern (symbol-name
+					(closer-mop:generic-function-name
+					 (closer-mop:method-generic-function method)))))
+		  (lambda-list-parameters
+		    (mapcar (lambda (element)
+			      (let ((type
+				      (nth (incf list-element) specializers)))
+				(if type
+				    (list (intern (symbol-name element))
+					  (intern (symbol-name (class-name type))))
+				    (typecase element
+				      (symbol
+				       (intern (symbol-name element)))
+				      (cons
+				       (mapcar (lambda (item)
+						 (intern (symbol-name item)))
+					       element))))))
+			    (cdr lambda-list))))
+	     (unless (string-equal method-name 'describe-object)
+	       (format stream "- ~S~%"
+		       (if lambda-list-parameters
+			   (list method-name lambda-list-parameters)
+			   (list method-name)))))))
+    (format stream "Supported RPC methods:~2%")
+    (mapc #'proper-lambda-list
+	  (stable-sort (copy-list (closer-mop:specializer-direct-methods class))
+		       (lambda (method1 method2)
+			 (string-lessp (closer-mop:generic-function-name
+					(closer-mop:method-generic-function method1))
+				       (closer-mop:generic-function-name
+					(closer-mop:method-generic-function method2))))))
+    nil))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (declaim (ftype (function (closer-mop:specializer stream) null)
-		  generate-method-descriptions))
-  (defun generate-method-descriptions (class stream)
-    (flet ((proper-lambda-list (method)
-             (let* ((lambda-list (closer-mop:method-lambda-list method))
-                    (specializers (closer-mop:method-specializers method))
-                    (list-element 0)
-                    (method-name (intern (symbol-name
-                                          (closer-mop:generic-function-name
-                                           (closer-mop:method-generic-function method)))))
-                    (lambda-list-parameters
-                      (mapcar (lambda (element)
-                                (let ((type
-                                        (nth (incf list-element) specializers)))
-                                  (if type
-                                      (list (intern (symbol-name element))
-                                            (intern (symbol-name (class-name type))))
-                                      (typecase element
-                                        (symbol
-                                         (intern (symbol-name element)))
-                                        (cons
-                                         (mapcar (lambda (item)
-                                                   (intern (symbol-name item)))
-                                                 element))))))
-                              (cdr lambda-list))))
-               (unless (string-equal method-name 'describe-object)
-                 (format stream "- ~S~%"
-                         (if lambda-list-parameters
-                             (list method-name lambda-list-parameters)
-                             (list method-name)))))))
-      (format stream "Supported RPC methods:~2%")
-      (mapc #'proper-lambda-list
-	    (stable-sort (copy-list (closer-mop:specializer-direct-methods class))
-			 (lambda (method1 method2)
-			   (string-lessp (closer-mop:generic-function-name
-					  (closer-mop:method-generic-function method1))
-					 (closer-mop:generic-function-name
-					  (closer-mop:method-generic-function method2))))))
-      nil))
-
   (declaim (ftype (function (symbol &key (:export-symbols boolean))
 			    cons)
 		  generate-client-class))
