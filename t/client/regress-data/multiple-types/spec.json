@@ -23,6 +23,58 @@
       }, 
       "summary": "Example method.",
       "paramStructure": "by-name"
+    },
+    {
+      "name": "example2",
+      "params": [
+        {
+          "name": "param1",
+          "schema":
+          {
+            "type": "boolean",
+          },
+          "required": true,
+          "summary": "User name."
+        },
+        {
+          "name": "paramX",
+          "schema":
+          {
+            "type": "array",
+          },
+          "summary": "X Parameter."
+        }
+      ],
+      "result": {
+        "name": "example_result2",
+        "schema": {
+          "type": "object",
+        }
+      },
+      "summary": "Example method.",
+      "paramStructure": "by-name"
+    },
+    {
+      "name": "example3",
+      "params": [
+        {
+          "name": "param3",
+          "schema":
+          {
+            "type": "array",
+          },
+          "required": true,
+          "summary": "User example3."
+        }
+      ],
+      "result": {
+        "name": "example_result3",
+        "schema": {
+          "type": "array",
+        }
+      },
+      "summary": "Example method.",
+      "paramStructure": "by-name"
     }
   ],
   "openrpc": "1.0.0",
