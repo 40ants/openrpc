@@ -13,6 +13,17 @@
                               "JSON"
                               "RPC"
                               "OSX"))
+  (0.9.3 2023-10-16
+	 "
+## Fixes
+
+A function `generate-method-descriptions` has been added. This function uses the mop
+for generating the method descriptions at run-time. Previously this happend at compile-time.
+The `generate-method-descriptions` is called from the generated specialized `describe-object`
+method. Now the output of `describe-object` should be correct again and show all generated,
+excluding the describe-object method itself.
+
+")
   (0.9.2 2023-10-15
 	   "
 ## Fixes

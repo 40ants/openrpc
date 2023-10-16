@@ -23,29 +23,58 @@
 (in-package #:openrpc-client/core)
 
 
+(declaim (ftype (function (closer-mop:specializer stream) null)
+		generate-method-descriptions))
+(defun generate-method-descriptions (class stream)
+  (flet ((proper-lambda-list (method)
+	   (let* ((lambda-list (closer-mop:method-lambda-list method))
+		  (specializers (closer-mop:method-specializers method))
+		  (list-element 0)
+		  (method-name (intern (symbol-name
+					(closer-mop:generic-function-name
+					 (closer-mop:method-generic-function method)))))
+		  (lambda-list-parameters
+		    (mapcar (lambda (element)
+			      (let ((type
+				      (nth (incf list-element) specializers)))
+				(if type
+				    (list (intern (symbol-name element))
+					  (intern (symbol-name (class-name type))))
+				    (typecase element
+				      (symbol
+				       (intern (symbol-name element)))
+				      (cons
+				       (mapcar (lambda (item)
+						 (intern (symbol-name item)))
+					       element))))))
+			    (cdr lambda-list))))
+	     (unless (string-equal method-name 'describe-object)
+	       (format stream "- ~S~%"
+		       (if lambda-list-parameters
+			   (list method-name lambda-list-parameters)
+			   (list method-name)))))))
+    (format stream "Supported RPC methods:~2%")
+    (mapc #'proper-lambda-list
+	  (stable-sort (copy-list (closer-mop:specializer-direct-methods class))
+		       (lambda (method1 method2)
+			 (string-lessp (closer-mop:generic-function-name
+					(closer-mop:method-generic-function method1))
+				       (closer-mop:generic-function-name
+					(closer-mop:method-generic-function method2))))))
+    nil))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (defun generate-method-description (spec)
-    (let* ((original-name (gethash "name" spec))
-           (name (intern (normalize-name original-name)))
-           (params-spec (gethash "params" spec))
-           (lambda-list (generate-lambda-list params-spec)))
-      `(format stream "- ~S~%"
-               ',(cons name
-                       lambda-list))))
-
-  
-  (defun generate-client-class (class-name spec &key export-symbols)
+  (declaim (ftype (function (symbol &key (:export-symbols boolean))
+			    cons)
+		  generate-client-class))
+  (defun generate-client-class (class-name &key export-symbols)
     (let* ((make-func-name (alexandria:symbolicate "MAKE-" class-name))
-           (method-descriptions (mapcar #'generate-method-description
-                                        (gethash "methods" spec)))
            (result `((defclass ,class-name (jsonrpc/class:client)
                        ())
                      (defun ,make-func-name ()
                        (make-instance ',class-name))
-                     (defmethod describe-object ((client ,class-name) stream)
-                       (format stream "Supported RPC methods:~2%")
-                       ,@method-descriptions))))
+		     (defmethod describe-object ((client ,class-name) stream)
+		       (generate-method-descriptions (class-of client) stream)))))
       (when export-symbols
         (appendf result
                  `((export ',class-name)
@@ -425,8 +454,11 @@ lambda-list a separate defmethod."
 
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
+  (declaim (ftype (function (symbol hash-table &key (:export-symbols boolean))
+			    (values cons list list &optional))
+		  %generate-client))
   (defun %generate-client (class-name spec &key (export-symbols t))
-    (let* ((client-class (generate-client-class class-name spec :export-symbols export-symbols))
+    (let* ((client-class (generate-client-class class-name :export-symbols export-symbols))
            (object-classes
              ;; The map from package::symbol to a code which defines
              ;; a class for some complex object used as argument or
