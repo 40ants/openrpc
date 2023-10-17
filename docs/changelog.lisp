@@ -13,6 +13,12 @@
                               "JSON"
                               "RPC"
                               "OSX"))
+  (0.10.0 2023-10-17
+          "
+## Changes
+
+Generic-function OPENRPC-SERVER/INTERFACE:MAKE-INFO now accepts only one argument - object of class OPENRPC-SERVER/API:API.
+")
   (0.9.3 2023-10-16
 	 "
 ## Fixes
@@ -25,7 +31,7 @@ excluding the describe-object method itself.
 
 ")
   (0.9.2 2023-10-15
-	   "
+	 "
 ## Fixes
 
 - Generate additional method with integer class specializer (till now it was
