@@ -2,6 +2,13 @@
   (:use #:cl)
   (:import-from #:40ants-doc
                 #:defsection)
+  (:import-from #:openrpc-server/api
+                #:api
+                #:*current-api*
+                #:api-methods
+                #:api-title
+                #:api-version
+                #:define-api)
   (:import-from #:openrpc-server
                 #:define-rpc-method
                 #:return-error
@@ -253,6 +260,13 @@ For our example project it will looks like:
                   ;; TODO: investigate why
                   ;; this does not work for docstring of transform-result generic-function
                   :external-links (("SERAPEUM:DICT" . "https://github.com/ruricolist/serapeum/blob/master/REFERENCE.md#dict-rest-keys-and-values")))
+  (api class)
+  (*current-api* variable)
+  (define-api macro)
+  (api-methods (reader api))
+  (api-title (reader api))
+  (api-version (reader api))
+  
   (define-rpc-method macro)
   (type-to-schema generic-function)
   (transform-result generic-function)
