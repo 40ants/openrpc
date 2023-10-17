@@ -2,7 +2,6 @@
   (:use #:cl)
   (:import-from #:serapeum
                 #:dict)
-  (:import-from #:jsonrpc)
   (:import-from #:alexandria
                 #:length=)
   (:import-from #:openrpc-server/api
