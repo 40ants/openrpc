@@ -5,6 +5,7 @@
   (:import-from #:diff)
   (:import-from #:openrpc-client/core
                 #:%generate-client
+		#:generate-client
                 #:retrieve-spec)
   (:import-from #:alexandria
                 #:last-elt
@@ -14,16 +15,17 @@
 
 (declaim (optimize (debug 3) (safety 3)))
 
-(defun relative-path (test-name file-name &key (type "lisp"))
-  (asdf:system-relative-pathname
-   :openrpc-tests
-   (make-pathname :directory (list :relative
-                                   "t"
-                                   "client"
-                                   "regress-data"
-                                   test-name)
-                  :name file-name
-                  :type type)))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defun relative-path (test-name file-name &key (type "lisp"))
+    (asdf:system-relative-pathname
+     :openrpc-tests
+     (make-pathname :directory (list :relative
+				     "t"
+				     "client"
+				     "regress-data"
+				     test-name)
+		    :name file-name
+		    :type type))))
 
 
 (defun regression-test-names ()
@@ -114,3 +116,26 @@
                    (compare methods
                             "multiple-types"
                             "methods")))))))
+
+(generate-client
+ test-client
+ (asdf:system-relative-pathname
+  :openrpc-tests
+  (relative-path "multiple-types"
+		 "spec"
+		 :type "json")))
+
+(deftest describe-object
+  (rove:testing "describe-object test-client"
+    (rove:ok (string-equal
+	      (let ((s (make-string-output-stream)))
+		(describe-object (make-test-client) s)
+		(get-output-stream-string s))
+	      "Supported RPC methods:
+
+- (EXAMPLE ((NAME NULL)))
+- (EXAMPLE ((NAME STRING)))
+- (EXAMPLE2 ((PARAM1 (EQL T)) &KEY (PARAM-X NIL PARAM-X-GIVEN-P)))
+- (EXAMPLE2 ((PARAM1 NULL) &KEY (PARAM-X NIL PARAM-X-GIVEN-P)))
+- (EXAMPLE3 ((PARAM3 LIST)))
+"))))

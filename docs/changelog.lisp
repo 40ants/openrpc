@@ -13,8 +13,15 @@
                               "JSON"
                               "RPC"
                               "OSX"))
-  (0.10.0 2023-10-17
-          "
+    (0.10.1 2023-10-17
+	    "
+## Additions
+
+- Support object and boolean type for required parameters.
+- Add regression tests for generated DESCRIBE-OBJECT method.
+")
+    (0.10.0 2023-10-17
+            "
 ## Changes
 
 Generic-function OPENRPC-SERVER/INTERFACE:MAKE-INFO now accepts only one argument - object of class OPENRPC-SERVER/API:API.
