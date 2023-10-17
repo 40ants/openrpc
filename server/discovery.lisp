@@ -4,6 +4,8 @@
   (:import-from #:lack.request)
   (:import-from #:openrpc-server/vars
                 #:*current-request*)
+  (:import-from #:openrpc-server/api
+                #:api-methods)
   (:import-from #:openrpc-server/content-descriptor
                 #:make-content-descriptor)
   (:import-from #:openrpc-server/method
@@ -21,15 +23,16 @@
   (:import-from #:serapeum
                 #:dict)
   (:import-from #:alexandria
-                #:when-let))
+                #:when-let)
+  (:export
+   #:generate-spec))
 (in-package #:openrpc-server/discovery)
 
 
-(defun generate-methods (api mapper)
+(defun generate-methods (api)
   (check-type api api)
 
-  (loop for name being the hash-key of mapper
-          using (hash-value func)
+  (loop for name being the hash-key of (api-methods api)
         for method = (let ((method (make-hash-table :test #'equal)))
                        (setf (gethash "name" method)
                              name)
@@ -69,26 +72,63 @@
           collect method))
 
 
-(defun rpc-discover (server args)
-  (declare (ignore args))
+(declaim (ftype (function (api &key (:server-url string)) hash-table)
+                generate-spec))
+(defun generate-spec (api &key (server-url "http://localhost:5000/"))
+  "Returns a dictionary with a full OpenRPC specification of the API.
+   This specification can be published on the web or saved to the JSON or YAML file.
 
-  (unless (boundp '*current-api*)
-    (error "Please, call rpc-discover in context of running application."))
-  
-  (let ((response (make-hash-table :test 'equal))
-        (req *current-request*))
+   Also, you might want to use this function in the REPL to inspect the spec like this:
+
+   ```
+   FOO> (serapeum:toggle-pretty-print-hash-table)
+   T
+   FOO> (openrpc-server/discovery:generate-spec test)
+   (SERAPEUM:DICT
+     \"methods\" '((SERAPEUM:DICT
+                   \"name\" \"foo\"
+                   \"params\" '((SERAPEUM:DICT
+                                \"name\" \"bar\"
+                                \"schema\" (SERAPEUM:DICT
+                                           \"type\" \"string\")))
+                   \"result\" (SERAPEUM:DICT
+                              \"name\" \"foo_result\"
+                              \"schema\" (SERAPEUM:DICT
+                                         \"type\" \"integer\"))
+                   \"paramStructure\" \"by-name\"))
+     \"openrpc\" \"1.0.0\"
+     \"info\" (SERAPEUM:DICT
+              \"title\" \"Default API\"
+              \"version\" \"0.1.0\")
+     \"servers\" '((SERAPEUM:DICT
+                   \"name\" \"default\"
+                   \"url\" \"http://localhost:5000/\")))
+   ```
+"
+
+  (let ((response (make-hash-table :test 'equal)))
     (setf (gethash "methods" response)
-          (generate-methods *current-api* (jsonrpc/mapper::exposable-mapper server)))
+          (generate-methods api))
     (setf (gethash "openrpc" response)
           "1.0.0")
     (setf (gethash "info" response)
-          (make-info *current-api* server))
+          (make-info api))
     (setf (gethash "servers" response)
           (list
            (dict "name" "default"
-                 "url" (format nil "https://~A/"
-                               (lack.request:request-server-name req))
-                 )))
+                 "url" server-url)))
     response))
+
+
+(defun rpc-discover (server args)
+  (declare (ignore server args))
+
+  (unless (boundp '*current-api*)
+    (error "Please, call rpc-discover in context of running application."))
+
+  (let ((req *current-request*))
+    (generate-spec *current-api*
+                   :server-url (format nil "https://~A/"
+                                       (lack.request:request-server-name req)))))
 
 

@@ -161,9 +161,9 @@ be strings. It is convenient to use [`SERAPEUM:DICT`][SERAPEUM:DICT] for buildin
               'type-to-schema)))))
 
 
-(defgeneric make-info (api server)
+(defgeneric make-info (api)
   (:documentation "Returns a basic information about API for [info section](https://spec.open-rpc.org/#info-object) of OpenRPC spec.")
-  (:method ((api api) (server jsonrpc:server))
+  (:method ((api api))
     (let ((info (make-hash-table :test 'equal)))
       (setf (gethash "title" info)
             (api-title api))
