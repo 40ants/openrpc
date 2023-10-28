@@ -56,7 +56,7 @@
   "
 [![](https://github-actions.40ants.com/40ants/openrpc/matrix.svg)](https://github.com/40ants/openrpc/actions)
 
-This framework is built on top of [`JSON-RPC`][jsonrpc] and [`Clack`][clack]. Comparing to JSON-RPC library,
+This framework is built on top of [JSON-RPC][jsonrpc] and [`Clack`][clack]. Comparing to JSON-RPC library,
 it provides these key features:
 
 - Automatic [OpenRPC spec][openrpc] generation.
