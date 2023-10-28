@@ -9,6 +9,9 @@
                 #:@server)
   (:import-from #:openrpc-client/docs
                 #:@client)
+  (:import-from #:openrpc-docs/contributing
+                #:@contributors
+                #:@ask)
   (:export #:@index
            #:@readme))
 (in-package #:openrpc-docs/index)
@@ -62,7 +65,9 @@ it provides these key features:
 - On both server and client sides your code looks very lispy, all JSON marshalling is done under the hood. 
 "
   (@server section)
-  (@client section))
+  (@client section)
+  (@ask section)
+  (@contributors section))
 
 
 (defsection-copy @readme @index)
