@@ -8,7 +8,7 @@
 (defsection @ask (:title "Our Ask...")
   "If you use this or find value in it, please consider contributing in one or more of the following ways:
 
-   1. Click the \"Sponsor\" button at the top of the page and make a contribution.
+   1. Sponsor project at [Patreon](https://www.patreon.com/bePatron?u=33868637) or [Boosty](https://boosty.to/40ants) and make a contribution.
    1. Star it!
    1. Share posts about it in social networks!
    1. Fix an issue.
