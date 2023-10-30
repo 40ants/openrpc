@@ -16,6 +16,6 @@
 
 
 (defsection @contributors (:title "Contributors")
-  "These people are contributed to OpenRPC. I'm so grateful to them!
+  "These people have contributed to OpenRPC. I'm so grateful to them!
 
    - [Kilian M. Haemmerle](https://github.com/kilianmh)")
