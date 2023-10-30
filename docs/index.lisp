@@ -9,6 +9,9 @@
                 #:@server)
   (:import-from #:openrpc-client/docs
                 #:@client)
+  (:import-from #:openrpc-docs/contributing
+                #:@contributors
+                #:@ask)
   (:export #:@index
            #:@readme))
 (in-package #:openrpc-docs/index)
@@ -53,7 +56,7 @@
   "
 [![](https://github-actions.40ants.com/40ants/openrpc/matrix.svg)](https://github.com/40ants/openrpc/actions)
 
-This framework is built on top of [`JSON-RPC`][jsonrpc] and [`Clack`][clack]. Comparing to JSON-RPC library,
+This framework is built on top of [JSON-RPC][jsonrpc] and [`Clack`][clack]. Comparing to JSON-RPC library,
 it provides these key features:
 
 - Automatic [OpenRPC spec][openrpc] generation.
@@ -62,7 +65,9 @@ it provides these key features:
 - On both server and client sides your code looks very lispy, all JSON marshalling is done under the hood. 
 "
   (@server section)
-  (@client section))
+  (@client section)
+  (@ask section)
+  (@contributors section))
 
 
 (defsection-copy @readme @index)
