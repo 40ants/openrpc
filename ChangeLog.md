@@ -2,6 +2,16 @@
 
 # ChangeLog
 
+<a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E10-2E2-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.10.2 (2023-11-17)
+
+<a id="fixes"></a>
+
+### Fixes
+
+Fixed loading error occured in some cases when jsonrpc/transport/http was not found.
+
 <a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E10-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.10.1 (2023-10-17)
