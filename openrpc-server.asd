@@ -7,6 +7,7 @@
   :pathname "server"
   :serial t
   :depends-on ("log4cl-extras"
+               "jsonrpc"
                "openrpc-server/server"
                "openrpc-server/class"
                "openrpc-server/discovery")
@@ -17,5 +18,3 @@
 
 (register-system-packages "log4cl" '(#:log))
 (register-system-packages "lack-request" '(#:lack.request))
-(register-system-packages "jsonrpc" '(#:jsonrpc/transport/http
-                                      #:jsonrpc/transport/websocket))
