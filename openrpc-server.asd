@@ -7,6 +7,7 @@
   :pathname "server"
   :serial t
   :depends-on ("log4cl-extras"
+               "jsonrpc"
                "openrpc-server/server"
                "openrpc-server/class"
                "openrpc-server/discovery")
