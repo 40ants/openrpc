@@ -17,3 +17,5 @@
 
 (register-system-packages "log4cl" '(#:log))
 (register-system-packages "lack-request" '(#:lack.request))
+(register-system-packages "jsonrpc" '(#:jsonrpc/transport/http
+                                      #:jsonrpc/transport/websocket))
