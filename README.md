@@ -54,6 +54,19 @@ First, we will operate on usual Common Lisp class:
         :type string
         :reader pet-tag)))
 ```
+
+Next we define some helpers:
+
+```lisp
+(defvar *pets* (make-hash-table :test 'equal))
+
+(defun get-new-id ()
+  (1+
+   (if (zerop (hash-table-count *pets*))
+       0
+       (apply #'max (alexandria:hash-table-keys *pets*)))))
+```
+
 Now we can define an `RPC` method to create a new pet:
 
 ```
