@@ -2,6 +2,16 @@
 
 # ChangeLog
 
+<a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E10-2E3-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.10.3 (2023-11-21)
+
+<a id="fix"></a>
+
+### Fix
+
+Add necessary helpers for simple example in Readme.
+
 <a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E10-2E2-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.10.2 (2023-11-17)
