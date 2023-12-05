@@ -13,8 +13,13 @@
                               "JSON"
                               "RPC"
                               "OSX"))
-  (0.10.2 2023-11-17
+  (0.10.3 2023-11-21
           "
+## Fix
+
+Add necessary helpers for simple example in Readme.")
+  (0.10.2 2023-11-17
+	  "
 ## Fixes
 
 Fixed loading error occured in some cases when jsonrpc/transport/http was not found.
