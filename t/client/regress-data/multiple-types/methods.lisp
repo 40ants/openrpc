@@ -28,7 +28,7 @@
  (defgeneric example2
      (openrpc-client/core::client param1 &key param-x)
    (:documentation "Example method."))
- (defmethod example2 ((openrpc-client/core::client the-class) (param1 null)
+ (defmethod example2 ((openrpc-client/core::client the-class) (param1 (eql yason:false))
 		      &key (param-x nil param-x-given-p))
    (let* ((#:g3
             (let ((openrpc-client/core::args (make-hash-table :test 'equal)))
