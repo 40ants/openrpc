@@ -2,6 +2,17 @@
 
 # ChangeLog
 
+<a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E10-2E4-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.10.4 (2024-02-04)
+
+<a id="fix"></a>
+
+### Fix
+
+Required parameters of type boolean false can be supplied now.
+Since yason:*parse-json-booleans-as-symbols* is set, only yason:false maps into json false.
+
 <a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E10-2E3-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.10.3 (2023-11-21)
