@@ -13,6 +13,12 @@
                               "JSON"
                               "RPC"
                               "OSX"))
+  (0.10.4 2024-02-04
+	  "
+## Fix
+
+Required parameters of type boolean false can be supplied now.
+Since yason:*parse-json-booleans-as-symbols* is set, only yason:false maps into json false.")
   (0.10.3 2023-11-21
           "
 ## Fix

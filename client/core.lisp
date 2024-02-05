@@ -105,11 +105,11 @@ The list is ordered alphabetically and excludes the describe-object method."
 		      (push 'integer type-list))
                      ((string-equal type "string") (push 'string type-list))
 		     ((string-equal type "boolean")
-		      (pushnew 'null type-list)
+		      (push '(eql yason:false) type-list)
 		      (push '(eql t) type-list))
 		     ((string-equal type "object") (push 'hash-table type-list))
                      ((string-equal type "array") (push 'list type-list))
-                     ((string-equal type "null") (pushnew 'null type-list))
+                     ((string-equal type "null") (push 'null type-list))
                      (t
                       (error "Type ~S is not supported yet."
                              type)))))
