@@ -27,7 +27,7 @@ Will generate the whole bunch of classes and methods:
 
 
 ```
-(defclass petshop (jsonrpc/class:client) nil)
+(defclass petshop (jsonrpc/client:client) nil)
 
 (defun make-petshop () (make-instance 'petshop))
 
