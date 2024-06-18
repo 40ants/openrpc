@@ -22,26 +22,28 @@
   :jobs ((40ants-ci/jobs/linter:linter :check-imports t)
          (run-tests
           :os ("ubuntu-latest"
-               "macos-latest")
+               "macos-13")
           :quicklisp (;; Quicklisp is not working yet, because
-                      ;; there is old JSONRPC where no "jsonrpc/transport/http" system. 
+                      ;; there is old JSONRPC where no "jsonrpc/server" system. 
                       ;; "quicklisp"
                       "ultralisp")
           :lisp ("sbcl-bin"
-                 ;; On CCL there are some strange network errors both on ubuntu and OSX
-                 "ccl-bin/1.12.1"
-                 "clisp"
-                 "ecl")
-          :exclude (
-                    ;; For some reason CLISP of OSX does not support threading
-                    ;; and bordeaux-threads fails to compile
-                    (:os "macos-latest" 
-                     :lisp "clisp")
-                    ;; ECL on OSX fails to compile prometheus-gc/sbcl
-                    (:os "macos-latest" 
-                     :lisp "ecl"))
+                 ;; If somebody cares about these or other implementations
+                 ;; you can join as a maintainer:
+                 ;; "ccl-bin"
+                 ;; "clisp"
+                 ;; "ecl"
+                 )
+          ;; :exclude (
+          ;;           ;; For some reason CLISP of OSX does not support threading
+          ;;           ;; and bordeaux-threads fails to compile
+          ;;           (:os "macos-13" 
+          ;;            :lisp "clisp")
+          ;;           ;; ECL on OSX fails to compile prometheus-gc/sbcl
+          ;;           (:os "macos-13" 
+          ;;            :lisp "ecl"))
           :coverage t
-          :qlfile "{% ifequal quicklisp_dist \"ultralisp\" %}
+          :qlfile "{% ifequal env.quicklisp_dist \"ultralisp\" %}
                    dist ultralisp http://dist.ultralisp.org
                    {% endifequal %}")))
 

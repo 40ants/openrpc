@@ -3,6 +3,7 @@
   (:import-from #:jsonrpc)
   (:import-from #:yason)
   (:import-from #:lack.request)
+  (:import-from #:jsonrpc)
   (:import-from #:jsonrpc/server
                 #:bind-server-to-transport)
   (:import-from #:jsonrpc/transport/websocket
