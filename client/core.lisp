@@ -3,11 +3,29 @@
   (:import-from #:kebab
                 #:to-lisp-case)
   (:import-from #:log)
-  (:import-from #:yason)
-  (:import-from #:jsonrpc/class)
-  (:import-from #:str)
-  (:import-from #:dexador)
+  (:import-from #:closer-mop
+		#:method-lambda-list
+		#:method-specializers
+		#:method-generic-function
+		#:generic-function-name
+		#:eql-specializer-object
+		#:specializer-direct-methods
+		#:specializer)
+  (:import-from #:yason
+		#:parse
+		#:false)
+  (:import-from #:jsonrpc/client
+		#:client)
+  (:import-from #:jsonrpc/base
+		#:call)
+  (:import-from #:str
+		#:starts-with-p
+		#:replace-all)
+  (:import-from #:dexador
+		#:response-body
+		#:http-request-internal-server-error)
   (:import-from #:alexandria
+		#:symbolicate
                 #:length=
                 #:make-keyword
                 #:appendf
@@ -23,18 +41,18 @@
 (in-package #:openrpc-client/core)
 
 
-(declaim (ftype (function (closer-mop:specializer stream) null)
+(declaim (ftype (function (specializer stream) null)
 		generate-method-descriptions))
 (defun generate-method-descriptions (class stream)
   "Prints method lambda lists wherein a class is used as parameter specializer.
 The list is ordered alphabetically and excludes the describe-object method."
   (flet ((proper-lambda-list (method)
-	   (let* ((lambda-list (closer-mop:method-lambda-list method))
-		  (specializers (closer-mop:method-specializers method))
+	   (let* ((lambda-list (method-lambda-list method))
+		  (specializers (method-specializers method))
 		  (list-element 0)
 		  (method-name (intern (symbol-name
-					(closer-mop:generic-function-name
-					 (closer-mop:method-generic-function method)))))
+					(generic-function-name
+					 (method-generic-function method)))))
 		  (lambda-list-parameters
 		    (mapcar (lambda (element)
 			      (let ((type
@@ -43,7 +61,7 @@ The list is ordered alphabetically and excludes the describe-object method."
 				    (list (intern (symbol-name element))
 					  (if (string-equal 'eql-specializer
 							    (class-name (class-of type)))
-					      (list 'eql (closer-mop:eql-specializer-object type))
+					      (list 'eql (eql-specializer-object type))
 					      (intern (symbol-name (class-name type)))))
 				    (typecase element
 				      (symbol
@@ -60,12 +78,12 @@ The list is ordered alphabetically and excludes the describe-object method."
 			   (list method-name)))))))
     (format stream "Supported RPC methods:~2%")
     (mapc #'proper-lambda-list
-	  (stable-sort (copy-list (closer-mop:specializer-direct-methods class))
+	  (stable-sort (copy-list (specializer-direct-methods class))
 		       (lambda (method1 method2)
-			 (string-lessp (closer-mop:generic-function-name
-					(closer-mop:method-generic-function method1))
-				       (closer-mop:generic-function-name
-					(closer-mop:method-generic-function method2))))))
+			 (string-lessp (generic-function-name
+					(method-generic-function method1))
+				       (generic-function-name
+					(method-generic-function method2))))))
     nil))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
@@ -73,8 +91,8 @@ The list is ordered alphabetically and excludes the describe-object method."
 			    cons)
 		  generate-client-class))
   (defun generate-client-class (class-name &key export-symbols)
-    (let* ((make-func-name (alexandria:symbolicate "MAKE-" class-name))
-           (result `((defclass ,class-name (jsonrpc/class:client)
+    (let* ((make-func-name (symbolicate "MAKE-" class-name))
+           (result `((defclass ,class-name (client)
                        ())
                      (defun ,make-func-name ()
                        (make-instance ',class-name))
@@ -89,7 +107,7 @@ The list is ordered alphabetically and excludes the describe-object method."
   (defun normalize-name (string)
     (string-upcase
      (to-lisp-case
-      (str:replace-all "." "-" string))))
+      (replace-all "." "-" string))))
 
   (declaim (ftype (function (hash-table) cons) schema-to-type))
   (defun schema-to-type (schema)
@@ -105,7 +123,7 @@ The list is ordered alphabetically and excludes the describe-object method."
 		      (push 'integer type-list))
                      ((string-equal type "string") (push 'string type-list))
 		     ((string-equal type "boolean")
-		      (push '(eql yason:false) type-list)
+		      (push '(eql false) type-list)
 		      (push '(eql t) type-list))
 		     ((string-equal type "object") (push 'hash-table type-list))
                      ((string-equal type "array") (push 'list type-list))
@@ -186,7 +204,7 @@ The list is ordered alphabetically and excludes the describe-object method."
                                         for name = (intern (normalize-name
                                                             (gethash "name" param)))
                                         for default = nil
-                                        for given-name = (alexandria:symbolicate name "-GIVEN-P")
+                                        for given-name = (symbolicate name "-GIVEN-P")
                                         collect (list name default given-name))))))
                     (declare (list required-parameter keyword-parameter))
                     (return (if required-parameter
@@ -216,7 +234,7 @@ The list is ordered alphabetically and excludes the describe-object method."
                              ,@(loop for param in keyword-params
                                      for original-name = (gethash "name" param)
                                      for name = (intern (normalize-name original-name))
-                                     for given-name = (alexandria:symbolicate name "-GIVEN-P")
+                                     for given-name = (symbolicate name "-GIVEN-P")
                                      collect `(when ,given-name
                                                 (setf (gethash ,original-name args)
                                                       ,name)))
@@ -224,15 +242,15 @@ The list is ordered alphabetically and excludes the describe-object method."
                              args))))
   
   (defun get-or-create-class (x-cl-class schema classes-cache &key export-symbols)
-    (let* ((class-name (alexandria:symbolicate (string-upcase x-cl-class)))
+    (let* ((class-name (symbolicate (string-upcase x-cl-class)))
            (existing-code (gethash class-name classes-cache)))
       (unless existing-code
         (loop with properties = (gethash "properties" schema)
               for name being the hash-key of properties
-              for name-symbol = (alexandria:symbolicate (string-upcase
+              for name-symbol = (symbolicate (string-upcase
                                                          (to-lisp-case name)))
-              for name-keyword = (alexandria:make-keyword name-symbol)
-              for reader-func = (alexandria:symbolicate class-name
+              for name-keyword = (make-keyword name-symbol)
+              for reader-func = (symbolicate class-name
                                                         "-"
                                                         name-symbol)
               collect `(export ',reader-func) into slot-reader-exports
@@ -431,12 +449,12 @@ lambda-list a separate defmethod."
               path))))
 
   (defun retrieve-spec (url-or-path)
-    (yason:parse 
+    (parse
      (etypecase url-or-path
        (pathname (retrieve-data-from-path url-or-path))
        (string
         (cond
-          ((str:starts-with-p "http" url-or-path)
+          ((starts-with-p "http" url-or-path)
            (retrieve-data-from-url url-or-path))
           (t
            (retrieve-data-from-path url-or-path))))))))
@@ -444,10 +462,10 @@ lambda-list a separate defmethod."
 
 (defgeneric rpc-call (client func-name arguments)
   (:method ((client t) func-name (arguments t))
-    (handler-bind ((dexador.error:http-request-internal-server-error
+    (handler-bind ((http-request-internal-server-error
                      (lambda (condition)
-                       (let* ((body (dex:response-body condition))
-                              (response (yason:parse body))
+                       (let* ((body (response-body condition))
+                              (response (parse body))
                               (error (gethash "error" response))
                               (code (gethash "code" error))
                               (message (gethash "message" error)))
@@ -459,7 +477,7 @@ lambda-list a separate defmethod."
                                 :message message
                                 :func-name func-name
                                 :func-arguments arguments)))))
-      (jsonrpc/class:call client func-name arguments))))
+      (call client func-name arguments))))
 
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
