@@ -83,7 +83,7 @@ Argument TYPE is a symbol.")
 returns NIL.
 
 It should return as hash-table with JSON-SCHEMA corresponding to type. Keys of the dictionary should
-be strings. It is convenient to use [`SERAPEUM:DICT`][SERAPEUM:DICT] for building the result.")
+be strings. It is convenient to use Serapeum's `DICT` macro for building the result.")
   (:method ((type t))
     (cond
       ((primitive-type-p type)
