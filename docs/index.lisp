@@ -42,6 +42,7 @@
                                    "SBCL"
                                    "CCL"
                                    "JSON"
+                                   "DICT"
                                    "JSON-SCHEMA"
                                    "API"
                                    "CLACK:CLACKUP"

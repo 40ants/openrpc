@@ -127,15 +127,19 @@
 
 (deftest describe-object
   (rove:testing "describe-object test-client"
-    (rove:ok (string-equal
-	      (let ((s (make-string-output-stream)))
-		(describe-object (make-test-client) s)
-		(get-output-stream-string s))
-	      "Supported RPC methods:
+    (let ((result
+            (let ((s (make-string-output-stream)))
+	      (describe-object (make-test-client) s)
+              (get-output-stream-string s)))
+          (expected-string
+            "Supported RPC methods:
 
 - (EXAMPLE ((NAME NULL)))
 - (EXAMPLE ((NAME STRING)))
 - (EXAMPLE2 ((PARAM1 (EQL T)) &KEY (PARAM-X NIL PARAM-X-GIVEN-P)))
 - (EXAMPLE2 ((PARAM1 (EQL YASON:FALSE)) &KEY (PARAM-X NIL PARAM-X-GIVEN-P)))
 - (EXAMPLE3 ((PARAM3 LIST)))
-"))))
+"))
+      (rove:ok (string-equal
+                result
+                expected-string)))))
