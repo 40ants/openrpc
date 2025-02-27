@@ -31,7 +31,7 @@
           "uses": "40ants/setup-lisp@v4",
           "with": {
             "asdf-system": "openrpc-docs",
-            "cache": "false"
+            "cache": "true"
           }
         },
         {
@@ -73,7 +73,7 @@
           "uses": "40ants/setup-lisp@v4",
           "with": {
             "asdf-system": "openrpc-docs",
-            "cache": "false"
+            "cache": "true"
           }
         },
         {
