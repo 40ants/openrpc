@@ -80,10 +80,26 @@ The list is ordered alphabetically and excludes the describe-object method."
     (mapc #'proper-lambda-list
 	  (stable-sort (copy-list (specializer-direct-methods class))
 		       (lambda (method1 method2)
-			 (string-lessp (generic-function-name
-					(method-generic-function method1))
-				       (generic-function-name
-					(method-generic-function method2))))))
+			 (let* ((name-is-less-p
+                                  (string-not-greaterp
+                                   (generic-function-name
+                                    (method-generic-function method1))
+                                   (generic-function-name
+                                    (method-generic-function method2))))
+                                (args-are-less-p
+                                  (string-not-greaterp
+                                   (prin1-to-string (closer-mop:method-lambda-list method1))
+                                   (prin1-to-string (closer-mop:method-lambda-list method2))))
+                                (specializers-are-less-p
+                                  (string-not-greaterp
+                                   (prin1-to-string (closer-mop:method-specializers method1))
+                                   (prin1-to-string (closer-mop:method-specializers method2))))
+                                (result
+                                  (and
+                                   name-is-less-p
+                                   args-are-less-p
+                                   specializers-are-less-p)))
+                           (values result)))))
     nil))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)

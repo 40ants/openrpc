@@ -20,6 +20,7 @@
                 #:length=)
   (:import-from #:bordeaux-threads
                 #:*default-special-bindings*)
+  (:import-from #:bordeaux-threads-2)
   (:import-from #:openrpc-example)
   (:import-from #:openrpc-example/server
                 #:pets-api
@@ -28,26 +29,12 @@
 
 
 (defmacro with-empty-pet-store (() &body body)
-  `(let* ((pets (make-hash-table :test 'equal))
-          (*pets* pets)
-          (new-bindings (list* (cons 'openrpc-example/server::*pets* pets)
-                               *default-special-bindings*))
-          ;; We have to pass *default-special-bindings* in the bindings because
-          ;; otherwise the *pets* variable will not be available in
-          ;; threads started by children of the current thread:
-          (*default-special-bindings* (list* `(*default-special-bindings* . ',new-bindings)
-                                             new-bindings)))
+  `(progn
+     (clrhash *pets*)
      ,@body))
 
 
 (deftest test-pet-shop-example
-  (format t "TRACE: clack is here: ~S~%"
-          (ql:where-is-system :clack))
-  (format t "TRACE: hunchentoot is here: ~S~%"
-          (ql:where-is-system :hunchentoot))
-  (format t "TRACE: bordeaux-threads is here: ~S~%"
-          (ql:where-is-system :bordeaux-threads))
-  
   (with-empty-pet-store ()
     (testing-app "Checking PetShop"
         (make-clack-app pets-api)
