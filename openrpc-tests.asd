@@ -17,4 +17,3 @@
 
 
 (register-system-packages "clack-test" '(#:clack.test))
-(register-system-packages "bordeaux-threads" '(#:bordeaux-threads-2))

@@ -18,9 +18,6 @@
                 #:generate-client)
   (:import-from #:alexandria
                 #:length=)
-  (:import-from #:bordeaux-threads
-                #:*default-special-bindings*)
-  (:import-from #:bordeaux-threads-2)
   (:import-from #:openrpc-example)
   (:import-from #:openrpc-example/server
                 #:pets-api
