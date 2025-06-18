@@ -6,7 +6,13 @@
 
 
 (defun sym-to-string (sym)
-  (string-downcase (symbol-name sym)))
+  "If this symbol has lowercase charcaters, then probably
+   it was given as |someMethod| and case should be preserved.
+   If all symbols are uppercased, then we will downcase the whole string."
+  (let ((name (symbol-name sym)))
+    (cond
+      ((some #'lower-case-p name) name)
+      (t (string-downcase name)))))
 
 
 (defun sym-to-api-string (sym)

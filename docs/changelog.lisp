@@ -18,6 +18,20 @@
 ## Fixes
 
 Now if class's slot has type BOOLEAN, it's value is propertly serialized as \"true\" or \"false\". Previously instead of \"false\" a \"null\" was returned.
+
+## Changes
+
+If slot name has some lowercased symbols, then we don't downcase the name when serializing or deserializing this slot. This allows to work with API's which require someStrangeCased attributes. Here is an example how to use this feature:
+
+```
+(defclass call-response ()
+  ((content :type (soft-list-of content)
+            :initarg :content)
+   (|isError| :type boolean
+              :initform nil
+              :initarg :is-error)))
+```
+
 ")
   (0.10.4 2024-02-04
 	  "
