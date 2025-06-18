@@ -2,6 +2,7 @@
   (:use #:cl)
   (:import-from #:serapeum
                 #:dict)
+  (:import-from #:yason)
   (:import-from #:alexandria
                 #:length=)
   (:import-from #:openrpc-server/api
@@ -46,6 +47,9 @@ Result should be list, hash-map or a value of primitive type.")
     object)
   
   (:method ((object (eql t)))
+    object)
+  
+  (:method ((object (eql yason:false)))
     object))
 
 

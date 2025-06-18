@@ -13,6 +13,12 @@
                               "JSON"
                               "RPC"
                               "OSX"))
+  (0.11.0 2025-06-19
+          "
+## Fixes
+
+Now if class's slot has type BOOLEAN, it's value is propertly serialized as \"true\" or \"false\". Previously instead of \"false\" a \"null\" was returned.
+")
   (0.10.4 2024-02-04
 	  "
 ## Fix
