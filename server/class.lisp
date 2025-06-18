@@ -6,6 +6,7 @@
                 #:type-to-schema)
   (:import-from #:serapeum
                 #:dict)
+  (:import-from #:yason)
   (:import-from #:closer-mop
                 #:standard-slot-definition
                 #:slot-definition-initfunction
@@ -81,7 +82,20 @@
           when (and (not should-be-excluded)
                     (slot-boundp object slot-name))
           do (let ((slot-value (slot-value object
-                                           slot-name)))
+                                           slot-name))
+                   (slot-type (slot-definition-type slot)))
+               ;; For boolean slots we automatically coerce
+               ;; values to the yason:false or T to exclude cases
+               ;; when null is returned instead of false:
+               (when (eql slot-type 'boolean)
+                 (setf slot-value
+                       (cond
+                         ((eql slot-value yason:false)
+                          yason:false)
+                         (slot-value
+                          t)
+                         (t
+                          yason:false))))
                (setf (gethash field-name result)
                      (transform-result slot-value)))
           finally (return result))))
