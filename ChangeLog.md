@@ -2,6 +2,30 @@
 
 # ChangeLog
 
+<a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E11-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
+
+## 0.11.0 (2025-06-19)
+
+<a id="fixes"></a>
+
+### Fixes
+
+Now if class's slot has type `BOOLEAN`, it's value is propertly serialized as "true" or "false". Previously instead of "false" a "null" was returned.
+
+<a id="changes"></a>
+
+### Changes
+
+If slot name has some lowercased symbols, then we don't downcase the name when serializing or deserializing this slot. This allows to work with `API`'s which require someStrangeCased attributes. Here is an example how to use this feature:
+
+```
+(defclass call-response ()
+  ((content :type (soft-list-of content)
+            :initarg :content)
+   (|isError| :type boolean
+              :initform nil
+              :initarg :is-error)))
+```
 <a id="x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E10-2E4-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"></a>
 
 ## 0.10.4 (2024-02-04)
