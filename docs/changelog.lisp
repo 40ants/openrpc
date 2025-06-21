@@ -13,6 +13,13 @@
                               "JSON"
                               "RPC"
                               "OSX"))
+  (0.12.0 2025-06-22
+          "
+## Changes
+
+Macro OPENRPC-SERVER:DEFINE-API now allows to pass class slots definition
+like you can do with DEFCLASS macro.
+")
   (0.11.0 2025-06-19
           "
 ## Fixes
