@@ -38,10 +38,11 @@
 
 (defmacro define-api ((name &key
                               (title "Default API")
-                              (version "0.1.0")))
+                              (version "0.1.0"))
+                      &body slots)
   `(progn
      (defclass ,name (api)
-       ())
+       (,@(car slots)))
 
      (defvar ,name (make-instance ',name
                                   :title ,title
