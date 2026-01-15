@@ -62,7 +62,7 @@
         "matrix": {
           "os": [
             "ubuntu-latest",
-            "macos-13"
+            "macos-latest"
           ]
         }
       },

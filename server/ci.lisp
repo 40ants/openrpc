@@ -22,7 +22,7 @@
   :jobs ((40ants-ci/jobs/linter:linter :check-imports t)
          (run-tests
           :os ("ubuntu-latest"
-               "macos-13")
+               "macos-latest")
           :quicklisp (;; Quicklisp is not working yet, because
                       ;; there is old JSONRPC where no "jsonrpc/server" system. 
                       ;; "quicklisp"
