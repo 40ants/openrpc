@@ -1,0 +1,157 @@
+{
+  "openrpc": "1.0.0",
+  "info": {
+    "title": "Schema Patterns Test API",
+    "version": "0.1.0"
+  },
+  "methods": [
+    {
+      "name": "testOneOf",
+      "params": [
+        {
+          "name": "value",
+          "schema": {
+            "title": "A value matching one of the types",
+            "oneOf": [
+              {"title": "String value", "type": "string"},
+              {"title": "Integer value", "type": "integer"}
+            ]
+          },
+          "required": true,
+          "summary": "Parameter using oneOf"
+        }
+      ],
+      "result": {
+        "name": "result",
+        "schema": { "type": "object" }
+      },
+      "summary": "Test method for oneOf schema"
+    },
+    {
+      "name": "testAnyOf",
+      "params": [
+        {
+          "name": "value",
+          "schema": {
+            "anyOf": [
+              {"type": "string"},
+              {"type": "integer"},
+              {"type": "null"}
+            ]
+          },
+          "required": true,
+          "summary": "Parameter using anyOf"
+        }
+      ],
+      "result": {
+        "name": "result",
+        "schema": { "type": "string" }
+      },
+      "summary": "Test method for anyOf schema"
+    },
+    {
+      "name": "testAllOf",
+      "params": [
+        {
+          "name": "value",
+          "schema": {
+            "allOf": [
+              { "type": "object" },
+              { "type": "object" }
+            ]
+          },
+          "required": true,
+          "summary": "Parameter using allOf"
+        }
+      ],
+      "result": {
+        "name": "result",
+        "schema": { "type": "string" }
+      },
+      "summary": "Test method for allOf schema"
+    },
+    {
+      "name": "testImplicitObject",
+      "params": [
+        {
+          "name": "config",
+          "schema": {
+            "title": "Configuration object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" },
+              "value": { "type": "integer" }
+            }
+          },
+          "required": true,
+          "summary": "Parameter with implicit object type"
+        }
+      ],
+      "result": {
+        "name": "result",
+        "schema": { "type": "string" }
+      },
+      "summary": "Test method for implicit object type (properties without type)"
+    },
+    {
+      "name": "testRef",
+      "params": [
+        {
+          "name": "data",
+          "schema": {
+            "$ref": "#/components/schemas/SomeType"
+          },
+          "required": true,
+          "summary": "Parameter using $ref"
+        }
+      ],
+      "result": {
+        "name": "result",
+        "schema": { "type": "string" }
+      },
+      "summary": "Test method for $ref schema"
+    },
+    {
+      "name": "testEnum",
+      "params": [
+        {
+          "name": "status",
+          "schema": {
+            "enum": ["pending", "active", "completed"]
+          },
+          "required": true,
+          "summary": "Parameter using enum without type"
+        }
+      ],
+      "result": {
+        "name": "result",
+        "schema": { "type": "string" }
+      },
+      "summary": "Test method for enum schema without type"
+    },
+    {
+      "name": "testConst",
+      "params": [
+        {
+          "name": "version",
+          "schema": {
+            "const": "v1"
+          },
+          "required": true,
+          "summary": "Parameter using const"
+        }
+      ],
+      "result": {
+        "name": "result",
+        "schema": { "type": "string" }
+      },
+      "summary": "Test method for const schema"
+    }
+  ],
+  "servers": [
+    {
+      "name": "default",
+      "url": "https://example.org/"
+    }
+  ]
+}

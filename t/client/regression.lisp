@@ -108,13 +108,13 @@
                        (%generate-client 'the-class spec :export-symbols nil))
 
                    (compare client-class
-                            "multiple-types"
+                            test-name
                             "client-class")
                    (compare class-definitions
-                            "multiple-types"
+                            test-name
                             "class-definitions")
                    (compare methods
-                            "multiple-types"
+                            test-name
                             "methods")))))))
 
 (generate-client
