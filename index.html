@@ -1,0 +1,495 @@
+<html lang=en>
+ <head>
+  <meta charset=UTF-8><meta name=viewport
+      content="width=device-width, initial-scale=1">
+  <title>OpenRPC for Common Lisp</title>
+  <link rel=alternate
+        href="https://40ants.com/openrpc/changelog.xml"
+        type="application/rss+xml">
+  <link rel=stylesheet type="text/css"
+        href=theme.css>
+  <script type="text/javascript" src=jquery.js></script>
+  <script type="text/javascript" src=toc.js></script>
+  <script type="text/javascript">$(document).ready(function() {$('a:has(img)').css('border-bottom', 'none')})</script>
+  <link rel=stylesheet type="text/css"
+      href=highlight.min.css>
+  <script type="text/javascript"
+          src=highlight.min.js></script>
+  <script type="text/javascript">hljs.highlightAll();</script>
+<style type="text/css">
+/* Стили для сворачиваемого меню */
+.sidebar ul ul {
+  display: none; /* Скрываем все подменю по умолчанию */
+  margin-left: 0.5em;
+}
+
+.sidebar li.expanded > ul {
+  display: block; /* Показываем подменю для развернутых элементов */
+}
+
+/* Стили для пунктов с подменю */
+.sidebar li.has-children > a {
+  cursor: pointer;
+  position: relative;
+  padding-left: 1.2em;
+}
+
+.sidebar li.has-children > p > a {
+  position: relative;
+  left: -1rem;
+}
+
+.sidebar li.has-children > p > a::before {
+  content:"►";
+}
+
+.sidebar li.has-children.expanded > p > a::before {
+  content: "▼";
+  position: relative;
+  left: -0.08rem;
+}
+
+/* Подсветка активного пункта */
+.sidebar li.active > a {
+  font-weight: bold;
+}
+
+/* Если активная страница находится в подменю, раскрываем родителя */
+.sidebar li.active-parent {
+  font-weight: normal;
+}
+
+.sidebar li.active-parent > ul {
+  display: block;
+}
+</style>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FL71WXK73K"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-FL71WXK73K');
+    </script>
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript" >
+       (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+       m[i].l=1*new Date();
+       for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+       k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+       (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+       ym(42462884, "init", {
+            clickmap:true,
+            trackLinks:true,
+            accurateTrackBounce:true
+       });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/42462884" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+
+ </head>
+ <body>
+  <div class=page><a id=fork-me href="https://github.com/40ants/openrpc">Fork me on GitHub</a>
+   <div class=navbar>
+    <div class=navbar-inner>
+     <a class=brand href="/">
+      <img class=logo
+           src="https://40ants.com/img/logo.svg"></a>
+     <ul class=nav>
+      <li><a href="/posts/">Blog</a>
+      <li><a href="/ru/posts/">Blog (RU)</a>
+      <li><a href="/tips/">Lisp Tips</a>
+      <li><a href="/projects/">Our Projects</a>
+      <li><a href="/about/">About</a>
+     </ul>
+    </div>
+   </div>
+   <input type=checkbox id=sidebar-check>
+   <label for=sidebar-check>
+    <div id=sidebar-trigger>
+     <span></span><span></span><span></span>
+    </div></label><div class=sidebar><div class=header><form class=search method=GET action="search/">
+      <input type=text name=q>
+      <input type=submit value=Search><span id=search-progress></span>
+     </form>
+    </div><div class=content><div class=page-toc><ul><li><p><a href="#x-28OPENRPC-DOCS-2FINDEX-3A-40INDEX-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-28OPENRPC-DOCS-2FINDEX-3A-40INDEX-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">OpenRPC for Common Lisp</a></p><ul><li><p><a href="#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40SERVER-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-28OPENRPC-SERVER-2FDOCS-3A-3A-40SERVER-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Server</a></p><ul><li><p><a href="#openrpc-server-asdf-system-details" data-document="" data-node="openrpc-server-asdf-system-details">OPENRPC-SERVER ASDF System Details</a></p></li><li><p><a href="#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40DEFINING-METHODS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-28OPENRPC-SERVER-2FDOCS-3A-3A-40DEFINING-METHODS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Defining Methods</a></p><ul><li><p><a href="#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40SIMPLE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-28OPENRPC-SERVER-2FDOCS-3A-3A-40SIMPLE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Simple Example</a></p></li><li><p><a href="#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40LISTS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-28OPENRPC-SERVER-2FDOCS-3A-3A-40LISTS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Returning Lists</a></p></li><li><p><a href="#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40PAGINATION-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-28OPENRPC-SERVER-2FDOCS-3A-3A-40PAGINATION-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Paginated Results</a></p></li></ul></li><li><p><a href="#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40STARTING-SERVER-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-28OPENRPC-SERVER-2FDOCS-3A-3A-40STARTING-SERVER-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Using Clack to Start Server</a></p></li><li><p><a href="#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40SPEC-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-28OPENRPC-SERVER-2FDOCS-3A-3A-40SPEC-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">OpenRPC Spec</a></p></li><li><p><a href="#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40API-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-28OPENRPC-SERVER-2FDOCS-3A-3A-40API-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">API</a></p></li></ul></li><li><p><a href="#x-28OPENRPC-CLIENT-2FDOCS-3A-3A-40CLIENT-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-28OPENRPC-CLIENT-2FDOCS-3A-3A-40CLIENT-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Client</a></p><ul><li><p><a href="#openrpc-client-asdf-system-details" data-document="" data-node="openrpc-client-asdf-system-details">OPENRPC-CLIENT ASDF System Details</a></p></li><li><p><a href="#generating" data-document="" data-node="generating">Generating</a></p></li><li><p><a href="#using" data-document="" data-node="using">Using</a></p></li></ul></li><li><p><a href="#x-28OPENRPC-DOCS-2FCONTRIBUTING-3A-3A-40ASK-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-28OPENRPC-DOCS-2FCONTRIBUTING-3A-3A-40ASK-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Our Ask...</a></p></li><li><p><a href="#x-28OPENRPC-DOCS-2FCONTRIBUTING-3A-3A-40CONTRIBUTORS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-28OPENRPC-DOCS-2FCONTRIBUTING-3A-3A-40CONTRIBUTORS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Contributors</a></p></li></ul></li><li><p><a href="changelog/#x-28OPENRPC-DOCS-2FCHANGELOG-3A-40CHANGELOG-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="changelog/" data-node="x-28OPENRPC-DOCS-2FCHANGELOG-3A-40CHANGELOG-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">ChangeLog</a></p></li></ul>
+     </div>
+    </div><div class=footer>
+     <a href="https://40ants.com/doc">[generated by 40ANTS-DOC]</a>
+    </div>
+   </div><div class=content role=main><h1>OpenRPC for Common Lisp<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FINDEX-3A-40INDEX-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FINDEX-3A-40INDEX-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h1><p><a href="https://github.com/40ants/openrpc/actions"><img src="https://github-actions.40ants.com/40ants/openrpc/matrix.svg"/></a></p><p>This framework is built on top of <a href="https://github.com/cxxxr/jsonrpc">JSON-RPC</a> and <a href="https://github.com/fukamachi/clack"><code>Clack</code></a>. Comparing to <code>JSON-RPC</code> library,
+it provides these key features:</p><ul><li><p>Automatic <a href="https://spec.open-rpc.org/">OpenRPC spec</a> generation.</p></li><li><p>Automatic <code>JSON-RPC</code> client building by Open<code>RPC</code> spec. This includes creation of Common Lisp classes and methods
+  for making <code>RPC</code> requests and returning native <code>CL</code> objects.</p></li><li><p>On both server and client sides your code looks very lispy, all <code>JSON</code> marshalling is done under the hood.</p></li></ul><h2>Server<a class=header-link
+     href=#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40SERVER-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-SERVER-2FDOCS-3A-3A-40SERVER-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3 id="openrpc-server-asdf-system-details">OPENRPC-SERVER ASDF System Details</h3><ul><li><p>Description: Open<code>RPC</code> server implementation for Common Lisp.</p></li><li><p>Licence: <code>BSD</code></p></li><li><p>Author: Alexander Artemenko</p></li><li><p>Homepage: <a href="https://40ants.com/openrpc/">https://40ants.com/openrpc/</a></p></li><li><p>Source control: <a href="https://github.com/40ants/openrpc">GIT</a></p></li><li><p>Depends on: <a href="https://quickdocs.org/alexandria">alexandria</a>, <a href="https://quickdocs.org/clack-cors">clack-cors</a>, <a href="https://quickdocs.org/clack-prometheus">clack-prometheus</a>, <a href="https://quickdocs.org/closer-mop">closer-mop</a>, <a href="https://quickdocs.org/jsonrpc">jsonrpc</a>, <a href="https://quickdocs.org/lack-request">lack-request</a>, <a href="https://quickdocs.org/lambda-fiddle">lambda-fiddle</a>, <a href="https://quickdocs.org/local-time">local-time</a>, <a href="https://quickdocs.org/log4cl">log4cl</a>, <a href="https://quickdocs.org/log4cl-extras">log4cl-extras</a>, <a href="https://quickdocs.org/serapeum">serapeum</a>, <a href="https://quickdocs.org/str">str</a>, <a href="https://quickdocs.org/websocket-driver">websocket-driver</a>, <a href="https://quickdocs.org/yason">yason</a></p></li></ul><h3>Defining Methods<a class=header-link
+     href=#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40DEFINING-METHODS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-SERVER-2FDOCS-3A-3A-40DEFINING-METHODS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h3><p>Here is an example of openrpc-server <code>ASDF</code> system allows to define
+<code>JSON-RPC</code> methods and data-structures they return.</p><p>Let's see how we can define an <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29"><code>api</code></a> for usual PetShop example.</p><h4>Simple Example<a class=header-link
+     href=#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40SIMPLE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-SERVER-2FDOCS-3A-3A-40SIMPLE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h4><p>First, we will operate on usual Common Lisp class:</p><pre><code class="">(defclass pet ()
+  ((id :initarg :id
+       :type integer
+       :reader pet-id)
+   (name :initarg :name
+         :type string
+         :reader pet-name)
+   (tag :initarg :tag
+        :type string
+        :reader pet-tag)))</code></pre><p>Now we can define an <code>RPC</code> method to create a new pet:</p><pre><code class="">(openrpc-server:define-rpc-method create-pet (name tag)
+  (:summary &quot;Short method docstring.&quot;)
+  (:description &quot;Lengthy description of the method.&quot;)
+  (:param name string &quot;Pet's name&quot;
+          :description &quot;This is a long description of the parameter.&quot;)
+  (:param tag string &quot;Old param, don't use it anymore.&quot; :deprecated t)
+  (:result pet)
+  (let* ((new-id (get-new-id))
+         (pet (make-instance 'pet
+                             :id new-id
+                             :name name
+                             :tag tag)))
+    (setf (gethash new-id *pets*)
+          pet)
+    pet))</code></pre><p>Here we should explicitly specify type for each parameter and result's type.</p><p>Pay attention, the result type is <code>PET</code>. <a href="https://40ants.com/openrpc/#x-28-23A-28-2814-29-20BASE-CHAR-20-2E-20-22openrpc-server-22-29-20ASDF-2FSYSTEM-3ASYSTEM-29" data-document="https://40ants.com/openrpc/" data-node="x-28-23A-28-2814-29-20BASE-CHAR-20-2E-20-22openrpc-server-22-29-20ASDF-2FSYSTEM-3ASYSTEM-29"><code>openrpc-server</code></a> system takes care on serializing
+objects and you can retrieve an Open<code>RPC</code> spec for any type, using <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FINTERFACE-3ATYPE-TO-SCHEMA-20GENERIC-FUNCTION-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FINTERFACE-3ATYPE-TO-SCHEMA-20GENERIC-FUNCTION-29"><code>type-to-schema</code></a> generic-function:</p><pre><code class="">CL-USER&gt; (serapeum:toggle-pretty-print-hash-table)
+T
+CL-USER&gt; (openrpc-server:type-to-schema 'pet)
+(SERAPEUM:DICT
+  &quot;type&quot; &quot;object&quot;
+  &quot;properties&quot; (SERAPEUM:DICT
+                 &quot;id&quot; (SERAPEUM:DICT
+                        &quot;type&quot; &quot;integer&quot;
+                       )
+                 &quot;name&quot; (SERAPEUM:DICT
+                          &quot;type&quot; &quot;string&quot;
+                         )
+                 &quot;tag&quot; (SERAPEUM:DICT
+                         &quot;type&quot; &quot;string&quot;
+                        )
+                )
+  &quot;required&quot; '(&quot;tag&quot; &quot;name&quot; &quot;id&quot;)
+  &quot;x-cl-class&quot; &quot;PET&quot;
+  &quot;x-cl-package&quot; &quot;COMMON-LISP-USER&quot;
+ )</code></pre><p>This method is used to render response requests to <code>/openrpc.json</code> handle of your <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29"><code>api</code></a>.</p><p>There is also a second generic-function which transform class instance into simple datastructures
+according to a scheme. For example, here is how we can serialize our pet:</p><pre><code class="">CL-USER&gt; (openrpc-server:transform-result
+          (make-instance 'pet :name &quot;Bobik&quot;))
+(SERAPEUM:DICT
+  &quot;name&quot; &quot;Bobik&quot;
+ ) 
+CL-USER&gt; (openrpc-server:transform-result
+          (make-instance 'pet
+                         :name &quot;Bobik&quot;
+                         :tag &quot;the dog&quot;))
+(SERAPEUM:DICT
+  &quot;name&quot; &quot;Bobik&quot;
+  &quot;tag&quot; &quot;the dog&quot;
+ )</code></pre><h4>Returning Lists<a class=header-link
+     href=#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40LISTS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-SERVER-2FDOCS-3A-3A-40LISTS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h4><p>To return result as a list of objects of some kind, use <code>(:result (list-of pet))</code> form:</p><pre><code class="">(openrpc-server:define-rpc-method list-pets ()
+  (:result (list-of pet))
+  (retrieve-all-pets))</code></pre><h4>Paginated Results<a class=header-link
+     href=#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40PAGINATION-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-SERVER-2FDOCS-3A-3A-40PAGINATION-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h4><p>Sometimes your system might operate on a lot of objects and you don't want to return all of them at once.
+For this case, framework supports a <a href="https://use-the-index-luke.com/no-offset">keyset pagination</a>. To use
+it, your method should accept <code>LIMIT</code> argument and <code>PAGE-KEY</code> argument. And if there are more results, than
+method should return as a second value the page key for retrieving the next page.</p><p>In this simplified example, we'll return <code>(list 1 2 3)</code> for the first page, <code>(list 4 5 6)</code> for the second and
+<code>(list 7 8)</code> for the third. Pay attention how <code>VALUES</code> form is used for first two pages but omitted for the third:</p><pre><code class="">(openrpc-server:define-rpc-method list-pets (&amp;key (limit 3) page-key)
+  (:param limit integer)
+  (:param page-key integer)
+  (:result (paginated-list-of integer))
+
+  (cond
+    ((null page-key)
+     (values (list 1 2 3)
+             3))
+    ((= page-key 3)
+     (values (list 4 5 6)
+             6))
+    (t
+      (list 7 8))))</code></pre><p>Of cause, in the real world application, you should use <code>PAGE-KEY</code> and <code>LIMIT</code> arguments in the <code>WHERE</code> <code>SQL</code> clause.</p><h3>Using Clack to Start Server<a class=header-link
+     href=#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40STARTING-SERVER-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-SERVER-2FDOCS-3A-3A-40STARTING-SERVER-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h3><p>Framework is based on Clack. Use <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FCLACK-3AMAKE-CLACK-APP-20GENERIC-FUNCTION-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FCLACK-3AMAKE-CLACK-APP-20GENERIC-FUNCTION-29"><code>make-clack-app</code></a> to create an application suitable for serving with <code>CLACK:CLACKUP</code>.</p><p>Then just start the web application as usual.</p><pre><code class="">(clack:clackup (make-clack-app)
+               :address interface
+               :port port)</code></pre><p>Also, you might use any Lack middlewares. For example, here is how &quot;mount&quot; middleware can be used
+to make <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29"><code>api</code></a> work on <code>/api/</code> <code>URL</code> path, while the main application is working on other <code>URL</code> paths:</p><pre><code class="">(defparameter *app*
+  (lambda (env)
+    '(200 (:content-type &quot;text/plain&quot;) (&quot;Hello, World!&quot;))))
+
+(clack:clackup
+ (lambda (app)
+   (funcall (lack.util:find-middleware :mount)
+            app
+            &quot;/api&quot;
+            (make-clack-app)))
+ *app*)</code></pre><h3>OpenRPC Spec<a class=header-link
+     href=#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40SPEC-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-SERVER-2FDOCS-3A-3A-40SPEC-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h3><p>The key feature of the framework, is an automatic <code>OpenRPC spec</code> generation.</p><p>When you have your <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29"><code>api</code></a> up and running, spec will be available on <code>/openrpc.json</code> path.
+For our example project it will looks like:</p><pre><code class="json">{
+  &quot;methods&quot;: [
+    {
+      &quot;name&quot;: &quot;rpc.discover&quot;,
+      &quot;params&quot;: [],
+      &quot;result&quot;: {
+        &quot;name&quot;: &quot;OpenRPC Schema&quot;,
+        &quot;schema&quot;: {
+          &quot;$ref&quot;: &quot;https://raw.githubusercontent.com/open-rpc/meta-schema/master/schema.json&quot;
+        }
+      }
+    },
+    {
+      &quot;name&quot;: &quot;list-pets&quot;,
+      &quot;params&quot;: [
+        {
+          &quot;name&quot;: &quot;page-key&quot;,
+          &quot;schema&quot;: {
+            &quot;type&quot;: &quot;integer&quot;
+          }
+        },
+        {
+          &quot;name&quot;: &quot;limit&quot;,
+          &quot;schema&quot;: {
+            &quot;type&quot;: &quot;integer&quot;
+          }
+        }
+      ],
+      &quot;result&quot;: {
+        &quot;name&quot;: &quot;list-pets-result&quot;,
+        &quot;schema&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;properties&quot;: {
+            &quot;items&quot;: {
+              &quot;type&quot;: &quot;array&quot;,
+...</code></pre><h3>API<a class=header-link
+     href=#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40API-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-SERVER-2FDOCS-3A-3A-40API-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h3><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/openrpc/blob/661a1049c4b2e3e861de7a359597ca7837fbe77d/server/api.lisp#L18">class</a><div class=reference-object><div class=object-name><a href=#x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29 id=x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29>openrpc-server/api:api</a></div><div class=object-args><span class=locative-args></span></div></div><a class=bullet-link href=#x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29></a></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/openrpc/blob/661a1049c4b2e3e861de7a359597ca7837fbe77d/server/api.lisp#L14">variable</a><div class=reference-object><div class=object-name><a href=#x-28OPENRPC-SERVER-2FAPI-3A-2ACURRENT-API-2A-20-28VARIABLE-29-29 id=x-28OPENRPC-SERVER-2FAPI-3A-2ACURRENT-API-2A-20-28VARIABLE-29-29>openrpc-server/api:*current-api*</a></div><div class=object-args><span class=locative-args>-unbound-</span></div></div><a class=bullet-link href=#x-28OPENRPC-SERVER-2FAPI-3A-2ACURRENT-API-2A-20-28VARIABLE-29-29></a></div><div class=bullet-content><p>Points to a current <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29"><code>api</code></a> object when processing any <code>RPC</code> method.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/openrpc/blob/661a1049c4b2e3e861de7a359597ca7837fbe77d/server/api.lisp#L39">macro</a><div class=reference-object><div class=object-name><a href=#x-28OPENRPC-SERVER-2FAPI-3ADEFINE-API-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29 id=x-28OPENRPC-SERVER-2FAPI-3ADEFINE-API-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29>openrpc-server/api:define-api</a></div><div class=object-args><span class=locative-args>(NAME &amp;KEY (TITLE &quot;Default API&quot;) (VERSION &quot;0.1.0&quot;)) &amp;BODY SLOTS</span></div></div><a class=bullet-link href=#x-28OPENRPC-SERVER-2FAPI-3ADEFINE-API-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29></a></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/openrpc/blob/661a1049c4b2e3e861de7a359597ca7837fbe77d/server/api.lisp#L19">reader</a><div class=reference-object><div class=object-name><a href=#x-28OPENRPC-SERVER-2FAPI-3AAPI-METHODS-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-20OPENRPC-SERVER-2FAPI-3AAPI-29-29 id=x-28OPENRPC-SERVER-2FAPI-3AAPI-METHODS-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-20OPENRPC-SERVER-2FAPI-3AAPI-29-29>openrpc-server/api:api-methods</a></div><div class=object-args><span class=locative-args></span><span class=locative-args>(= (make-hash-table :test &#39;equal))</span></div></div><a class=bullet-link href=#x-28OPENRPC-SERVER-2FAPI-3AAPI-METHODS-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-20OPENRPC-SERVER-2FAPI-3AAPI-29-29></a></div><div class=bullet-content><p>Returns a hash-table containing meta-information about all <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29"><code>api</code></a> methods.</p><p>Returned hash-table has key strings having methods names and internal
+objects of class <code>method-info</code> as values. I'm not sure if we need to
+export functions to manipulate with method info objects manually.
+Use <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FMETHOD-3ADEFINE-RPC-METHOD-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FMETHOD-3ADEFINE-RPC-METHOD-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29"><code>openrpc-server/method:define-rpc-method</code></a> macro to add or update <code>RPC</code> methods.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/openrpc/blob/661a1049c4b2e3e861de7a359597ca7837fbe77d/server/api.lisp#L27">reader</a><div class=reference-object><div class=object-name><a href=#x-28OPENRPC-SERVER-2FAPI-3AAPI-TITLE-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-20OPENRPC-SERVER-2FAPI-3AAPI-29-29 id=x-28OPENRPC-SERVER-2FAPI-3AAPI-TITLE-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-20OPENRPC-SERVER-2FAPI-3AAPI-29-29>openrpc-server/api:api-title</a></div><div class=object-args><span class=locative-args></span><span class=locative-args>(:TITLE = &quot;Default API&quot;)</span></div></div><a class=bullet-link href=#x-28OPENRPC-SERVER-2FAPI-3AAPI-TITLE-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-20OPENRPC-SERVER-2FAPI-3AAPI-29-29></a></div><div class=bullet-content><p>Returns a title of the <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29"><code>api</code></a>.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/openrpc/blob/661a1049c4b2e3e861de7a359597ca7837fbe77d/server/api.lisp#L31">reader</a><div class=reference-object><div class=object-name><a href=#x-28OPENRPC-SERVER-2FAPI-3AAPI-VERSION-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-20OPENRPC-SERVER-2FAPI-3AAPI-29-29 id=x-28OPENRPC-SERVER-2FAPI-3AAPI-VERSION-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-20OPENRPC-SERVER-2FAPI-3AAPI-29-29>openrpc-server/api:api-version</a></div><div class=object-args><span class=locative-args></span><span class=locative-args>(:version = &quot;0.1.0&quot;)</span></div></div><a class=bullet-link href=#x-28OPENRPC-SERVER-2FAPI-3AAPI-VERSION-20-2840ANTS-DOC-2FLOCATIVES-3AREADER-20OPENRPC-SERVER-2FAPI-3AAPI-29-29></a></div><div class=bullet-content><p>Returns a version of the <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29"><code>api</code></a>.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/openrpc/blob/661a1049c4b2e3e861de7a359597ca7837fbe77d/server/method.lisp#L313">macro</a><div class=reference-object><div class=object-name><a href=#x-28OPENRPC-SERVER-2FMETHOD-3ADEFINE-RPC-METHOD-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29 id=x-28OPENRPC-SERVER-2FMETHOD-3ADEFINE-RPC-METHOD-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29>openrpc-server/method:define-rpc-method</a></div><div class=object-args><span class=locative-args>name args &amp;body body</span></div></div><a class=bullet-link href=#x-28OPENRPC-SERVER-2FMETHOD-3ADEFINE-RPC-METHOD-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29></a></div><div class=bullet-content><p>Macro to define <code>RPC</code> method.</p><p>All arguments should have corresponding (:param arg type) form in the <code>BODY</code>.</p><p>Also, there should be one (:result type) form in the <code>BODY</code>.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/openrpc/blob/661a1049c4b2e3e861de7a359597ca7837fbe77d/server/interface.lisp#L85">generic-function</a><div class=reference-object><div class=object-name><a href=#x-28OPENRPC-SERVER-2FINTERFACE-3ATYPE-TO-SCHEMA-20GENERIC-FUNCTION-29 id=x-28OPENRPC-SERVER-2FINTERFACE-3ATYPE-TO-SCHEMA-20GENERIC-FUNCTION-29>openrpc-server/interface:type-to-schema</a></div><div class=object-args><span class=locative-args>type</span></div></div><a class=bullet-link href=#x-28OPENRPC-SERVER-2FINTERFACE-3ATYPE-TO-SCHEMA-20GENERIC-FUNCTION-29></a></div><div class=bullet-content><p>This method is called for all types for which <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FINTERFACE-3APRIMITIVE-TYPE-P-20GENERIC-FUNCTION-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FINTERFACE-3APRIMITIVE-TYPE-P-20GENERIC-FUNCTION-29"><code>primitive-type-p</code></a> generic-function
+returns <code>NIL</code>.</p><p>It should return as hash-table with <code>JSON-SCHEMA</code> corresponding to type. Keys of the dictionary should
+be strings. It is convenient to use Serapeum's <code>DICT</code> macro for building the result.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/openrpc/blob/661a1049c4b2e3e861de7a359597ca7837fbe77d/server/interface.lisp#L21">generic-function</a><div class=reference-object><div class=object-name><a href=#x-28OPENRPC-SERVER-2FINTERFACE-3ATRANSFORM-RESULT-20GENERIC-FUNCTION-29 id=x-28OPENRPC-SERVER-2FINTERFACE-3ATRANSFORM-RESULT-20GENERIC-FUNCTION-29>openrpc-server/interface:transform-result</a></div><div class=object-args><span class=locative-args>object</span></div></div><a class=bullet-link href=#x-28OPENRPC-SERVER-2FINTERFACE-3ATRANSFORM-RESULT-20GENERIC-FUNCTION-29></a></div><div class=bullet-content><p>Prepares object for serialization before responding to <code>RPC</code> call.</p><p>Result should be list, hash-map or a value of primitive type.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/openrpc/blob/661a1049c4b2e3e861de7a359597ca7837fbe77d/server/interface.lisp#L56">generic-function</a><div class=reference-object><div class=object-name><a href=#x-28OPENRPC-SERVER-2FINTERFACE-3APRIMITIVE-TYPE-P-20GENERIC-FUNCTION-29 id=x-28OPENRPC-SERVER-2FINTERFACE-3APRIMITIVE-TYPE-P-20GENERIC-FUNCTION-29>openrpc-server/interface:primitive-type-p</a></div><div class=object-args><span class=locative-args>type</span></div></div><a class=bullet-link href=#x-28OPENRPC-SERVER-2FINTERFACE-3APRIMITIVE-TYPE-P-20GENERIC-FUNCTION-29></a></div><div class=bullet-content><p>Should return t for type if it's name matched to simple types supported by <a href="https://json-schema.org/">JSON-SCHEMA</a>.</p><p>Argument <code>TYPE</code> is a symbol.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/openrpc/blob/661a1049c4b2e3e861de7a359597ca7837fbe77d/server/interface.lisp#L167">generic-function</a><div class=reference-object><div class=object-name><a href=#x-28OPENRPC-SERVER-2FINTERFACE-3AMAKE-INFO-20GENERIC-FUNCTION-29 id=x-28OPENRPC-SERVER-2FINTERFACE-3AMAKE-INFO-20GENERIC-FUNCTION-29>openrpc-server/interface:make-info</a></div><div class=object-args><span class=locative-args>api</span></div></div><a class=bullet-link href=#x-28OPENRPC-SERVER-2FINTERFACE-3AMAKE-INFO-20GENERIC-FUNCTION-29></a></div><div class=bullet-content><p>Returns a basic information about <code>API</code> for <a href="https://spec.open-rpc.org/#info-object">info section</a> of Open<code>RPC</code> spec.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/openrpc/blob/661a1049c4b2e3e861de7a359597ca7837fbe77d/server/errors.lisp#L9">function</a><div class=reference-object><div class=object-name><a href=#x-28OPENRPC-SERVER-2FERRORS-3ARETURN-ERROR-20FUNCTION-29 id=x-28OPENRPC-SERVER-2FERRORS-3ARETURN-ERROR-20FUNCTION-29>openrpc-server/errors:return-error</a></div><div class=object-args><span class=locative-args>message &amp;key (code -1) (error-class &#39;jsonrpc/errors:jsonrpc-callback-error)</span></div></div><a class=bullet-link href=#x-28OPENRPC-SERVER-2FERRORS-3ARETURN-ERROR-20FUNCTION-29></a></div><div class=bullet-content><p>Raises an error to interrupt processing and return status to the caller.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/openrpc/blob/661a1049c4b2e3e861de7a359597ca7837fbe77d/server/clack.lisp#L67">generic-function</a><div class=reference-object><div class=object-name><a href=#x-28OPENRPC-SERVER-2FCLACK-3AMAKE-CLACK-APP-20GENERIC-FUNCTION-29 id=x-28OPENRPC-SERVER-2FCLACK-3AMAKE-CLACK-APP-20GENERIC-FUNCTION-29>openrpc-server/clack:make-clack-app</a></div><div class=object-args><span class=locative-args>api &amp;key http websocket indent-json</span></div></div><a class=bullet-link href=#x-28OPENRPC-SERVER-2FCLACK-3AMAKE-CLACK-APP-20GENERIC-FUNCTION-29></a></div><div class=bullet-content><p>Should return an app suitable for passing to clackup.</p><p>You can define a method to redefine application.
+But to add middlewares it is more convenient to define a method for
+<a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FCLACK-3AAPP-MIDDLEWARES-20GENERIC-FUNCTION-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FCLACK-3AAPP-MIDDLEWARES-20GENERIC-FUNCTION-29"><code>app-middlewares</code></a> generic-function.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/openrpc/blob/661a1049c4b2e3e861de7a359597ca7837fbe77d/server/clack.lisp#L74">generic-function</a><div class=reference-object><div class=object-name><a href=#x-28OPENRPC-SERVER-2FCLACK-3AAPP-MIDDLEWARES-20GENERIC-FUNCTION-29 id=x-28OPENRPC-SERVER-2FCLACK-3AAPP-MIDDLEWARES-20GENERIC-FUNCTION-29>openrpc-server/clack:app-middlewares</a></div><div class=object-args><span class=locative-args>api</span></div></div><a class=bullet-link href=#x-28OPENRPC-SERVER-2FCLACK-3AAPP-MIDDLEWARES-20GENERIC-FUNCTION-29></a></div><div class=bullet-content><p>Should return an plist of middlewared to be applied to the Clack application.</p><p>Keys should be a keyword with middleware name. And value is a function accepting
+a Clack application as a single argument and returning a new application.</p><p>Middlewares are applied to the app from left to right. This makes it possible to
+define an :around method which will inject or replace a middleware or original app.</p><p>Default method defines two middlewares with keys <code>:CORS</code> and <code>:PROMETHEUS</code>.
+(Prometheus middleware works on <code>SBCL</code> but not on <code>CCL</code>).
+To wrap these middlewares, add your middlewares to the end of the list.
+To add your middleware inside the stack - push it to the front.</p></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/openrpc/blob/661a1049c4b2e3e861de7a359597ca7837fbe77d/server/clack.lisp#L181">function</a><div class=reference-object><div class=object-name><a href=#x-28OPENRPC-SERVER-2FCLACK-3ADEBUG-ON-20FUNCTION-29 id=x-28OPENRPC-SERVER-2FCLACK-3ADEBUG-ON-20FUNCTION-29>openrpc-server/clack:debug-on</a></div></div><a class=bullet-link href=#x-28OPENRPC-SERVER-2FCLACK-3ADEBUG-ON-20FUNCTION-29></a></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/openrpc/blob/661a1049c4b2e3e861de7a359597ca7837fbe77d/server/clack.lisp#L186">function</a><div class=reference-object><div class=object-name><a href=#x-28OPENRPC-SERVER-2FCLACK-3ADEBUG-OFF-20FUNCTION-29 id=x-28OPENRPC-SERVER-2FCLACK-3ADEBUG-OFF-20FUNCTION-29>openrpc-server/clack:debug-off</a></div></div><a class=bullet-link href=#x-28OPENRPC-SERVER-2FCLACK-3ADEBUG-OFF-20FUNCTION-29></a></div></div><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/openrpc/blob/661a1049c4b2e3e861de7a359597ca7837fbe77d/server/interface.lisp#L72">generic-function</a><div class=reference-object><div class=object-name><a href=#x-28OPENRPC-SERVER-2FINTERFACE-3ASLOTS-TO-EXCLUDE-20GENERIC-FUNCTION-29 id=x-28OPENRPC-SERVER-2FINTERFACE-3ASLOTS-TO-EXCLUDE-20GENERIC-FUNCTION-29>openrpc-server/interface:slots-to-exclude</a></div><div class=object-args><span class=locative-args>type</span></div></div><a class=bullet-link href=#x-28OPENRPC-SERVER-2FINTERFACE-3ASLOTS-TO-EXCLUDE-20GENERIC-FUNCTION-29></a></div><div class=bullet-content><p>You can define a method for this generic function to exclude some slots from being shown in the <code>JSON</code> schema.</p><p>Pay attention that this generic-function is called with class not with objects to be serialized.
+We need this because at the moment of generation <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29"><code>api</code></a> methods and Open<code>RPC</code> spec we know nothing about
+objects except their classes.</p><p>Methods of this function should return a list of strings. Given slots will be excluded from the spec
+and will not be serialized. Strings are compared in case-insensitive mode.</p></div></div><h2>Client<a class=header-link
+     href=#x-28OPENRPC-CLIENT-2FDOCS-3A-3A-40CLIENT-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-CLIENT-2FDOCS-3A-3A-40CLIENT-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3 id="openrpc-client-asdf-system-details">OPENRPC-CLIENT ASDF System Details</h3><ul><li><p>Description: Open<code>RPC</code> client implementation for Common Lisp.</p></li><li><p>Licence: <code>BSD</code></p></li><li><p>Author: Alexander Artemenko</p></li><li><p>Homepage: <a href="https://40ants.com/openrpc/">https://40ants.com/openrpc/</a></p></li><li><p>Source control: <a href="https://github.com/40ants/openrpc">GIT</a></p></li><li><p>Depends on: <a href="https://quickdocs.org/alexandria">alexandria</a>, <a href="https://quickdocs.org/closer-mop">closer-mop</a>, <a href="https://quickdocs.org/dexador">dexador</a>, <a href="https://quickdocs.org/jsonrpc">jsonrpc</a>, <a href="https://quickdocs.org/kebab">kebab</a>, <a href="https://quickdocs.org/log4cl">log4cl</a>, <a href="https://quickdocs.org/serapeum">serapeum</a>, <a href="https://quickdocs.org/str">str</a>, <a href="https://quickdocs.org/usocket">usocket</a>, <a href="https://quickdocs.org/yason">yason</a></p></li></ul><p><a href="https://40ants.com/openrpc/#x-28-23A-28-2814-29-20BASE-CHAR-20-2E-20-22openrpc-client-22-29-20ASDF-2FSYSTEM-3ASYSTEM-29" data-document="https://40ants.com/openrpc/" data-node="x-28-23A-28-2814-29-20BASE-CHAR-20-2E-20-22openrpc-client-22-29-20ASDF-2FSYSTEM-3ASYSTEM-29"><code>openrpc-client</code></a> <code>ASDF</code> system provides a way to build <code>CL</code> classes and methods for working with <code>JSON-RPC</code> <code>API</code>.
+All you need is to give it an <code>URL</code> and all code will be created in compile-time as a result of macro-expansion.</p><h3 id="generating">Generating</h3><p>For example, this macro call:</p><pre><code class="">
+(generate-client petshop
+                 &quot;http://localhost:8000/openrpc.json&quot;)
+</code></pre><p>Will generate the whole bunch of classes and methods:</p><pre><code class="">(defclass petshop (jsonrpc/client:client) nil)
+
+(defun make-petshop () (make-instance 'petshop))
+
+(defmethod describe-object ((openrpc-client/core::client petshop) stream)
+  (format stream &quot;Supported RPC methods:~2%&quot;)
+  (format stream &quot;- ~S~%&quot; '(rpc-discover))
+  (format stream &quot;- ~S~%&quot;
+          '(list-pets &amp;key (page-key nil page-key-given-p)
+            (limit nil limit-given-p)))
+  (format stream &quot;- ~S~%&quot; '(create-pet (name string) (tag string)))
+  (format stream &quot;- ~S~%&quot; '(get-pet (id integer))))
+
+(defclass pet nil
+  ((id :initform nil :initarg :id :reader pet-id)
+   (name :initform nil :initarg :name :reader pet-name)
+   (tag :initform nil :initarg :tag :reader pet-tag)))
+
+(defmethod print-object ((openrpc-client/core::obj pet) stream)
+  (print-unreadable-object (openrpc-client/core::obj stream :type t)
+    (format stream &quot; ~A=~S&quot; 'id (pet-id openrpc-client/core::obj))
+    (format stream &quot; ~A=~S&quot; 'name (pet-name openrpc-client/core::obj))
+    (format stream &quot; ~A=~S&quot; 'tag (pet-tag openrpc-client/core::obj))))
+
+(defmethod rpc-discover ((openrpc-client/core::client petshop))
+  ...)
+
+(defmethod list-pets
+    ((openrpc-client/core::client petshop)
+     &amp;key (page-key nil page-key-given-p) (limit nil limit-given-p))
+  ...)
+
+(defmethod create-pet
+    ((openrpc-client/core::client petshop) (name string) (tag string))
+  ...)
+
+(defmethod get-pet ((openrpc-client/core::client petshop) (id integer))
+  ...)</code></pre><h3 id="using">Using</h3><p>When client is generated, you need to make an instance of it and to connect
+it to the server:</p><pre><code class="">(let ((cl (make-petshop)))
+    (jsonrpc:client-connect cl :url &quot;http://localhost:8000/&quot; :mode :http)
+    cl)</code></pre><p>You can use any transport, supported by <code>JSONRPC</code> library.</p><p><code>DESCRIBE-OBJECT</code> method is defined for a client, so you might see which methods are supported right in the <code>REPL</code>:</p><pre><code class="common-lisp-repl">OPENRPC-EXAMPLE/CLIENT&gt; (defvar *client* (make-test-client))
+#&lt;PETSHOP {1007AB2B13}&gt;
+
+OPENRPC-EXAMPLE/CLIENT&gt; (describe *client*)
+Supported RPC methods:
+
+- (RPC-DISCOVER)
+- (LIST-PETS &amp;KEY (PAGE-KEY NIL PAGE-KEY-GIVEN-P)
+             (LIMIT NIL LIMIT-GIVEN-P))
+- (CREATE-PET (NAME STRING) (TAG STRING))
+- (GET-PET (ID INTEGER))</code></pre><p>And then to call these methods as usually you do in Common Lisp. Pay attention, that
+the library returns not <code>JSON</code> dictionaries, but ready to use <code>CL</code> class instances:</p><pre><code class="common-lisp-repl">OPENRPC-EXAMPLE/CLIENT&gt; (create-pet *client* &quot;Bobik&quot; &quot;the dog&quot;)
+#&lt;PET  ID=1 NAME=&quot;Bobik&quot; TAG=&quot;the dog&quot;&gt;
+
+OPENRPC-EXAMPLE/CLIENT&gt; (create-pet *client* &quot;Murzik&quot; &quot;the cat&quot;)
+#&lt;PET  ID=2 NAME=&quot;Murzik&quot; TAG=&quot;the cat&quot;&gt;
+
+OPENRPC-EXAMPLE/CLIENT&gt; (create-pet *client* &quot;Homa&quot; &quot;the hamster&quot;)
+#&lt;PET  ID=3 NAME=&quot;Homa&quot; TAG=&quot;the hamster&quot;&gt;</code></pre><p>Now, pay attention how pagination does work.</p><pre><code class="common-lisp-repl">OPENRPC-EXAMPLE/CLIENT&gt; (list-pets *client* :limit 2)
+(#&lt;PET  ID=1 NAME=&quot;Bobik&quot; TAG=&quot;the dog&quot;&gt;
+ #&lt;PET  ID=2 NAME=&quot;Murzik&quot; TAG=&quot;the cat&quot;&gt;)
+#&lt;FUNCTION (FLET OPENRPC-CLIENT/CORE::RETRIEVE-NEXT-PAGE :IN LIST-PETS) {1006D1F3CB}&gt;</code></pre><p>This call has returned a list of objects as the first value and a closure, which can
+be called to retrive the next page. Let's retrieve it now!</p><pre><code class="common-lisp-repl">OPENRPC-EXAMPLE/CLIENT&gt; (funcall #v167:1)
+(#&lt;PET  ID=3 NAME=&quot;Homa&quot; TAG=&quot;the hamster&quot;&gt;)</code></pre><p>Now this is the last page and there is now a closure to retrieve the next page. Learn more how
+to implement pagination on server-side in the <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40PAGINATION-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FDOCS-3A-3A-40PAGINATION-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29"><code>Paginated Results</code></a> section.</p><div class=reference-bullet><div class=reference-bullet-header><a class=locative-type href="https://github.com/40ants/openrpc/blob/661a1049c4b2e3e861de7a359597ca7837fbe77d/client/core.lisp#L522">macro</a><div class=reference-object><div class=object-name><a href=#x-28OPENRPC-CLIENT-2FCORE-3AGENERATE-CLIENT-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29 id=x-28OPENRPC-CLIENT-2FCORE-3AGENERATE-CLIENT-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29>openrpc-client/core:generate-client</a></div><div class=object-args><span class=locative-args>class-name url-or-path &amp;key (export-symbols t)</span></div></div><a class=bullet-link href=#x-28OPENRPC-CLIENT-2FCORE-3AGENERATE-CLIENT-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29></a></div><div class=bullet-content><p>Generates Common Lisp client by Open<code>RPC</code> spec.</p><p><code>CLASS-NAME</code> is the name of a <code>API</code> class. Also, a corresponding <code>MAKE</code>-<CLASS-NAME> function
+is created.</p><p><code>URL-OR-PATH</code> argument could be a string with <code>HTTP</code> <code>URL</code> of a spec, or a pathname
+if a spec should be read from the disc.</p></div></div><h2>Our Ask...<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCONTRIBUTING-3A-3A-40ASK-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCONTRIBUTING-3A-3A-40ASK-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><p>If you use this or find value in it, please consider contributing in one or more of the following ways:</p><ol><li><p>Sponsor project at <a href="https://www.patreon.com/bePatron?u=33868637">Patreon</a> or <a href="https://boosty.to/40ants">Boosty</a> and make a contribution.</p></li><li><p>Star it!</p></li><li><p>Share posts about it in social networks!</p></li><li><p>Fix an issue.</p></li><li><p>Add a feature (post a proposal in an issue first!).</p></li></ol><h2>Contributors<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCONTRIBUTING-3A-3A-40CONTRIBUTORS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCONTRIBUTING-3A-3A-40CONTRIBUTORS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><p>These people have contributed to Open<code>RPC</code>. I'm so grateful to them!</p><ul><li><p><a href="https://github.com/kilianmh">Kilian M. Haemmerle</a></p></li></ul>
+   </div><div class=footer>
+    <hr class=separator>
+    <p class=fineprint>Created with passion by <em>40Ants</em><a class=lisp-logo
+     href="http://lisp-lang.org/">
+      <img
+           src="https://40ants.com/img/made-with-lisp.svg"></a>
+   </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Ключ для localStorage
+  const STORAGE_KEY = 'openrpc-docs-menu-state';
+  
+  // Загружаем сохраненное состояние меню
+  function loadMenuState() {
+    try {
+      const savedState = localStorage.getItem(STORAGE_KEY);
+      return savedState ? JSON.parse(savedState) : {};
+    } catch (e) {
+      console.error('Ошибка при загрузке состояния меню:', e);
+      return {};
+    }
+  }
+  
+  // Сохраняем текущее состояние меню
+  function saveMenuState(state) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      console.error('Ошибка при сохранении состояния меню:', e);
+    }
+  }
+  
+  // Получаем уникальный идентификатор для пункта меню
+  function getMenuItemId(item) {
+    const link = item.querySelector('a');
+    if (!link) return null;
+    
+    // Используем текст ссылки как идентификатор
+    // Можно также использовать href, но он может меняться в зависимости от текущей страницы
+    return link.innerText.trim();
+  }
+  
+  // Загружаем сохраненное состояние
+  const menuState = loadMenuState();
+  
+  // Находим все пункты меню с подпунктами
+  const menuItems = document.querySelectorAll('.sidebar li');
+  
+  // Обрабатываем каждый пункт меню
+  menuItems.forEach(item => {
+    const subMenu = item.querySelector('ul');
+    
+    // Если у пункта есть подменю
+    if (subMenu) {
+      const itemId = getMenuItemId(item);
+      item.classList.add('has-children');
+      
+      // Восстанавливаем состояние из localStorage, если оно сохранено
+      if (itemId && menuState[itemId]) {
+        item.classList.add('expanded');
+      }
+      
+      // Добавляем обработчик клика
+      const link = item.querySelector('a');
+      if (link) {
+        link.addEventListener('click', function(e) {
+          // Останавливаем переход по ссылке только если кликнули по пункту с подменю
+          if (item.classList.contains('has-children')) {
+            e.preventDefault();
+            
+            // Переключаем класс для раскрытия/скрытия
+            item.classList.toggle('expanded');
+            
+            // Сохраняем новое состояние
+            if (itemId) {
+              if (item.classList.contains('expanded')) {
+                menuState[itemId] = true;
+              } else {
+                delete menuState[itemId];
+              }
+              saveMenuState(menuState);
+            }
+          }
+        });
+      }
+    }
+  });
+  
+  // Функция для поиска и раскрытия родителей активного пункта
+  function expandActiveItemParents() {
+    const activeItem = document.querySelector('.sidebar li.active');
+    if (activeItem) {
+      let parent = activeItem.parentElement;
+      
+      while (parent) {
+        if (parent.tagName === 'UL' && parent.parentElement && parent.parentElement.tagName === 'LI') {
+          parent.parentElement.classList.add('expanded');
+          parent.parentElement.classList.add('active-parent');
+          
+          // Сохраняем состояние активного родителя
+          const parentItem = parent.parentElement;
+          const parentId = getMenuItemId(parentItem);
+          if (parentId) {
+            menuState[parentId] = true;
+          }
+        }
+        parent = parent.parentElement;
+      }
+      
+      // Сохраняем обновленное состояние после раскрытия активных родителей
+      saveMenuState(menuState);
+    }
+  }
+  
+  // Запускаем функцию для текущей страницы
+  expandActiveItemParents();
+});
+</script>
+
+
+  </div>
+ </body>
+</html>
