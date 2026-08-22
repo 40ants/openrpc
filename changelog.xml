@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<rss version="2.0">
+    <channel>
+        <title>openrpc-docs ChangeLog</title>
+        <link>https://40ants.com/openrpc/</link>
+        <generator>xml-emitter</generator>
+        <language>en-us</language>
+        <item>
+            <title>0.12.0  (2025-06-22)</title>
+            <description>&lt;h1 id=&quot;changes&quot;&gt;Changes&lt;/h1&gt;&lt;p&gt;Macro &lt;a href=&quot;https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FAPI-3ADEFINE-API-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29&quot; data-document=&quot;https://40ants.com/openrpc/&quot; data-node=&quot;x-28OPENRPC-SERVER-2FAPI-3ADEFINE-API-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29&quot;&gt;&lt;code&gt;openrpc-server:define-api&lt;/code&gt;&lt;/a&gt; now allows to pass class slots definition
+like you can do with &lt;code&gt;DEFCLASS&lt;/code&gt; macro.&lt;/p&gt;</description>
+            <pubDate>Sun, 22 Jun 2025 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.11.0  (2025-06-19)</title>
+            <description>&lt;h1 id=&quot;fixes&quot;&gt;Fixes&lt;/h1&gt;&lt;p&gt;Now if class&apos;s slot has type &lt;code&gt;BOOLEAN&lt;/code&gt;, it&apos;s value is propertly serialized as &amp;quot;true&amp;quot; or &amp;quot;false&amp;quot;. Previously instead of &amp;quot;false&amp;quot; a &amp;quot;null&amp;quot; was returned.&lt;/p&gt;&lt;h1 id=&quot;changes&quot;&gt;Changes&lt;/h1&gt;&lt;p&gt;If slot name has some lowercased symbols, then we don&apos;t downcase the name when serializing or deserializing this slot. This allows to work with &lt;code&gt;API&lt;/code&gt;&apos;s which require someStrangeCased attributes. Here is an example how to use this feature:&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;&quot;&gt;(defclass call-response ()
+  ((content :type (soft-list-of content)
+            :initarg :content)
+   (|isError| :type boolean
+              :initform nil
+              :initarg :is-error)))&lt;/code&gt;&lt;/pre&gt;</description>
+            <pubDate>Thu, 19 Jun 2025 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.10.4  (2024-02-04)</title>
+            <description>&lt;h1 id=&quot;fix&quot;&gt;Fix&lt;/h1&gt;&lt;p&gt;Required parameters of type boolean false can be supplied now.
+Since yason:*parse-json-booleans-as-symbols* is set, only yason:false maps into json false.&lt;/p&gt;</description>
+            <pubDate>Sun, 04 Feb 2024 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.10.3  (2023-11-21)</title>
+            <description>&lt;h1 id=&quot;fix&quot;&gt;Fix&lt;/h1&gt;&lt;p&gt;Add necessary helpers for simple example in Readme.&lt;/p&gt;</description>
+            <pubDate>Tue, 21 Nov 2023 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.10.2  (2023-11-17)</title>
+            <description>&lt;h1 id=&quot;fixes&quot;&gt;Fixes&lt;/h1&gt;&lt;p&gt;Fixed loading error occured in some cases when jsonrpc/transport/http was not found.&lt;/p&gt;</description>
+            <pubDate>Fri, 17 Nov 2023 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.10.1  (2023-10-17)</title>
+            <description>&lt;h1 id=&quot;additions&quot;&gt;Additions&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Support object and boolean type for required parameters.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Add regression tests for generated &lt;code&gt;DESCRIBE-OBJECT&lt;/code&gt; method.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Tue, 17 Oct 2023 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.10.0  (2023-10-17)</title>
+            <description>&lt;h1 id=&quot;changes&quot;&gt;Changes&lt;/h1&gt;&lt;p&gt;Generic-function &lt;a href=&quot;https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FINTERFACE-3AMAKE-INFO-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/openrpc/&quot; data-node=&quot;x-28OPENRPC-SERVER-2FINTERFACE-3AMAKE-INFO-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;openrpc-server/interface:make-info&lt;/code&gt;&lt;/a&gt; now accepts only one argument - object of class &lt;a href=&quot;https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29&quot; data-document=&quot;https://40ants.com/openrpc/&quot; data-node=&quot;x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29&quot;&gt;&lt;code&gt;openrpc-server/api:api&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;</description>
+            <pubDate>Tue, 17 Oct 2023 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.9.3  (2023-10-16)</title>
+            <description>&lt;h1 id=&quot;fixes&quot;&gt;Fixes&lt;/h1&gt;&lt;p&gt;A function &lt;code&gt;generate-method-descriptions&lt;/code&gt; has been added. This function uses the mop
+for generating the method descriptions at run-time. Previously this happend at compile-time.
+The &lt;code&gt;generate-method-descriptions&lt;/code&gt; is called from the generated specialized &lt;code&gt;describe-object&lt;/code&gt;
+method. Now the output of &lt;code&gt;describe-object&lt;/code&gt; should be correct again and show all generated,
+excluding the describe-object method itself.&lt;/p&gt;</description>
+            <pubDate>Mon, 16 Oct 2023 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.9.2  (2023-10-15)</title>
+            <description>&lt;h1 id=&quot;fixes&quot;&gt;Fixes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Generate additional method with integer class specializer (till now it was
+  only double-float) for required parameter of type number.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Allow required parameter of type array without an items slot.
+  The result will not be transformed.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sun, 15 Oct 2023 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.9.1  (2023-09-24)</title>
+            <description>&lt;h1 id=&quot;fixes&quot;&gt;Fixes&lt;/h1&gt;&lt;p&gt;Fix support for multiple parameter types, (particularly for required parameters):&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;json&quot;&gt;&amp;quot;params&amp;quot;: [
+  {
+    &amp;quot;name&amp;quot;: &amp;quot;name&amp;quot;,
+    &amp;quot;schema&amp;quot;:
+    {
+      &amp;quot;type&amp;quot;: [&amp;quot;string&amp;quot;, &amp;quot;null&amp;quot;],
+      &amp;quot;maxLength&amp;quot;: 255
+    },
+    &amp;quot;required&amp;quot;: true,
+    &amp;quot;summary&amp;quot;: &amp;quot;User name.&amp;quot;
+  }
+]&lt;/code&gt;&lt;/pre&gt;</description>
+            <pubDate>Sun, 24 Sep 2023 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.9.0  (2023-08-19)</title>
+            <description>&lt;h1 id=&quot;backward-incompatible-fixes&quot;&gt;Backward Incompatible Fixes&lt;/h1&gt;&lt;p&gt;Fixed how &lt;code&gt;oneOf&lt;/code&gt; type is processed when there are only two subtypes like that:&lt;/p&gt;&lt;pre&gt;&lt;code class=&quot;json&quot;&gt;&amp;quot;oneOf&amp;quot;: [
+  {
+    &amp;quot;type&amp;quot;: &amp;quot;null&amp;quot;
+  },
+  {
+    &amp;quot;type&amp;quot;: &amp;quot;object&amp;quot;,
+    &amp;quot;properties&amp;quot;: {
+      &amp;quot;project_name&amp;quot;: {
+        &amp;quot;type&amp;quot;: &amp;quot;object&amp;quot;,
+        &amp;quot;properties&amp;quot;: {},
+        &amp;quot;required&amp;quot;: [],
+        &amp;quot;x-cl-class&amp;quot;: &amp;quot;T&amp;quot;,
+        &amp;quot;x-cl-package&amp;quot;: &amp;quot;COMMON-LISP&amp;quot;
+      },&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Previously in this case openrpc-client generated code which returned a hash-table.
+Now it will return a common-lisp object or &lt;code&gt;NIL&lt;/code&gt;.&lt;/p&gt;</description>
+            <pubDate>Sat, 19 Aug 2023 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.8.0  (2023-08-16)</title>
+            <description>&lt;h1 id=&quot;backward-incompatible-fixes&quot;&gt;Backward Incompatible Fixes&lt;/h1&gt;&lt;p&gt;Nested dataclasses now handled propertly in the client. Previously, nested objects were parsed as hash-maps.&lt;/p&gt;</description>
+            <pubDate>Wed, 16 Aug 2023 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.7.1  (2023-08-11)</title>
+            <description>&lt;h1 id=&quot;fixes&quot;&gt;Fixes&lt;/h1&gt;&lt;p&gt;Fixed location for autogenerated generic function and added docstrings taken from Open&lt;code&gt;RPC&lt;/code&gt; spec.&lt;/p&gt;</description>
+            <pubDate>Fri, 11 Aug 2023 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.7.0  (2023-08-09)</title>
+            <description>&lt;h1 id=&quot;backward-incompatible-changes&quot;&gt;Backward Incompatible Changes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Generic-function &lt;a href=&quot;https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FINTERFACE-3ASLOTS-TO-EXCLUDE-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/openrpc/&quot; data-node=&quot;x-28OPENRPC-SERVER-2FINTERFACE-3ASLOTS-TO-EXCLUDE-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;openrpc-server/interface:slots-to-exclude&lt;/code&gt;&lt;/a&gt; now matches slot names before transforming
+  them to camel_case. Now you can return slot names as they are given in lisp classes.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h1 id=&quot;fixes&quot;&gt;Fixes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Now client &lt;code&gt;API&lt;/code&gt; is generated correctly when you call &lt;a href=&quot;https://40ants.com/openrpc/#x-28OPENRPC-CLIENT-2FCORE-3AGENERATE-CLIENT-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29&quot; data-document=&quot;https://40ants.com/openrpc/&quot; data-node=&quot;x-28OPENRPC-CLIENT-2FCORE-3AGENERATE-CLIENT-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29&quot;&gt;&lt;code&gt;openrpc-client:generate-client&lt;/code&gt;&lt;/a&gt; macro
+  with &lt;code&gt;:export-symbols nil&lt;/code&gt; argument.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Wed, 09 Aug 2023 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.6.0  (2023-06-09)</title>
+            <description>&lt;h1 id=&quot;additions&quot;&gt;Additions&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Float, Double float and Ratio types are supported. They are represented as a &amp;quot;number&amp;quot; type in &lt;code&gt;JSON&lt;/code&gt; schema.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Fri, 09 Jun 2023 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.5.0  (2023-05-27)</title>
+            <description>&lt;h1 id=&quot;changes&quot;&gt;Changes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FCLACK-3AMAKE-CLACK-APP-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/openrpc/&quot; data-node=&quot;x-28OPENRPC-SERVER-2FCLACK-3AMAKE-CLACK-APP-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;openrpc-server/clack:make-clack-app&lt;/code&gt;&lt;/a&gt; now is a generic-function and it requires &lt;code&gt;API&lt;/code&gt; instance as a first argument.
+  Previously &lt;code&gt;API&lt;/code&gt; instance was optional.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h1 id=&quot;additions&quot;&gt;Additions&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Added a way to modify Clack middlewares applied to the app. This way you can add your own middlewares or routes to your application. See details in the &lt;a href=&quot;https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FCLACK-3AAPP-MIDDLEWARES-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/openrpc/&quot; data-node=&quot;x-28OPENRPC-SERVER-2FCLACK-3AAPP-MIDDLEWARES-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;openrpc-server/clack:app-middlewares&lt;/code&gt;&lt;/a&gt; generic-function documentation.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Added &lt;a href=&quot;https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FCLACK-3ADEBUG-ON-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/openrpc/&quot; data-node=&quot;x-28OPENRPC-SERVER-2FCLACK-3ADEBUG-ON-20FUNCTION-29&quot;&gt;&lt;code&gt;openrpc-server/clack:debug-on&lt;/code&gt;&lt;/a&gt; and &lt;a href=&quot;https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FCLACK-3ADEBUG-OFF-20FUNCTION-29&quot; data-document=&quot;https://40ants.com/openrpc/&quot; data-node=&quot;x-28OPENRPC-SERVER-2FCLACK-3ADEBUG-OFF-20FUNCTION-29&quot;&gt;&lt;code&gt;openrpc-server/clack:debug-off&lt;/code&gt;&lt;/a&gt; functions. They turn on support for &lt;code&gt;X-Debug-On&lt;/code&gt; &lt;code&gt;HTTP&lt;/code&gt; header. Use this header to turn on interative debugger only for choosen requests.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Added generic-function &lt;a href=&quot;https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FINTERFACE-3ASLOTS-TO-EXCLUDE-20GENERIC-FUNCTION-29&quot; data-document=&quot;https://40ants.com/openrpc/&quot; data-node=&quot;x-28OPENRPC-SERVER-2FINTERFACE-3ASLOTS-TO-EXCLUDE-20GENERIC-FUNCTION-29&quot;&gt;&lt;code&gt;openrpc-server/interface:slots-to-exclude&lt;/code&gt;&lt;/a&gt; which allows to list some slots to be hidden from all data-structures. For example, you might want to exclude password-hashes or some other sensitive information.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Added support for &lt;code&gt;(MEMBER :foo :bar ...)&lt;/code&gt; datatype. Such objects are represented as string with enum values in &lt;code&gt;JSON&lt;/code&gt; schema.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h1 id=&quot;fixes&quot;&gt;Fixes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Fixes type of the next-page key in the response of paginated methods.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sat, 27 May 2023 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.4.0  (2022-11-07)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Fixed usage of default &lt;code&gt;API&lt;/code&gt; when api is not specified to define-rpc-method macro.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Fixed most imports.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Mon, 07 Nov 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.3.0  (2022-10-30)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Method and its params now support such metadata as :summary :description and :deprecated.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Schemas for &lt;code&gt;CL&lt;/code&gt; classes can have :description if documentation id defined for class or its slots.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Macro &lt;a href=&quot;https://40ants.com/openrpc/#x-28OPENRPC-CLIENT-2FCORE-3AGENERATE-CLIENT-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29&quot; data-document=&quot;https://40ants.com/openrpc/&quot; data-node=&quot;x-28OPENRPC-CLIENT-2FCORE-3AGENERATE-CLIENT-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29&quot;&gt;&lt;code&gt;openrpc-client:generate-client&lt;/code&gt;&lt;/a&gt; now exports methods, classes and their slot readers by default.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;All methods, their arguments and object keys now use underscore instead of dash to make them more
+  convenient to use from other languages.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Sun, 30 Oct 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.2.0  (2022-10-25)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Support client generation from a file on a filesystem.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Tue, 25 Oct 2022 00:00:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>0.1.0  (2022-10-13)</title>
+            <description>&lt;ul&gt;&lt;li&gt;&lt;p&gt;Initial version.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+            <pubDate>Thu, 13 Oct 2022 00:00:00 +0000</pubDate>
+        </item>
+    </channel>
+</rss>

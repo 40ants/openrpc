@@ -1,0 +1,350 @@
+<html lang=en>
+ <head>
+  <meta charset=UTF-8><meta name=viewport
+      content="width=device-width, initial-scale=1">
+  <title>ChangeLog</title>
+  <link rel=alternate
+        href="https://40ants.com/openrpc/changelog.xml"
+        type="application/rss+xml">
+  <link rel=stylesheet type="text/css"
+        href="../theme.css">
+  <script type="text/javascript" src="../jquery.js"></script>
+  <script type="text/javascript" src="../toc.js"></script>
+  <script type="text/javascript">$(document).ready(function() {$('a:has(img)').css('border-bottom', 'none')})</script>
+  <link rel=stylesheet type="text/css"
+      href="../highlight.min.css">
+  <script type="text/javascript"
+          src="../highlight.min.js"></script>
+  <script type="text/javascript">hljs.highlightAll();</script>
+<style type="text/css">
+/* Стили для сворачиваемого меню */
+.sidebar ul ul {
+  display: none; /* Скрываем все подменю по умолчанию */
+  margin-left: 0.5em;
+}
+
+.sidebar li.expanded > ul {
+  display: block; /* Показываем подменю для развернутых элементов */
+}
+
+/* Стили для пунктов с подменю */
+.sidebar li.has-children > a {
+  cursor: pointer;
+  position: relative;
+  padding-left: 1.2em;
+}
+
+.sidebar li.has-children > p > a {
+  position: relative;
+  left: -1rem;
+}
+
+.sidebar li.has-children > p > a::before {
+  content:"►";
+}
+
+.sidebar li.has-children.expanded > p > a::before {
+  content: "▼";
+  position: relative;
+  left: -0.08rem;
+}
+
+/* Подсветка активного пункта */
+.sidebar li.active > a {
+  font-weight: bold;
+}
+
+/* Если активная страница находится в подменю, раскрываем родителя */
+.sidebar li.active-parent {
+  font-weight: normal;
+}
+
+.sidebar li.active-parent > ul {
+  display: block;
+}
+</style>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FL71WXK73K"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-FL71WXK73K');
+    </script>
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript" >
+       (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+       m[i].l=1*new Date();
+       for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+       k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+       (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+       ym(42462884, "init", {
+            clickmap:true,
+            trackLinks:true,
+            accurateTrackBounce:true
+       });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/42462884" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+
+ </head>
+ <body>
+  <div class=page><a id=fork-me href="https://github.com/40ants/openrpc">Fork me on GitHub</a>
+   <div class=navbar>
+    <div class=navbar-inner>
+     <a class=brand href="/">
+      <img class=logo
+           src="https://40ants.com/img/logo.svg"></a>
+     <ul class=nav>
+      <li><a href="/posts/">Blog</a>
+      <li><a href="/ru/posts/">Blog (RU)</a>
+      <li><a href="/tips/">Lisp Tips</a>
+      <li><a href="/projects/">Our Projects</a>
+      <li><a href="/about/">About</a>
+     </ul>
+    </div>
+   </div>
+   <input type=checkbox id=sidebar-check>
+   <label for=sidebar-check>
+    <div id=sidebar-trigger>
+     <span></span><span></span><span></span>
+    </div></label><div class=sidebar><div class=header><form class=search method=GET
+      action="../search/">
+      <input type=text name=q>
+      <input type=submit value=Search><span id=search-progress></span>
+     </form>
+    </div><div class=content><div class=page-toc><ul><li><p><a href="../#x-28OPENRPC-DOCS-2FINDEX-3A-40INDEX-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="../" data-node="x-28OPENRPC-DOCS-2FINDEX-3A-40INDEX-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">OpenRPC for Common Lisp</a></p><ul><li><p><a href="../#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40SERVER-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="../" data-node="x-28OPENRPC-SERVER-2FDOCS-3A-3A-40SERVER-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Server</a></p><ul><li><p><a href="../#openrpc-server-asdf-system-details" data-document="../" data-node="openrpc-server-asdf-system-details">OPENRPC-SERVER ASDF System Details</a></p></li><li><p><a href="../#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40DEFINING-METHODS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="../" data-node="x-28OPENRPC-SERVER-2FDOCS-3A-3A-40DEFINING-METHODS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Defining Methods</a></p><ul><li><p><a href="../#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40SIMPLE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="../" data-node="x-28OPENRPC-SERVER-2FDOCS-3A-3A-40SIMPLE-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Simple Example</a></p></li><li><p><a href="../#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40LISTS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="../" data-node="x-28OPENRPC-SERVER-2FDOCS-3A-3A-40LISTS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Returning Lists</a></p></li><li><p><a href="../#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40PAGINATION-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="../" data-node="x-28OPENRPC-SERVER-2FDOCS-3A-3A-40PAGINATION-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Paginated Results</a></p></li></ul></li><li><p><a href="../#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40STARTING-SERVER-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="../" data-node="x-28OPENRPC-SERVER-2FDOCS-3A-3A-40STARTING-SERVER-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Using Clack to Start Server</a></p></li><li><p><a href="../#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40SPEC-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="../" data-node="x-28OPENRPC-SERVER-2FDOCS-3A-3A-40SPEC-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">OpenRPC Spec</a></p></li><li><p><a href="../#x-28OPENRPC-SERVER-2FDOCS-3A-3A-40API-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="../" data-node="x-28OPENRPC-SERVER-2FDOCS-3A-3A-40API-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">API</a></p></li></ul></li><li><p><a href="../#x-28OPENRPC-CLIENT-2FDOCS-3A-3A-40CLIENT-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="../" data-node="x-28OPENRPC-CLIENT-2FDOCS-3A-3A-40CLIENT-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Client</a></p><ul><li><p><a href="../#openrpc-client-asdf-system-details" data-document="../" data-node="openrpc-client-asdf-system-details">OPENRPC-CLIENT ASDF System Details</a></p></li><li><p><a href="../#generating" data-document="../" data-node="generating">Generating</a></p></li><li><p><a href="../#using" data-document="../" data-node="using">Using</a></p></li></ul></li><li><p><a href="../#x-28OPENRPC-DOCS-2FCONTRIBUTING-3A-3A-40ASK-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="../" data-node="x-28OPENRPC-DOCS-2FCONTRIBUTING-3A-3A-40ASK-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Our Ask...</a></p></li><li><p><a href="../#x-28OPENRPC-DOCS-2FCONTRIBUTING-3A-3A-40CONTRIBUTORS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="../" data-node="x-28OPENRPC-DOCS-2FCONTRIBUTING-3A-3A-40CONTRIBUTORS-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">Contributors</a></p></li></ul></li><li><p><a href="#x-28OPENRPC-DOCS-2FCHANGELOG-3A-40CHANGELOG-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29" data-document="" data-node="x-28OPENRPC-DOCS-2FCHANGELOG-3A-40CHANGELOG-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29">ChangeLog</a></p></li></ul>
+     </div>
+    </div><div class=footer>
+     <a href="https://40ants.com/doc">[generated by 40ANTS-DOC]</a>
+    </div>
+   </div><div class=content role=main><h1>ChangeLog<a class=rss-icon href="https://40ants.com/openrpc/changelog.xml"></a></h1><h2>0.12.0 (2025-06-22)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E12-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E12-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3 id="changes">Changes</h3><p>Macro <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FAPI-3ADEFINE-API-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FAPI-3ADEFINE-API-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29"><code>openrpc-server:define-api</code></a> now allows to pass class slots definition
+like you can do with <code>DEFCLASS</code> macro.</p><h2>0.11.0 (2025-06-19)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E11-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E11-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3 id="fixes">Fixes</h3><p>Now if class's slot has type <code>BOOLEAN</code>, it's value is propertly serialized as &quot;true&quot; or &quot;false&quot;. Previously instead of &quot;false&quot; a &quot;null&quot; was returned.</p><h3 id="changes">Changes</h3><p>If slot name has some lowercased symbols, then we don't downcase the name when serializing or deserializing this slot. This allows to work with <code>API</code>'s which require someStrangeCased attributes. Here is an example how to use this feature:</p><pre><code class="">(defclass call-response ()
+  ((content :type (soft-list-of content)
+            :initarg :content)
+   (|isError| :type boolean
+              :initform nil
+              :initarg :is-error)))</code></pre><h2>0.10.4 (2024-02-04)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E10-2E4-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E10-2E4-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3 id="fix">Fix</h3><p>Required parameters of type boolean false can be supplied now.
+Since yason:*parse-json-booleans-as-symbols* is set, only yason:false maps into json false.</p><h2>0.10.3 (2023-11-21)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E10-2E3-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E10-2E3-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3 id="fix">Fix</h3><p>Add necessary helpers for simple example in Readme.</p><h2>0.10.2 (2023-11-17)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E10-2E2-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E10-2E2-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3 id="fixes">Fixes</h3><p>Fixed loading error occured in some cases when jsonrpc/transport/http was not found.</p><h2>0.10.1 (2023-10-17)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E10-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E10-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3 id="additions">Additions</h3><ul><li><p>Support object and boolean type for required parameters.</p></li><li><p>Add regression tests for generated <code>DESCRIBE-OBJECT</code> method.</p></li></ul><h2>0.10.0 (2023-10-17)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E10-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E10-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3 id="changes">Changes</h3><p>Generic-function <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FINTERFACE-3AMAKE-INFO-20GENERIC-FUNCTION-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FINTERFACE-3AMAKE-INFO-20GENERIC-FUNCTION-29"><code>openrpc-server/interface:make-info</code></a> now accepts only one argument - object of class <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FAPI-3AAPI-20CLASS-29"><code>openrpc-server/api:api</code></a>.</p><h2>0.9.3 (2023-10-16)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E9-2E3-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E9-2E3-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3 id="fixes">Fixes</h3><p>A function <code>generate-method-descriptions</code> has been added. This function uses the mop
+for generating the method descriptions at run-time. Previously this happend at compile-time.
+The <code>generate-method-descriptions</code> is called from the generated specialized <code>describe-object</code>
+method. Now the output of <code>describe-object</code> should be correct again and show all generated,
+excluding the describe-object method itself.</p><h2>0.9.2 (2023-10-15)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E9-2E2-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E9-2E2-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3 id="fixes">Fixes</h3><ul><li><p>Generate additional method with integer class specializer (till now it was
+  only double-float) for required parameter of type number.</p></li><li><p>Allow required parameter of type array without an items slot.
+  The result will not be transformed.</p></li></ul><h2>0.9.1 (2023-09-24)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E9-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E9-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3 id="fixes">Fixes</h3><p>Fix support for multiple parameter types, (particularly for required parameters):</p><pre><code class="json">&quot;params&quot;: [
+  {
+    &quot;name&quot;: &quot;name&quot;,
+    &quot;schema&quot;:
+    {
+      &quot;type&quot;: [&quot;string&quot;, &quot;null&quot;],
+      &quot;maxLength&quot;: 255
+    },
+    &quot;required&quot;: true,
+    &quot;summary&quot;: &quot;User name.&quot;
+  }
+]</code></pre><h2>0.9.0 (2023-08-19)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E9-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E9-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3 id="backward-incompatible-fixes">Backward Incompatible Fixes</h3><p>Fixed how <code>oneOf</code> type is processed when there are only two subtypes like that:</p><pre><code class="json">&quot;oneOf&quot;: [
+  {
+    &quot;type&quot;: &quot;null&quot;
+  },
+  {
+    &quot;type&quot;: &quot;object&quot;,
+    &quot;properties&quot;: {
+      &quot;project_name&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;properties&quot;: {},
+        &quot;required&quot;: [],
+        &quot;x-cl-class&quot;: &quot;T&quot;,
+        &quot;x-cl-package&quot;: &quot;COMMON-LISP&quot;
+      },</code></pre><p>Previously in this case openrpc-client generated code which returned a hash-table.
+Now it will return a common-lisp object or <code>NIL</code>.</p><h2>0.8.0 (2023-08-16)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E8-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E8-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3 id="backward-incompatible-fixes">Backward Incompatible Fixes</h3><p>Nested dataclasses now handled propertly in the client. Previously, nested objects were parsed as hash-maps.</p><h2>0.7.1 (2023-08-11)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E7-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E7-2E1-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3 id="fixes">Fixes</h3><p>Fixed location for autogenerated generic function and added docstrings taken from Open<code>RPC</code> spec.</p><h2>0.7.0 (2023-08-09)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E7-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E7-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3 id="backward-incompatible-changes">Backward Incompatible Changes</h3><ul><li><p>Generic-function <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FINTERFACE-3ASLOTS-TO-EXCLUDE-20GENERIC-FUNCTION-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FINTERFACE-3ASLOTS-TO-EXCLUDE-20GENERIC-FUNCTION-29"><code>openrpc-server/interface:slots-to-exclude</code></a> now matches slot names before transforming
+  them to camel_case. Now you can return slot names as they are given in lisp classes.</p></li></ul><h3 id="fixes">Fixes</h3><ul><li><p>Now client <code>API</code> is generated correctly when you call <a href="https://40ants.com/openrpc/#x-28OPENRPC-CLIENT-2FCORE-3AGENERATE-CLIENT-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-CLIENT-2FCORE-3AGENERATE-CLIENT-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29"><code>openrpc-client:generate-client</code></a> macro
+  with <code>:export-symbols nil</code> argument.</p></li></ul><h2>0.6.0 (2023-06-09)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E6-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E6-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3 id="additions">Additions</h3><ul><li><p>Float, Double float and Ratio types are supported. They are represented as a &quot;number&quot; type in <code>JSON</code> schema.</p></li></ul><h2>0.5.0 (2023-05-27)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E5-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E5-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><h3 id="changes">Changes</h3><ul><li><p><a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FCLACK-3AMAKE-CLACK-APP-20GENERIC-FUNCTION-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FCLACK-3AMAKE-CLACK-APP-20GENERIC-FUNCTION-29"><code>openrpc-server/clack:make-clack-app</code></a> now is a generic-function and it requires <code>API</code> instance as a first argument.
+  Previously <code>API</code> instance was optional.</p></li></ul><h3 id="additions">Additions</h3><ul><li><p>Added a way to modify Clack middlewares applied to the app. This way you can add your own middlewares or routes to your application. See details in the <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FCLACK-3AAPP-MIDDLEWARES-20GENERIC-FUNCTION-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FCLACK-3AAPP-MIDDLEWARES-20GENERIC-FUNCTION-29"><code>openrpc-server/clack:app-middlewares</code></a> generic-function documentation.</p></li><li><p>Added <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FCLACK-3ADEBUG-ON-20FUNCTION-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FCLACK-3ADEBUG-ON-20FUNCTION-29"><code>openrpc-server/clack:debug-on</code></a> and <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FCLACK-3ADEBUG-OFF-20FUNCTION-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FCLACK-3ADEBUG-OFF-20FUNCTION-29"><code>openrpc-server/clack:debug-off</code></a> functions. They turn on support for <code>X-Debug-On</code> <code>HTTP</code> header. Use this header to turn on interative debugger only for choosen requests.</p></li><li><p>Added generic-function <a href="https://40ants.com/openrpc/#x-28OPENRPC-SERVER-2FINTERFACE-3ASLOTS-TO-EXCLUDE-20GENERIC-FUNCTION-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-SERVER-2FINTERFACE-3ASLOTS-TO-EXCLUDE-20GENERIC-FUNCTION-29"><code>openrpc-server/interface:slots-to-exclude</code></a> which allows to list some slots to be hidden from all data-structures. For example, you might want to exclude password-hashes or some other sensitive information.</p></li><li><p>Added support for <code>(MEMBER :foo :bar ...)</code> datatype. Such objects are represented as string with enum values in <code>JSON</code> schema.</p></li></ul><h3 id="fixes">Fixes</h3><ul><li><p>Fixes type of the next-page key in the response of paginated methods.</p></li></ul><h2>0.4.0 (2022-11-07)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E4-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E4-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><ul><li><p>Fixed usage of default <code>API</code> when api is not specified to define-rpc-method macro.</p></li><li><p>Fixed most imports.</p></li></ul><h2>0.3.0 (2022-10-30)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E3-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E3-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><ul><li><p>Method and its params now support such metadata as :summary :description and :deprecated.</p></li><li><p>Schemas for <code>CL</code> classes can have :description if documentation id defined for class or its slots.</p></li><li><p>Macro <a href="https://40ants.com/openrpc/#x-28OPENRPC-CLIENT-2FCORE-3AGENERATE-CLIENT-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29" data-document="https://40ants.com/openrpc/" data-node="x-28OPENRPC-CLIENT-2FCORE-3AGENERATE-CLIENT-20-2840ANTS-DOC-2FLOCATIVES-3AMACRO-29-29"><code>openrpc-client:generate-client</code></a> now exports methods, classes and their slot readers by default.</p></li><li><p>All methods, their arguments and object keys now use underscore instead of dash to make them more
+  convenient to use from other languages.</p></li></ul><h2>0.2.0 (2022-10-25)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E2-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E2-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><ul><li><p>Support client generation from a file on a filesystem.</p></li></ul><h2>0.1.0 (2022-10-13)<a class=header-link
+     href=#x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E1-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29
+     title="Permalink to this headline"
+     id=x-28OPENRPC-DOCS-2FCHANGELOG-3A-3A-7C0-2E1-2E0-7C-2040ANTS-DOC-2FLOCATIVES-3ASECTION-29></a></h2><ul><li><p>Initial version.</p></li></ul>
+   </div><div class=footer>
+    <hr class=separator>
+    <p class=fineprint>Created with passion by <em>40Ants</em><a class=lisp-logo
+     href="http://lisp-lang.org/">
+      <img
+           src="https://40ants.com/img/made-with-lisp.svg"></a>
+   </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Ключ для localStorage
+  const STORAGE_KEY = 'openrpc-docs-menu-state';
+  
+  // Загружаем сохраненное состояние меню
+  function loadMenuState() {
+    try {
+      const savedState = localStorage.getItem(STORAGE_KEY);
+      return savedState ? JSON.parse(savedState) : {};
+    } catch (e) {
+      console.error('Ошибка при загрузке состояния меню:', e);
+      return {};
+    }
+  }
+  
+  // Сохраняем текущее состояние меню
+  function saveMenuState(state) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      console.error('Ошибка при сохранении состояния меню:', e);
+    }
+  }
+  
+  // Получаем уникальный идентификатор для пункта меню
+  function getMenuItemId(item) {
+    const link = item.querySelector('a');
+    if (!link) return null;
+    
+    // Используем текст ссылки как идентификатор
+    // Можно также использовать href, но он может меняться в зависимости от текущей страницы
+    return link.innerText.trim();
+  }
+  
+  // Загружаем сохраненное состояние
+  const menuState = loadMenuState();
+  
+  // Находим все пункты меню с подпунктами
+  const menuItems = document.querySelectorAll('.sidebar li');
+  
+  // Обрабатываем каждый пункт меню
+  menuItems.forEach(item => {
+    const subMenu = item.querySelector('ul');
+    
+    // Если у пункта есть подменю
+    if (subMenu) {
+      const itemId = getMenuItemId(item);
+      item.classList.add('has-children');
+      
+      // Восстанавливаем состояние из localStorage, если оно сохранено
+      if (itemId && menuState[itemId]) {
+        item.classList.add('expanded');
+      }
+      
+      // Добавляем обработчик клика
+      const link = item.querySelector('a');
+      if (link) {
+        link.addEventListener('click', function(e) {
+          // Останавливаем переход по ссылке только если кликнули по пункту с подменю
+          if (item.classList.contains('has-children')) {
+            e.preventDefault();
+            
+            // Переключаем класс для раскрытия/скрытия
+            item.classList.toggle('expanded');
+            
+            // Сохраняем новое состояние
+            if (itemId) {
+              if (item.classList.contains('expanded')) {
+                menuState[itemId] = true;
+              } else {
+                delete menuState[itemId];
+              }
+              saveMenuState(menuState);
+            }
+          }
+        });
+      }
+    }
+  });
+  
+  // Функция для поиска и раскрытия родителей активного пункта
+  function expandActiveItemParents() {
+    const activeItem = document.querySelector('.sidebar li.active');
+    if (activeItem) {
+      let parent = activeItem.parentElement;
+      
+      while (parent) {
+        if (parent.tagName === 'UL' && parent.parentElement && parent.parentElement.tagName === 'LI') {
+          parent.parentElement.classList.add('expanded');
+          parent.parentElement.classList.add('active-parent');
+          
+          // Сохраняем состояние активного родителя
+          const parentItem = parent.parentElement;
+          const parentId = getMenuItemId(parentItem);
+          if (parentId) {
+            menuState[parentId] = true;
+          }
+        }
+        parent = parent.parentElement;
+      }
+      
+      // Сохраняем обновленное состояние после раскрытия активных родителей
+      saveMenuState(menuState);
+    }
+  }
+  
+  // Запускаем функцию для текущей страницы
+  expandActiveItemParents();
+});
+</script>
+
+
+  </div>
+ </body>
+</html>
