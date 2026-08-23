@@ -125,31 +125,58 @@ The list is ordered alphabetically and excludes the describe-object method."
      (to-lisp-case
       (replace-all "." "-" string))))
 
-  (declaim (ftype (function (hash-table) cons) schema-to-type))
+  (declaim (ftype (function (hash-table) list) schema-to-type))
   (defun schema-to-type (schema)
-    "Convert JSON types to CL types. Supports one or multiple types."
+    "Convert JSON types to CL types. Supports direct types, multiple types,
+     oneOf, anyOf, allOf composition keywords, $ref, enum, const, and implicit object types."
     (let ((type (gethash "type" schema))
+          (one-of (gethash "oneOf" schema))
+          (any-of (gethash "anyOf" schema))
+          (all-of (gethash "allOf" schema))
+          (ref (gethash "$ref" schema))
+          (properties (gethash "properties" schema))
+          (enum-values (gethash "enum" schema))
+          (const-value (gethash "const" schema))
           (type-list nil))
-      (declare (type (or string cons) type)
-               (list type-list))
+      (declare (list type-list))
       (flet ((%schema-to-type (type)
                (cond ((string-equal type "integer") (push 'integer type-list))
                      ((string-equal type "number")
-		      (push 'double-float type-list)
-		      (push 'integer type-list))
+                      (push 'double-float type-list)
+                      (push 'integer type-list))
                      ((string-equal type "string") (push 'string type-list))
-		     ((string-equal type "boolean")
-		      (push '(eql false) type-list)
-		      (push '(eql t) type-list))
-		     ((string-equal type "object") (push 'hash-table type-list))
+                     ((string-equal type "boolean")
+                      (push '(eql false) type-list)
+                      (push '(eql t) type-list))
+                     ((string-equal type "object") (push 'hash-table type-list))
                      ((string-equal type "array") (push 'list type-list))
                      ((string-equal type "null") (push 'null type-list))
                      (t
                       (error "Type ~S is not supported yet."
-                             type)))))
-        (if (stringp type)
-            (%schema-to-type type)
-            (mapc #'%schema-to-type type)))
+                             type))))
+             (collect-types-from-subschemas (subschemas)
+               (dolist (sub-schema subschemas)
+                 (dolist (sub-type (schema-to-type sub-schema))
+                   (pushnew sub-type type-list :test #'equal)))))
+        (cond
+          ;; Handle oneOf/anyOf/allOf - collect types from all sub-schemas
+          (one-of (collect-types-from-subschemas one-of))
+          (any-of (collect-types-from-subschemas any-of))
+          (all-of (collect-types-from-subschemas all-of))
+          ;; Handle direct type (existing behavior)
+          (type
+           (if (stringp type)
+               (%schema-to-type type)
+               (mapc #'%schema-to-type type)))
+          ;; Handle implicit object type (properties without explicit type)
+          (properties
+           (push 'hash-table type-list))
+          ;; Handle $ref/enum/const - accept any type since we can't determine the exact type
+          ((or ref enum-values const-value)
+           (push t type-list))
+          ;; No recognized schema pattern - error
+          (t
+           (error "Schema has no type, oneOf, anyOf, allOf, properties, $ref, enum, or const: ~S" schema))))
       (nreverse type-list)))
 
   (defun generate-generic-lambda-list (params)
